@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — MedFair</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['IBM Plex Mono', 'monospace'],
+          },
+          colors: {
+            navy: {
+              50:  '#EEF2F9',
+              100: '#D5DFF0',
+              200: '#ABBFE1',
+              400: '#5680C2',
+              600: '#2B4FA3',
+              700: '#1E3B82',
+              800: '#142D66',
+              900: '#0C1F4A',
+            },
+            slate: {
+              550: '#5A6882',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+  <!-- Navigation -->
+  <header class="bg-navy-800 text-white sticky top-0 z-40 shadow-md">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center gap-3">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded bg-navy-600 flex items-center justify-center flex-shrink-0">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+            <path d="M10 2L3 6v4c0 4.418 3.134 8.555 7 9.9C16.866 18.555 20 14.418 20 10V6l-7-4H10z" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M8 10l1.5 1.5L12.5 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="text-base font-semibold tracking-tight">MedFair</span>
+      </a>
+
+      <div class="ml-auto flex items-center gap-3">
+        <span class="hidden sm:inline-flex status-badge" style="background:rgba(255,255,255,0.1); color:#BFD4F8; border:1px solid rgba(255,255,255,0.15);">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1L9.5 2.5V5c0 2.6-1.7 4.5-4 5.5C3.2 9.5 1.5 7.6 1.5 5V2.5L5.5 1z" stroke="#BFD4F8" stroke-width="1" stroke-linejoin="round"/></svg>
+          HIPAA-Compliant UI
+        </span>
+        <a href="index.html#tool" class="hidden sm:inline-block bg-white text-navy-800 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors">
+          Check My Bill
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Trust strip -->
+  <div class="bg-navy-900 text-blue-200 text-xs text-center py-2 tracking-wide px-4">
+    Based on Medicare Physician Fee Schedule & CMS fair price benchmarks &nbsp;·&nbsp; Not legal or medical advice
+  </div>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-b from-navy-900 via-navy-800 to-slate-50 pt-16 pb-24 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-blue-100 text-xs font-medium px-3.5 py-1.5 rounded-full mb-6">
+        Our Mission
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-5">
+        Healthcare costs shouldn't<br class="hidden sm:block" /> be a mystery.
+      </h1>
+      <p class="text-blue-100 text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
+        MedFair exists to give everyday Americans the same pricing leverage that hospitals and insurance companies have always had — and the tools to push back when something doesn't add up.
+      </p>
+    </div>
+  </section>
+
+  <main class="flex-1 max-w-3xl mx-auto px-4 -mt-12 pb-10 relative z-10 w-full">
+
+    <!-- Story card -->
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm px-6 sm:px-10 py-8 sm:py-10 mb-8">
+      <div class="text-xs font-semibold text-navy-600 uppercase tracking-widest mb-3">Why We Started MedFair</div>
+      <div class="space-y-4 text-gray-600 text-[15px] leading-relaxed">
+        <p>
+          Medical billing in the United States operates on an information imbalance. Hospitals negotiate complex, often confidential rates with insurers. Billing departments use procedure codes most patients have never heard of. And when a bill finally arrives, it's presented as a final number — take it or leave it — with little context for whether the amount charged bears any resemblance to a fair, standard rate.
+        </p>
+        <p>
+          Meanwhile, the federal government already publishes an enormous amount of pricing transparency data through the CMS Physician Fee Schedule — the same benchmark Medicare itself uses to reimburse providers across the country. That data is public. It's free. And almost nobody outside the healthcare billing industry knows it exists, let alone how to use it.
+        </p>
+        <p>
+          We built MedFair to close that gap. Our tool takes the procedure code and charge from your bill, checks it against that same public CMS reference pricing, and shows you — in plain English — whether what you were charged lines up with a reasonable benchmark. If it doesn't, we help you generate a formal letter that cites that same data to request a review.
+        </p>
+        <p>
+          We're not a law firm, and we don't promise outcomes. What we offer is information that used to be hard to find, presented in a way that's easy to act on — so that disputing an inflated bill doesn't require a billing expert on your side. It just requires the same numbers the hospital already has.
+        </p>
+      </div>
+    </div>
+
+    <!-- Mission pillars -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div class="bg-white border border-slate-200 rounded-xl px-5 py-6 text-center">
+        <div class="w-11 h-11 rounded-xl bg-navy-50 border border-navy-100 flex items-center justify-center mx-auto mb-4">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 1.5L3 5v4.5c0 5 3.5 9.6 7 10.5 3.5-.9 7-5.5 7-10.5V5l-7-3.5z" stroke="#1E3B82" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="text-sm font-semibold text-gray-900 mb-1.5">Transparency</h3>
+        <p class="text-xs text-gray-500 leading-relaxed">Public pricing data, explained in plain language — no industry jargon required.</p>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl px-5 py-6 text-center">
+        <div class="w-11 h-11 rounded-xl bg-navy-50 border border-navy-100 flex items-center justify-center mx-auto mb-4">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2.5v15M3 6.5h14M5 6.5L3.5 11a2 2 0 003.6 1.4M15 6.5L16.5 11a2 2 0 01-3.6 1.4" stroke="#1E3B82" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="text-sm font-semibold text-gray-900 mb-1.5">Fairness</h3>
+        <p class="text-xs text-gray-500 leading-relaxed">Everyone deserves a bill that reflects a reasonable, defensible price.</p>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl px-5 py-6 text-center">
+        <div class="w-11 h-11 rounded-xl bg-navy-50 border border-navy-100 flex items-center justify-center mx-auto mb-4">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 18s7-4.3 7-9.8a4.2 4.2 0 00-7-3.2A4.2 4.2 0 003 8.2C3 13.7 10 18 10 18z" stroke="#1E3B82" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="text-sm font-semibold text-gray-900 mb-1.5">Patient-First</h3>
+        <p class="text-xs text-gray-500 leading-relaxed">Built for the person holding the bill, not the institution that sent it.</p>
+      </div>
+    </div>
+
+    <!-- Closing statement -->
+    <div class="bg-navy-800 rounded-xl px-6 sm:px-10 py-8 text-center">
+      <p class="text-blue-100 text-sm leading-relaxed max-w-xl mx-auto">
+        Every American deserves to know whether their medical bill is fair before they pay it. That's the entire premise behind MedFair — and it's why the tool is, and always will be, free to use.
+      </p>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════════ -->
+  <footer class="bg-navy-900 text-slate-300 py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-8 pb-8 border-b border-white/10">
+        <div class="max-w-xs">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-7 h-7 rounded bg-navy-600 flex items-center justify-center flex-shrink-0">
+              <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
+                <path d="M10 2L3 6v4c0 4.418 3.134 8.555 7 9.9C16.866 18.555 20 14.418 20 10V6l-7-4H10z" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M8 10l1.5 1.5L12.5 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="text-white font-semibold tracking-tight">MedFair</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Helping patients understand and dispute inaccurate medical bills using transparent, publicly available reference pricing.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-12 gap-y-2 text-sm">
+          <a href="privacy.html" class="text-slate-300 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="terms.html" class="text-slate-300 hover:text-white transition-colors">Terms of Service</a>
+          <a href="about.html" class="text-slate-300 hover:text-white transition-colors">About Us</a>
+          <a href="contact.html" class="text-slate-300 hover:text-white transition-colors">Contact Us</a>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 text-xs text-slate-400">
+        <span>&copy; 2025 MedFair. All rights reserved.</span>
+        <span>Not affiliated with CMS or Medicare. Reference pricing for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — MedFair</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['IBM Plex Mono', 'monospace'],
+          },
+          colors: {
+            navy: {
+              50:  '#EEF2F9',
+              100: '#D5DFF0',
+              200: '#ABBFE1',
+              400: '#5680C2',
+              600: '#2B4FA3',
+              700: '#1E3B82',
+              800: '#142D66',
+              900: '#0C1F4A',
+            },
+            slate: {
+              550: '#5A6882',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .prose-legal h2 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #142D66;
+      margin-top: 2.25rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+    .prose-legal h2:first-child { margin-top: 0; }
+    .prose-legal p {
+      color: #4B5563;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .prose-legal ul {
+      list-style: disc;
+      padding-left: 1.5rem;
+      color: #4B5563;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .prose-legal li { margin-bottom: 0.4rem; }
+    .prose-legal strong { color: #1F2937; font-weight: 600; }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+  <!-- Navigation -->
+  <header class="bg-navy-800 text-white sticky top-0 z-40 shadow-md">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center gap-3">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded bg-navy-600 flex items-center justify-center flex-shrink-0">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+            <path d="M10 2L3 6v4c0 4.418 3.134 8.555 7 9.9C16.866 18.555 20 14.418 20 10V6l-7-4H10z" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M8 10l1.5 1.5L12.5 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="text-base font-semibold tracking-tight">MedFair</span>
+      </a>
+
+      <div class="ml-auto flex items-center gap-3">
+        <span class="hidden sm:inline-flex status-badge" style="background:rgba(255,255,255,0.1); color:#BFD4F8; border:1px solid rgba(255,255,255,0.15);">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1L9.5 2.5V5c0 2.6-1.7 4.5-4 5.5C3.2 9.5 1.5 7.6 1.5 5V2.5L5.5 1z" stroke="#BFD4F8" stroke-width="1" stroke-linejoin="round"/></svg>
+          HIPAA-Compliant UI
+        </span>
+        <a href="index.html#tool" class="hidden sm:inline-block bg-white text-navy-800 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors">
+          Check My Bill
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Trust strip -->
+  <div class="bg-navy-900 text-blue-200 text-xs text-center py-2 tracking-wide px-4">
+    Based on Medicare Physician Fee Schedule & CMS fair price benchmarks &nbsp;·&nbsp; Not legal or medical advice
+  </div>
+
+  <!-- Page Header -->
+  <section class="bg-navy-800 pt-12 pb-16 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-blue-100 text-xs font-medium px-3.5 py-1.5 rounded-full mb-5">
+        Legal
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-3">Terms of Service</h1>
+      <p class="text-blue-100 text-sm">Last updated: June 1, 2026</p>
+    </div>
+  </section>
+
+  <main class="flex-1 max-w-3xl mx-auto px-4 -mt-8 pb-20 relative z-10 w-full">
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm px-6 sm:px-10 py-8 sm:py-10">
+
+      <!-- Critical disclaimer callout -->
+      <div class="bg-red-50 border border-red-200 rounded-lg px-5 py-4 mb-8 flex gap-3">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="flex-shrink-0 mt-0.5"><circle cx="10" cy="10" r="8.3" stroke="#B91C1C" stroke-width="1.4"/><path d="M10 6v5M10 13.2h.01" stroke="#B91C1C" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <p class="text-sm text-red-800 leading-relaxed">
+          <strong class="font-semibold">Important:</strong> MedFair provides general informational reference pricing based on publicly available CMS (Centers for Medicare &amp; Medicaid Services) data. It does <strong>not</strong> constitute legal, financial, or medical advice, and no attorney-client, advisory, or fiduciary relationship is created by your use of this website.
+        </p>
+      </div>
+
+      <div class="prose-legal">
+
+        <h2>1. Acceptance of Terms</h2>
+        <p>
+          These Terms of Service ("Terms") govern your access to and use of the MedFair website and bill comparison tool (collectively, the "Service"), operated by MedFair ("MedFair," "we," "us," or "our"). By accessing or using the Service, you agree to be bound by these Terms. If you do not agree, please do not use the Service.
+        </p>
+
+        <h2>2. Description of the Service</h2>
+        <p>
+          MedFair offers a free, browser-based calculator that compares a medical bill amount you enter against publicly available Medicare Physician Fee Schedule reference pricing published by CMS. Based on that comparison, the Service may generate a downloadable dispute letter template. MedFair also offers an optional, one-time-purchase version of the dispute letter through our checkout flow.
+        </p>
+
+        <h2>3. Not Legal, Financial, or Medical Advice</h2>
+        <p>
+          The Service is provided strictly for general informational and educational purposes. The reference pricing, dispute letter templates, and any other content provided through the Service:
+        </p>
+        <ul>
+          <li>Do not constitute legal advice and should not be relied upon as a substitute for consultation with a licensed attorney;</li>
+          <li>Do not constitute financial or billing advice and should not be relied upon as a substitute for consultation with a licensed financial counselor or patient advocate; and</li>
+          <li>Do not constitute medical advice, diagnosis, or treatment recommendations of any kind.</li>
+        </ul>
+        <p>
+          You are solely responsible for evaluating the accuracy, completeness, and applicability of any information provided by the Service to your specific situation. We strongly encourage you to consult a qualified healthcare attorney, patient advocate, or financial counselor before taking any action based on information from MedFair.
+        </p>
+
+        <h2>4. No Guarantee of Outcome</h2>
+        <p>
+          MedFair makes no representation, warranty, or guarantee that disputing a medical bill using a letter generated through our Service will result in a reduced bill, a successful negotiation, or any particular outcome with a hospital, provider, or billing department. Results depend on factors outside of our control, including the policies of the specific provider involved.
+        </p>
+
+        <h2>5. Accuracy of Reference Pricing</h2>
+        <p>
+          Reference pricing displayed through the Service is derived from publicly available CMS Physician Fee Schedule data and is provided "as is." While we aim to keep this data current and accurate, CMS reference rates are updated periodically and may not reflect the most recent fee schedule, regional pricing adjustments, or the specific facility fees, supply costs, or other charges that can legitimately affect a final bill. MedFair does not guarantee the completeness or current accuracy of any reference price shown.
+        </p>
+
+        <h2>6. User Responsibilities</h2>
+        <p>
+          You agree to provide accurate information when using the calculator and to use the Service only for lawful purposes. You are solely responsible for the content of any dispute letter you send to a third party, including its accuracy and any consequences of sending it.
+        </p>
+
+        <h2>7. Payments</h2>
+        <p>
+          Certain features of the Service, such as the official dispute letter download, may require a one-time payment as indicated at checkout. All fees are stated in U.S. dollars and are non-refundable except as required by applicable law.
+        </p>
+
+        <h2>8. Intellectual Property</h2>
+        <p>
+          The Service, including its design, text, graphics, and underlying code, is owned by MedFair or its licensors and is protected by applicable intellectual property laws. You may not copy, modify, distribute, or create derivative works from the Service without our prior written consent, other than downloading a dispute letter generated for your own personal use.
+        </p>
+
+        <h2>9. Limitation of Liability</h2>
+        <p>
+          To the fullest extent permitted by law, MedFair and its officers, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, arising from your use of or inability to use the Service, including any reliance placed on reference pricing or dispute letter content.
+        </p>
+
+        <h2>10. Disclaimer of Warranties</h2>
+        <p>
+          The Service is provided on an "as is" and "as available" basis without warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
+        </p>
+
+        <h2>11. Changes to These Terms</h2>
+        <p>
+          We may revise these Terms from time to time. Material changes will be reflected by updating the "Last updated" date at the top of this page. Your continued use of the Service after changes are posted constitutes your acceptance of the revised Terms.
+        </p>
+
+        <h2>12. Governing Law</h2>
+        <p>
+          These Terms shall be governed by and construed in accordance with the laws of the United States and the state in which MedFair is headquartered, without regard to its conflict of law principles.
+        </p>
+
+        <h2>13. Contact Us</h2>
+        <p>
+          If you have questions about these Terms, please contact us at <a href="mailto:support@medfair.com" class="text-navy-700 font-medium hover:underline">support@medfair.com</a> or visit our <a href="contact.html" class="text-navy-700 font-medium hover:underline">Contact page</a>.
+        </p>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════════ -->
+  <footer class="bg-navy-900 text-slate-300 py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-8 pb-8 border-b border-white/10">
+        <div class="max-w-xs">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-7 h-7 rounded bg-navy-600 flex items-center justify-center flex-shrink-0">
+              <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
+                <path d="M10 2L3 6v4c0 4.418 3.134 8.555 7 9.9C16.866 18.555 20 14.418 20 10V6l-7-4H10z" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M8 10l1.5 1.5L12.5 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="text-white font-semibold tracking-tight">MedFair</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Helping patients understand and dispute inaccurate medical bills using transparent, publicly available reference pricing.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-12 gap-y-2 text-sm">
+          <a href="privacy.html" class="text-slate-300 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="terms.html" class="text-slate-300 hover:text-white transition-colors">Terms of Service</a>
+          <a href="about.html" class="text-slate-300 hover:text-white transition-colors">About Us</a>
+          <a href="contact.html" class="text-slate-300 hover:text-white transition-colors">Contact Us</a>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 text-xs text-slate-400">
+        <span>&copy; 2025 MedFair. All rights reserved.</span>
+        <span>Not affiliated with CMS or Medicare. Reference pricing for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

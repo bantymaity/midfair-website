@@ -1,0 +1,32 @@
+# robots.txt — medfair.us
+# Generated for a static single-domain web application.
+# Reference: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+
+# ── Allow all compliant crawlers full access ──────────────────────────
+User-agent: *
+Allow: /
+
+# Block crawling of any future admin, API, or draft paths that should
+# not be indexed. Add rules here as the site grows.
+# Disallow: /admin/
+# Disallow: /api/
+# Disallow: /drafts/
+
+# Explicitly disallow common nuisance bots that ignore Allow directives.
+# These do not respect robots.txt, but the declaration signals intent.
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# ── Sitemap location ──────────────────────────────────────────────────
+# Providing the absolute URL here allows all crawlers to discover the
+# sitemap without relying solely on Search Console submission.
+Sitemap: https://medfair.us/sitemap.xml

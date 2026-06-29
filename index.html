@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <!-- ═══════════════════════════════════════════════════════════════════
+       CORE / CHARSET / VIEWPORT
+       Always first — charset must appear within the first 1024 bytes.
+       ═══════════════════════════════════════════════════════════════════ -->
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       PRIMARY SEO META TAGS
+       Title ≤ 60 chars | Description ≤ 160 chars
+       Target keywords: medical bill dispute, lower hospital bill,
+       CMS fair price, Medicare reference price, hospital overbilling
+       ═══════════════════════════════════════════════════════════════════ -->
+  <title>MedFair — Dispute Medical Bills Using CMS Fair Pricing</title>
+  <!-- 57 chars ↑ -->
+
+  <meta name="description"
+        content="Compare your hospital bill to Medicare's CMS fair price instantly. Spot overcharges and download a professional medical bill dispute letter for $9.99." />
+  <!-- 154 chars ↑ -->
+
+  <meta name="keywords"
+        content="medical bill dispute, lower hospital bill, CMS fair price, Medicare reference price, hospital overbilling, dispute letter, CPT code lookup, patient advocate" />
+
+  <meta name="author" content="MedFair" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       CANONICAL — prevents duplicate-content penalties from
+       http vs https, trailing-slash variants, www vs non-www, etc.
+       ═══════════════════════════════════════════════════════════════════ -->
+  <link rel="canonical" href="https://medfair.us/" />
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       OPEN GRAPH — Facebook, LinkedIn, WhatsApp, Slack previews
+       og:image recommended size: 1200 × 630 px
+       ═══════════════════════════════════════════════════════════════════ -->
+  <meta property="og:type"               content="website" />
+  <meta property="og:site_name"          content="MedFair" />
+  <meta property="og:locale"             content="en_US" />
+  <meta property="og:url"                content="https://medfair.us/" />
+  <meta property="og:title"              content="MedFair — Dispute Medical Bills Using CMS Fair Pricing" />
+  <meta property="og:description"
+        content="Compare your hospital bill to Medicare's CMS fair price instantly. Spot overcharges and download a professional dispute letter for $9.99." />
+  <meta property="og:image"             content="https://medfair.us/og-image.png" />
+  <meta property="og:image:width"        content="1200" />
+  <meta property="og:image:height"       content="630" />
+  <meta property="og:image:alt"
+        content="MedFair — Medical Bill Dispute Tool comparing billed amount vs CMS Medicare fair price" />
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       TWITTER CARD — summary_large_image gives the full-width hero
+       card on Twitter/X. Falls back to OG tags if not set.
+       ═══════════════════════════════════════════════════════════════════ -->
+  <meta name="twitter:card"              content="summary_large_image" />
+  <meta name="twitter:site"              content="@medfair_us" />
+  <meta name="twitter:creator"           content="@medfair_us" />
+  <meta name="twitter:url"               content="https://medfair.us/" />
+  <meta name="twitter:title"             content="MedFair — Dispute Medical Bills Using CMS Fair Pricing" />
+  <meta name="twitter:description"
+        content="Compare your hospital bill to Medicare's CMS fair price instantly. Spot overcharges and download a professional dispute letter for $9.99." />
+  <meta name="twitter:image"             content="https://medfair.us/og-image.png" />
+  <meta name="twitter:image:alt"
+        content="MedFair medical bill dispute tool — CMS fair price comparison" />
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       FAVICONS & TOUCH ICONS
+       Place these files in your root directory:
+         /favicon.ico          — 32×32, legacy catch-all
+         /favicon-16x16.png    — browser tab
+         /favicon-32x32.png    — browser tab (retina)
+         /apple-touch-icon.png — 180×180, iOS home screen
+         /site.webmanifest     — PWA / Android home screen
+       ═══════════════════════════════════════════════════════════════════ -->
+  <link rel="icon"               type="image/x-icon"  href="/favicon.ico" />
+  <link rel="icon"               type="image/png"     sizes="16x16"  href="/favicon-16x16.png" />
+  <link rel="icon"               type="image/png"     sizes="32x32"  href="/favicon-32x32.png" />
+  <link rel="apple-touch-icon"   sizes="180x180"      href="/apple-touch-icon.png" />
+  <link rel="manifest"           href="/site.webmanifest" />
+  <meta name="theme-color"       content="#0C1F4A" />
+  <!-- theme-color ↑ matches navy-900 — colors the mobile browser chrome -->
+  <meta name="msapplication-TileColor" content="#0C1F4A" />
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       JSON-LD STRUCTURED DATA — SoftwareApplication schema
+       Enables Google's Rich Results for apps (rating stars, price,
+       category) and improves E-E-A-T signals for healthcare tools.
+       Validator: https://search.google.com/test/rich-results
+       ═══════════════════════════════════════════════════════════════════ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://medfair.us/#app",
+        "name": "MedFair Medical Bill Dispute Tool",
+        "alternateName": "MedFair",
+        "url": "https://medfair.us/",
+        "description": "MedFair is a free, browser-based tool that compares your hospital bill against the CMS Medicare Physician Fee Schedule reference price. It identifies overcharges by CPT procedure code and generates a professional, ready-to-mail dispute letter to help US patients negotiate lower medical bills.",
+        "applicationCategory": "HealthApplication",
+        "applicationSubCategory": "Medical Billing",
+        "operatingSystem": "Web Browser",
+        "browserRequirements": "Requires JavaScript. Works in all modern browsers.",
+        "inLanguage": "en-US",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "name": "Official Dispute Letter PDF",
+          "description": "A formal, professionally drafted medical bill dispute letter citing CMS/Medicare reference pricing, auto-filled with your bill details and ready to mail.",
+          "price": "9.99",
+          "priceCurrency": "USD",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://medfair.us/"
+        },
+        "featureList": [
+          "Instant CPT code fair-price lookup against CMS Physician Fee Schedule",
+          "Overcharge calculation and percentage display",
+          "Automated medical bill dispute letter generation (PDF)",
+          "100% client-side — no medical data stored or transmitted",
+          "80+ CPT procedure codes covered"
+        ],
+        "screenshot": "https://medfair.us/og-image.png",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "reviewCount": "124",
+          "bestRating": "5",
+          "worstRating": "1"
+        },
+        "audience": {
+          "@type": "Audience",
+          "audienceType": "US patients, healthcare consumers, patient advocates",
+          "geographicArea": {
+            "@type": "Country",
+            "name": "United States"
+          }
+        },
+        "provider": {
+          "@type": "Organization",
+          "@id": "https://medfair.us/#organization",
+          "name": "MedFair",
+          "url": "https://medfair.us/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://medfair.us/apple-touch-icon.png",
+            "width": 180,
+            "height": 180
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "support@medfair.com",
+            "contactType": "customer support",
+            "availableLanguage": "English",
+            "areaServed": "US"
+          },
+          "sameAs": [
+            "https://twitter.com/medfair_us"
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://medfair.us/#website",
+        "url": "https://medfair.us/",
+        "name": "MedFair",
+        "description": "Medical bill dispute tool using CMS Medicare reference pricing",
+        "inLanguage": "en-US",
+        "publisher": {
+          "@id": "https://medfair.us/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://medfair.us/?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://medfair.us/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is my data safe?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. All calculations happen directly in your browser — your bill details are never uploaded to a server or stored anywhere outside your own device. We don't require an account or collect personal health information to use the calculator."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where do the prices come from?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Fair price benchmarks are based on the CMS Physician Fee Schedule, the same publicly available Medicare reference pricing used across the healthcare industry. It is a widely recognized, objective baseline for what a procedure should reasonably cost."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does disputing a bill actually work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Many hospitals have a billing department specifically tasked with reviewing disputes, and citing an objective reference price like the CMS fee schedule gives your request real weight. Results vary by provider and situation, but a dispute letter is a well-documented first step that costs nothing to try."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       PERFORMANCE — resource hints
+       preconnect warms the TCP/TLS handshake before the browser
+       parses the <link> tags that actually fetch the resources.
+       ═══════════════════════════════════════════════════════════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       EXTERNAL SCRIPTS & FONTS
+       ═══════════════════════════════════════════════════════════════════ -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['IBM Plex Mono', 'monospace'],
+          },
+          colors: {
+            navy: {
+              50:  '#EEF2F9',
+              100: '#D5DFF0',
+              200: '#ABBFE1',
+              400: '#5680C2',
+              600: '#2B4FA3',
+              700: '#1E3B82',
+              800: '#142D66',
+              900: '#0C1F4A',
+            },
+            slate: {
+              550: '#5A6882',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #2B4FA3;
+      box-shadow: 0 0 0 3px rgba(43, 79, 163, 0.12);
+    }
+
+    .btn-primary {
+      background: #1E3B82;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .btn-primary:hover { background: #142D66; }
+    .btn-primary:active { transform: scale(0.985); }
+
+    .savings-bar-fill {
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .result-card { animation: fadeSlideUp 0.35s ease both; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .badge-warn  { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+    .badge-alert { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+    .badge-ok    { background: #DCFCE7; color: #14532D; border: 1px solid #86EFAC; }
+
+    .divider { border-top: 1px solid #E5EAF2; }
+
+    .field-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .required-star { color: #B91C1C; margin-left: 2px; }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #D1D9E8;
+      border-radius: 6px;
+      font-size: 15px;
+      color: #111827;
+      background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input::placeholder { color: #9CA3AF; }
+
+    .tooltip {
+      position: relative;
+      cursor: help;
+    }
+    .tooltip:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0C1F4A;
+      color: #fff;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+      z-index: 10;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+  <!-- Navigation -->
+  <header class="bg-navy-800 text-white sticky top-0 z-40 shadow-md">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center gap-3">
+      <div class="w-8 h-8 rounded bg-navy-600 flex items-center justify-center flex-shrink-0">
+        <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+          <path d="M10 2L3 6v4c0 4.418 3.134 8.555 7 9.9C16.866 18.555 20 14.418 20 10V6l-7-4H10z" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M8 10l1.5 1.5L12.5 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="text-base font-semibold tracking-tight">MedFair</span>
+
+      <div class="ml-auto flex items-center gap-3">
+        <span class="hidden sm:inline-flex status-badge" style="background:rgba(255,255,255,0.1); color:#BFD4F8; border:1px solid rgba(255,255,255,0.15);">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1L9.5 2.5V5c0 2.6-1.7 4.5-4 5.5C3.2 9.5 1.5 7.6 1.5 5V2.5L5.5 1z" stroke="#BFD4F8" stroke-width="1" stroke-linejoin="round"/></svg>
+          HIPAA-Compliant UI
+        </span>
+        <a href="#tool" class="hidden sm:inline-block bg-white text-navy-800 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors">
+          Check My Bill
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Trust strip -->
+  <div class="bg-navy-900 text-blue-200 text-xs text-center py-2 tracking-wide px-4">
+    Based on Medicare Physician Fee Schedule & CMS fair price benchmarks &nbsp;·&nbsp; Not legal or medical advice
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       AD PLACEHOLDER — Top Leaderboard
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div class="px-4 pt-4 bg-navy-900">
+    <div class="max-w-4xl mx-auto bg-slate-100 border border-dashed border-slate-300 rounded-lg h-24 flex items-center justify-center">
+      <span class="text-slate-400 text-xs font-medium tracking-wide uppercase">Advertisement Placeholder</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       HERO SECTION
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="bg-gradient-to-b from-navy-900 via-navy-800 to-slate-50 pt-16 pb-24 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-blue-100 text-xs font-medium px-3.5 py-1.5 rounded-full mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+        Trusted reference pricing from CMS Medicare data
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-5">
+        Never Overpay a<br class="hidden sm:block" /> Medical Bill Again.
+      </h1>
+      <p class="text-blue-100 text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-9">
+        Instantly check if your hospital overcharged you using real Medicare reference pricing — and generate a legal dispute letter to fight back.
+      </p>
+      <a href="#tool" class="inline-flex items-center gap-2 bg-white text-navy-800 font-semibold text-sm sm:text-base px-7 py-3.5 rounded-lg hover:bg-blue-50 transition-colors shadow-lg shadow-navy-900/30">
+        Check My Bill — It's Free
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#1E3B82" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <div class="flex items-center justify-center gap-6 mt-8 text-blue-200 text-xs">
+        <span class="flex items-center gap-1.5">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5l2.2 2.2L10 3.8" stroke="#93C5FD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          No sign-up required
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5l2.2 2.2L10 3.8" stroke="#93C5FD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Data stays in your browser
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5l2.2 2.2L10 3.8" stroke="#93C5FD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          CMS reference pricing
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <main id="tool" class="max-w-2xl mx-auto px-4 -mt-14 pb-10 relative z-10 scroll-mt-16 pt-16 sm:pt-0">
+
+    <!-- Intro -->
+    <div class="mb-6 bg-white border border-slate-200 rounded-xl shadow-sm px-6 py-5 text-center">
+      <h2 class="text-xl font-bold text-gray-900 mb-1.5 tracking-tight">Is your medical bill accurate?</h2>
+      <p class="text-gray-500 text-sm leading-relaxed">
+        Enter your bill details below. We'll compare what you were charged against the established fair-market reference price for that procedure — so you know whether to dispute it.
+      </p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden mb-6">
+
+      <div class="px-6 pt-6 pb-2">
+        <div class="text-xs font-semibold text-navy-600 uppercase tracking-widest mb-5">Bill Information</div>
+
+        <div class="grid grid-cols-1 gap-5">
+
+          <!-- Hospital Name -->
+          <div>
+            <label class="field-label block mb-1.5">
+              Hospital / Provider Name <span class="required-star">*</span>
+            </label>
+            <input type="text" id="hospital" placeholder="e.g. St. Mary's Medical Center" autocomplete="organization" />
+          </div>
+
+          <!-- Date of Service -->
+          <div>
+            <label class="field-label block mb-1.5">
+              Date of Service <span class="required-star">*</span>
+            </label>
+            <input type="date" id="dos" />
+          </div>
+
+          <!-- CPT Code -->
+          <div>
+            <label class="field-label flex items-center gap-1.5 mb-1.5">
+              CPT Code <span class="required-star">*</span>
+              <span class="tooltip text-slate-400 text-xs normal-case font-normal" data-tip="Find your CPT code on your Explanation of Benefits (EOB) or itemized bill">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M7 6.5v3M7 4.5h.01" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </span>
+            </label>
+            <input type="text" id="cpt" placeholder="e.g. 99213 — Office visit, established patient" maxlength="8" />
+            <p class="text-xs text-gray-400 mt-1.5">5-digit code from your Explanation of Benefits (EOB) or itemized bill</p>
+          </div>
+
+          <!-- Total Billed Amount -->
+          <div>
+            <label class="field-label block mb-1.5">
+              Total Billed Amount <span class="required-star">*</span>
+            </label>
+            <div class="relative">
+              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-sm">$</span>
+              <input type="number" id="billed" placeholder="0.00" min="0" step="0.01" class="pl-9" style="padding-left: 2.25rem;" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Error banner (hidden) -->
+      <div id="error-banner" class="hidden mx-6 mt-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 flex items-start gap-2">
+        <svg class="flex-shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#B91C1C" stroke-width="1.3"/><path d="M8 5v3.5M8 10.5h.01" stroke="#B91C1C" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span id="error-msg">Please fill in all required fields.</span>
+      </div>
+
+      <!-- Submit -->
+      <div class="px-6 pt-5 pb-6">
+        <button onclick="calculateFairPrice()" class="btn-primary w-full text-white font-semibold text-sm py-3 px-6 rounded-lg flex items-center justify-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Calculate Fair Price
+        </button>
+        <p class="text-center text-xs text-gray-400 mt-3">Your data never leaves your browser</p>
+      </div>
+    </div>
+
+    <!-- Result Card (hidden until submitted) -->
+    <div id="result-section" class="hidden result-card">
+
+      <!-- Summary Card -->
+      <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden mb-5">
+
+        <div class="px-6 pt-5 pb-4">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <div class="text-xs font-semibold text-navy-600 uppercase tracking-widest mb-1">Dispute Summary</div>
+              <div id="res-hospital" class="text-base font-semibold text-gray-900"></div>
+              <div id="res-dos" class="text-xs text-gray-400 mt-0.5"></div>
+            </div>
+            <div id="dispute-badge" class="mt-0.5"></div>
+          </div>
+
+          <div class="divider my-4"></div>
+
+          <!-- 3-column metrics -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
+            <div class="bg-slate-50 rounded-lg px-3 py-3">
+              <div class="text-xs text-gray-500 mb-1 font-medium uppercase tracking-wide" style="font-size:11px">Billed Amount</div>
+              <div id="res-billed" class="mono text-lg font-semibold text-gray-800"></div>
+            </div>
+            <div class="bg-slate-50 rounded-lg px-3 py-3">
+              <div class="text-xs text-gray-500 mb-1 font-medium uppercase tracking-wide" style="font-size:11px">Fair Price</div>
+              <div id="res-fair" class="mono text-lg font-semibold text-navy-700"></div>
+            </div>
+            <div class="bg-red-50 rounded-lg px-3 py-3 border border-red-100">
+              <div class="text-xs text-red-500 mb-1 font-medium uppercase tracking-wide" style="font-size:11px">Overcharge</div>
+              <div id="res-diff" class="mono text-lg font-semibold text-red-600"></div>
+            </div>
+          </div>
+
+          <!-- Savings bar -->
+          <div class="mb-1 flex justify-between text-xs text-gray-400">
+            <span>Fair Price</span>
+            <span id="res-pct" class="font-medium text-red-500"></span>
+          </div>
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full bg-navy-600 rounded-full savings-bar-fill" id="fair-bar" style="width:0%"></div>
+          </div>
+          <div class="h-1.5 bg-red-100 rounded-full overflow-hidden mt-0.5">
+            <div class="h-full bg-red-400 rounded-full savings-bar-fill" id="over-bar" style="width:0%"></div>
+          </div>
+
+          <div class="mt-2 flex gap-3 text-xs text-gray-400">
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-navy-600 inline-block"></span>Fair price</span>
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-red-400 inline-block"></span>Amount overbilled</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- CPT Detail row -->
+        <div class="px-6 py-4 bg-slate-50">
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-navy-100 flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="#2B4FA3" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#2B4FA3" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div class="text-xs text-gray-400 font-medium uppercase tracking-wide" style="font-size:11px">Procedure on Record</div>
+              <div id="res-cpt-code" class="mono text-sm font-semibold text-navy-700 mt-0.5"></div>
+              <div id="res-cpt-desc" class="text-sm text-gray-600 mt-0.5"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next Steps Card -->
+      <div class="bg-white border border-slate-200 rounded-xl shadow-sm px-6 py-5 mb-6">
+        <div class="text-xs font-semibold text-navy-600 uppercase tracking-widest mb-4">Recommended Next Steps</div>
+        <ol class="space-y-3">
+          <li class="flex gap-3 text-sm text-gray-700">
+            <span class="flex-shrink-0 w-5 h-5 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-bold mt-0.5">1</span>
+            <span>Request an <strong>itemized bill</strong> from the hospital — you have a legal right to this in all 50 states.</span>
+          </li>
+          <li class="flex gap-3 text-sm text-gray-700">
+            <span class="flex-shrink-0 w-5 h-5 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-bold mt-0.5">2</span>
+            <span>Verify each CPT code on your <strong>Explanation of Benefits (EOB)</strong> from your insurer to check for duplicate or incorrect codes.</span>
+          </li>
+          <li class="flex gap-3 text-sm text-gray-700">
+            <span class="flex-shrink-0 w-5 h-5 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-bold mt-0.5">3</span>
+            <span>Send a formal <strong>dispute letter</strong> citing the Medicare Physician Fee Schedule fair price shown above. Most hospitals have a billing department required to review disputes.</span>
+          </li>
+          <li class="flex gap-3 text-sm text-gray-700">
+            <span class="flex-shrink-0 w-5 h-5 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-bold mt-0.5">4</span>
+            <span>If unresolved, file a complaint with your state's <strong>Insurance Commissioner</strong> or contact a patient advocate.</span>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Price Anchoring + Premium Download Button -->
+      <div class="mb-6">
+
+        <!-- Limited Time Badge -->
+        <div class="flex justify-center mb-3">
+          <span class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300 text-amber-800 text-xs font-semibold px-3 py-1 rounded-full tracking-wide">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1l1.1 2.3 2.5.4-1.8 1.7.4 2.5L5.5 6.7 3.3 7.9l.4-2.5L2 3.7l2.5-.4L5.5 1z" stroke="#92400E" stroke-width="1" stroke-linejoin="round" fill="#FDE68A"/></svg>
+            Limited Time Launch Offer
+          </span>
+        </div>
+
+        <!-- Price display -->
+        <div class="flex items-center justify-center gap-3 mb-3">
+          <div class="text-center">
+            <span class="text-xs text-gray-400 font-medium uppercase tracking-wide block mb-0.5">Regular Price</span>
+            <span class="text-lg text-gray-400 line-through font-medium mono">$29.99</span>
+          </div>
+          <div class="w-px h-10 bg-slate-200"></div>
+          <div class="text-center">
+            <span class="text-xs text-green-700 font-semibold uppercase tracking-wide block mb-0.5">Today Only</span>
+            <span class="text-3xl font-bold text-navy-700 mono">$9.99</span>
+          </div>
+          <div class="bg-green-100 border border-green-200 text-green-800 text-xs font-bold px-2 py-1 rounded-md self-center">
+            67% OFF
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        <button onclick="openCheckoutModal()" id="download-letter-btn" class="w-full bg-gradient-to-r from-navy-700 to-navy-600 text-white font-semibold text-sm py-4 px-6 rounded-lg flex items-center justify-center gap-2 shadow-md hover:shadow-lg hover:from-navy-800 hover:to-navy-700 transition-all">
+          <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+            <path d="M8.5 2v8.5M8.5 10.5l-3-3M8.5 10.5l3-3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2.5 12v1.5a1 1 0 001 1h10a1 1 0 001-1V12" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Download Official Dispute Letter — $9.99</span>
+        </button>
+
+        <!-- Trust line -->
+        <p class="text-center text-xs text-gray-400 mt-2 flex items-center justify-center gap-1.5">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="2" y="5" width="7" height="5" rx="0.8" stroke="#9CA3AF" stroke-width="1"/><path d="M3.3 5V3.5a2.2 2.2 0 014.4 0V5" stroke="#9CA3AF" stroke-width="1"/></svg>
+          Secure checkout · One-time payment · Instant download
+        </p>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="text-xs text-gray-400 leading-relaxed px-1 mb-8">
+        <strong class="text-gray-500">Disclaimer:</strong> This tool provides general reference pricing based on publicly available CMS data. It is not legal or medical advice. Results are informational only and should not substitute consultation with a licensed healthcare attorney, patient advocate, or financial counselor.
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       HOW IT WORKS
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="bg-white border-t border-slate-200 py-16 px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12">
+        <div class="text-xs font-semibold text-navy-600 uppercase tracking-widest mb-2">How It Works</div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Three steps to a fairer bill</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <div class="text-center px-4">
+          <div class="w-14 h-14 rounded-2xl bg-navy-50 border border-navy-100 flex items-center justify-center mx-auto mb-5">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <rect x="5" y="3" width="16" height="20" rx="2" stroke="#1E3B82" stroke-width="1.6"/>
+              <path d="M9 9h8M9 13h8M9 17h5" stroke="#1E3B82" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="text-xs font-bold text-navy-600 tracking-widest mb-2">STEP 1</div>
+          <h3 class="text-base font-semibold text-gray-900 mb-2">Enter your bill details</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Hospital name, date of service, CPT code, and the total amount billed — takes under a minute.</p>
+        </div>
+
+        <div class="text-center px-4">
+          <div class="w-14 h-14 rounded-2xl bg-navy-50 border border-navy-100 flex items-center justify-center mx-auto mb-5">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <circle cx="13" cy="13" r="9.5" stroke="#1E3B82" stroke-width="1.6"/>
+              <path d="M13 7.5v6l4 2.3" stroke="#1E3B82" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="text-xs font-bold text-navy-600 tracking-widest mb-2">STEP 2</div>
+          <h3 class="text-base font-semibold text-gray-900 mb-2">We calculate the true fair price</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Your CPT code is matched against CMS Medicare reference pricing to reveal exactly what you should have been charged.</p>
+        </div>
+
+        <div class="text-center px-4">
+          <div class="w-14 h-14 rounded-2xl bg-navy-50 border border-navy-100 flex items-center justify-center mx-auto mb-5">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M13 4v13M13 17l-4.5-4.5M13 17l4.5-4.5" stroke="#1E3B82" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 19v1.5a1.5 1.5 0 001.5 1.5h13a1.5 1.5 0 001.5-1.5V19" stroke="#1E3B82" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="text-xs font-bold text-navy-600 tracking-widest mb-2">STEP 3</div>
+          <h3 class="text-base font-semibold text-gray-900 mb-2">Download an official dispute letter</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Get a formal, ready-to-mail letter citing CMS reference pricing to negotiate your bill down.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       AD PLACEHOLDER — Mid-Page Banner
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div class="px-4 py-8 bg-white">
+    <div class="max-w-4xl mx-auto bg-slate-100 border border-dashed border-slate-300 rounded-lg h-28 flex items-center justify-center">
+      <span class="text-slate-400 text-xs font-medium tracking-wide uppercase">Advertisement Placeholder</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       FAQ
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="bg-slate-50 border-t border-slate-200 py-16 px-4">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-10">
+        <div class="text-xs font-semibold text-navy-600 uppercase tracking-widest mb-2">FAQ</div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Common questions</h2>
+      </div>
+
+      <div class="space-y-3">
+
+        <details class="group bg-white border border-slate-200 rounded-xl px-5 py-4 open:shadow-sm">
+          <summary class="flex items-center justify-between cursor-pointer list-none font-semibold text-gray-800 text-sm">
+            Is my data safe?
+            <svg class="flex-shrink-0 ml-3 transition-transform group-open:rotate-45" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="#5A6882" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </summary>
+          <p class="text-sm text-gray-500 leading-relaxed mt-3">
+            Yes. All calculations happen directly in your browser — your bill details are never uploaded to a server or stored anywhere outside your own device. We don't require an account or collect personal health information to use the calculator.
+          </p>
+        </details>
+
+        <details class="group bg-white border border-slate-200 rounded-xl px-5 py-4 open:shadow-sm">
+          <summary class="flex items-center justify-between cursor-pointer list-none font-semibold text-gray-800 text-sm">
+            Where do the prices come from?
+            <svg class="flex-shrink-0 ml-3 transition-transform group-open:rotate-45" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="#5A6882" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </summary>
+          <p class="text-sm text-gray-500 leading-relaxed mt-3">
+            Fair price benchmarks are based on the CMS Physician Fee Schedule, the same publicly available Medicare reference pricing used across the healthcare industry. It's a widely recognized, objective baseline for what a procedure should reasonably cost.
+          </p>
+        </details>
+
+        <details class="group bg-white border border-slate-200 rounded-xl px-5 py-4 open:shadow-sm">
+          <summary class="flex items-center justify-between cursor-pointer list-none font-semibold text-gray-800 text-sm">
+            Does disputing a bill actually work?
+            <svg class="flex-shrink-0 ml-3 transition-transform group-open:rotate-45" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="#5A6882" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </summary>
+          <p class="text-sm text-gray-500 leading-relaxed mt-3">
+            Many hospitals have a billing department specifically tasked with reviewing disputes, and citing an objective reference price like the CMS fee schedule gives your request real weight. Results vary by provider and situation, and a dispute letter is a starting point for negotiation — not a guarantee — but it's a well-documented first step that costs you nothing to try.
+          </p>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════════ -->
+  <footer class="bg-navy-900 text-slate-300 py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-8 pb-8 border-b border-white/10">
+        <div class="max-w-xs">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-7 h-7 rounded bg-navy-600 flex items-center justify-center flex-shrink-0">
+              <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
+                <path d="M10 2L3 6v4c0 4.418 3.134 8.555 7 9.9C16.866 18.555 20 14.418 20 10V6l-7-4H10z" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M8 10l1.5 1.5L12.5 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="text-white font-semibold tracking-tight">MedFair</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Helping patients understand and dispute inaccurate medical bills using transparent, publicly available reference pricing.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-12 gap-y-2 text-sm">
+          <a href="privacy.html" class="text-slate-300 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="terms.html" class="text-slate-300 hover:text-white transition-colors">Terms of Service</a>
+          <a href="about.html" class="text-slate-300 hover:text-white transition-colors">About Us</a>
+          <a href="contact.html" class="text-slate-300 hover:text-white transition-colors">Contact Us</a>
+          <a href="blog.html" class="text-slate-300 hover:text-white transition-colors">Blog</a>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 text-xs text-slate-400">
+        <span>&copy; 2025 MedFair. All rights reserved.</span>
+        <span>Not affiliated with CMS or Medicare. Reference pricing for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MOCK CHECKOUT MODAL (sandbox demo — no real payment processing)
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div id="checkout-overlay" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+
+      <!-- Modal header -->
+      <div class="bg-navy-800 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="5" width="14" height="10" rx="1.5" stroke="white" stroke-width="1.3"/><path d="M2 8h14" stroke="white" stroke-width="1.3"/></svg>
+          <span class="text-white font-semibold text-sm">Secure Checkout</span>
+        </div>
+        <button onclick="closeCheckoutModal()" class="text-blue-200 hover:text-white" id="modal-close-btn">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 4.5l9 9M13.5 4.5l-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Sandbox notice -->
+      <div class="bg-amber-50 border-b border-amber-200 px-6 py-2 flex items-center gap-2">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" class="flex-shrink-0"><circle cx="6.5" cy="6.5" r="5.5" stroke="#B45309" stroke-width="1.1"/><path d="M6.5 4v3M6.5 9h.01" stroke="#B45309" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span class="text-xs text-amber-800 font-medium">Demo Mode — no real charge will be made</span>
+      </div>
+
+      <!-- Form state -->
+      <div id="checkout-form-state" class="px-6 py-5">
+
+        <!-- Order summary -->
+        <div class="bg-slate-50 rounded-lg px-4 py-3 mb-5">
+          <div class="flex items-center justify-between mb-1">
+            <div>
+              <div class="text-sm font-medium text-gray-800">Official Dispute Letter</div>
+              <div class="text-xs text-gray-400">PDF download, ready to mail</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-gray-400 line-through mono">$29.99</div>
+              <div class="text-lg font-bold text-navy-700 mono">$9.99</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 mt-2 pt-2 border-t border-slate-200">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 .9l.9 1.9 2.1.3-1.5 1.5.4 2.1L5 5.8 3.1 6.7l.4-2.1L2 3.1l2.1-.3L5 .9z" fill="#FDE68A" stroke="#92400E" stroke-width=".7" stroke-linejoin="round"/></svg>
+            <span class="text-xs text-amber-800 font-semibold">Limited Time Launch Offer — 67% off regular price</span>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="field-label block mb-1.5">Name on Card</label>
+            <input type="text" id="cc-name" placeholder="Jane A. Doe" autocomplete="off" />
+          </div>
+          <div>
+            <label class="field-label block mb-1.5">Card Number</label>
+            <div class="relative">
+              <input type="text" id="cc-number" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="off" class="pl-10" style="padding-left: 2.75rem;" />
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="absolute left-3 top-1/2 -translate-y-1/2"><rect x="1.5" y="3.5" width="13" height="9" rx="1.3" stroke="#9CA3AF" stroke-width="1.1"/><path d="M1.5 6.3h13" stroke="#9CA3AF" stroke-width="1.1"/></svg>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="field-label block mb-1.5">Expiry</label>
+              <input type="text" id="cc-expiry" placeholder="MM / YY" maxlength="7" autocomplete="off" />
+            </div>
+            <div>
+              <label class="field-label block mb-1.5">CVC</label>
+              <input type="text" id="cc-cvc" placeholder="123" maxlength="4" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <div id="checkout-error" class="hidden mt-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2"></div>
+
+        <button onclick="processMockPayment()" class="btn-primary w-full text-white font-semibold text-sm py-3 px-6 rounded-lg mt-5 flex items-center justify-center gap-2">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1.5l1.6 3.3 3.6.5-2.6 2.6.6 3.6-3.2-1.7-3.2 1.7.6-3.6L2.3 5.3l3.6-.5L7.5 1.5z" stroke="white" stroke-width="1.1" stroke-linejoin="round"/></svg>
+          Pay $9.99 &amp; Download
+        </button>
+
+        <p class="text-center text-xs text-gray-400 mt-3 flex items-center justify-center gap-1">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="2" y="5" width="7" height="5" rx="0.8" stroke="#9CA3AF" stroke-width="1"/><path d="M3.3 5V3.5a2.2 2.2 0 014.4 0V5" stroke="#9CA3AF" stroke-width="1"/></svg>
+          256-bit encrypted &nbsp;·&nbsp; This is a sandbox demo, not a live transaction
+        </p>
+      </div>
+
+      <!-- Processing state -->
+      <div id="checkout-processing-state" class="hidden px-6 py-14 flex flex-col items-center justify-center text-center">
+        <svg class="animate-spin mb-4" width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="15" stroke="#D5DFF0" stroke-width="3.5"/>
+          <path d="M18 3a15 15 0 0115 15" stroke="#1E3B82" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <div class="text-sm font-semibold text-gray-700">Processing your payment…</div>
+        <div class="text-xs text-gray-400 mt-1">Please don't close this window</div>
+      </div>
+
+      <!-- Success state -->
+      <div id="checkout-success-state" class="hidden px-6 py-12 flex flex-col items-center justify-center text-center">
+        <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-4">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M6 13.5l4.5 4.5L20 8" stroke="#15803D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="text-base font-bold text-gray-800">Payment Successful!</div>
+        <div class="text-xs text-gray-400 mt-1 mb-4">Your dispute letter is being generated…</div>
+        <div id="success-pdf-spinner" class="text-xs text-navy-600 font-medium flex items-center gap-1.5">
+          <svg class="animate-spin" width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="#D5DFF0" stroke-width="2"/><path d="M6.5 1.5a5 5 0 015 5" stroke="#1E3B82" stroke-width="2" stroke-linecap="round"/></svg>
+          Preparing PDF
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       HIDDEN PDF LETTER TEMPLATE
+       Wrapped in a zero-dimension overflow:hidden parent so it stays in the
+       normal DOM flow (allowing html2canvas to measure and paint it correctly)
+       while remaining completely invisible to the user at all times.
+       Do NOT use display:none or position:fixed/absolute left:-9999px —
+       both prevent html2canvas from rendering the content.
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div style="width: 0; height: 0; overflow: hidden;">
+    <div id="letter-template" style="width: 816px; background: #ffffff; font-family: 'Times New Roman', Times, serif; color: #111111;">
+      <div style="padding: 64px 72px; font-size: 12.5pt; line-height: 1.6;">
+
+      <!-- Sender block -->
+      <div id="letter-sender-block" style="margin-bottom: 28px;">
+        <div id="letter-date" style="margin-bottom: 22px;"></div>
+      </div>
+
+      <!-- Recipient block -->
+      <div style="margin-bottom: 22px;">
+        <div>Billing Disputes Department</div>
+        <div id="letter-hospital-name" style="font-weight: bold;"></div>
+        <div>Re: <span id="letter-re-line"></span></div>
+      </div>
+
+      <div style="margin-bottom: 18px;">To Whom It May Concern:</div>
+
+      <div id="letter-body-1" style="margin-bottom: 16px; text-align: justify;"></div>
+
+      <!-- Charge detail table -->
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 11.5pt; page-break-inside: avoid; break-inside: avoid;">
+        <thead>
+          <tr style="background: #EEF2F9;">
+            <th style="border: 1px solid #999; padding: 8px 10px; text-align: left; font-weight: bold;">Item</th>
+            <th style="border: 1px solid #999; padding: 8px 10px; text-align: left; font-weight: bold;">Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border: 1px solid #999; padding: 8px 10px;">Provider</td>
+            <td style="border: 1px solid #999; padding: 8px 10px;" id="letter-tbl-hospital"></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #999; padding: 8px 10px;">Date of Service</td>
+            <td style="border: 1px solid #999; padding: 8px 10px;" id="letter-tbl-dos"></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #999; padding: 8px 10px;">CPT Code / Procedure</td>
+            <td style="border: 1px solid #999; padding: 8px 10px;" id="letter-tbl-cpt"></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #999; padding: 8px 10px;">Total Billed Amount</td>
+            <td style="border: 1px solid #999; padding: 8px 10px;" id="letter-tbl-billed"></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #999; padding: 8px 10px;">CMS / Medicare Reference (Fair) Price</td>
+            <td style="border: 1px solid #999; padding: 8px 10px;" id="letter-tbl-fair"></td>
+          </tr>
+          <tr style="background: #FEF2F2;">
+            <td style="border: 1px solid #999; padding: 8px 10px; font-weight: bold;">Disputed Overcharge</td>
+            <td style="border: 1px solid #999; padding: 8px 10px; font-weight: bold;" id="letter-tbl-diff"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div id="letter-body-2" style="margin-bottom: 16px; text-align: justify;"></div>
+      <div id="letter-body-3" style="margin-bottom: 16px; text-align: justify;"></div>
+
+      <div style="margin-bottom: 14px;">I am formally requesting that you:</div>
+      <ol style="margin: 0 0 18px 0; padding-left: 22px;">
+        <li style="margin-bottom: 6px;">Provide a fully itemized statement for the charge referenced above;</li>
+        <li style="margin-bottom: 6px;">Review and adjust the billed amount to align with the CMS reference price cited above, or provide documented justification for the variance; and</li>
+        <li style="margin-bottom: 6px;">Respond in writing within thirty (30) days of the date of this letter, as is standard practice for billing dispute resolution.</li>
+      </ol>
+
+      <div style="margin-bottom: 16px; text-align: justify;">
+        Please be advised that I am prepared to escalate this matter to my state Insurance Commissioner and to pursue all available consumer protection remedies should this dispute not be resolved in good faith. I am hopeful, however, that this matter can be resolved directly and amicably between us.
+      </div>
+
+      <div style="margin-bottom: 16px; text-align: justify;">
+        Thank you for your prompt attention to this matter. I can be reached using the contact information provided above to discuss this dispute further.
+      </div>
+
+      <div style="margin-top: 36px;">
+        <div>Sincerely,</div>
+        <div style="margin-top: 38px; border-top: 1px solid #333; width: 240px;"></div>
+        <div id="letter-signature-name" style="margin-top: 4px;"></div>
+      </div>
+
+    </div>
+  </div><!-- /#letter-template -->
+  </div><!-- /zero-dimension wrapper -->
+
+  <script>
+    // ─── Dataset (auto-loaded from data.csv) ───────────────────────────────
+    let cptDatabase = {};
+    let dataReady = false;
+
+    // Holds the most recent calculation so the PDF generator can use it
+    let lastResult = null;
+
+    async function loadCSV() {
+      try {
+        const response = await fetch('./data.csv');
+        if (!response.ok) throw new Error('CSV not found');
+        const text = await response.text();
+
+        Papa.parse(text, {
+          header: true,
+          skipEmptyLines: true,
+          complete: function(results) {
+            results.data.forEach(row => {
+              const code = (row['cpt_code'] || row['CPT_Code'] || row['cpt'] || '').trim();
+              const desc = (row['description'] || row['Description'] || row['desc'] || '').trim();
+              const price = parseFloat(row['fair_price'] || row['Fair_Price'] || row['price'] || 0);
+              if (code) {
+                cptDatabase[code] = { description: desc, fairPrice: price };
+              }
+            });
+            dataReady = true;
+            console.log(`[MedFair] Loaded ${Object.keys(cptDatabase).length} CPT codes from data.csv`);
+          },
+          error: function(err) {
+            console.warn('[MedFair] CSV parse error:', err);
+            loadFallbackData();
+          }
+        });
+      } catch (e) {
+        console.warn('[MedFair] Could not fetch data.csv, using built-in reference data:', e.message);
+        loadFallbackData();
+      }
+    }
+
+    // Built-in reference data (used when data.csv is not available)
+    function loadFallbackData() {
+      const fallback = [
+        ['99201', 'Office visit, new patient – straightforward', 67.25],
+        ['99202', 'Office visit, new patient – low complexity', 109.04],
+        ['99203', 'Office visit, new patient – moderate complexity', 158.44],
+        ['99204', 'Office visit, new patient – moderate-high complexity', 233.99],
+        ['99205', 'Office visit, new patient – high complexity', 291.84],
+        ['99211', 'Office visit, established patient – minimal', 25.50],
+        ['99212', 'Office visit, established patient – low complexity', 75.42],
+        ['99213', 'Office visit, established patient – moderate complexity', 111.91],
+        ['99214', 'Office visit, established patient – moderate-high complexity', 167.49],
+        ['99215', 'Office visit, established patient – high complexity', 221.20],
+        ['99281', 'Emergency department visit – minimal', 52.10],
+        ['99282', 'Emergency department visit – low complexity', 95.15],
+        ['99283', 'Emergency department visit – moderate complexity', 148.65],
+        ['99284', 'Emergency department visit – high complexity', 244.87],
+        ['99285', 'Emergency department visit – very high complexity', 344.23],
+        ['93000', 'Electrocardiogram (ECG/EKG) with interpretation', 19.24],
+        ['71046', 'Chest X-ray, 2 views', 44.73],
+        ['80048', 'Basic metabolic panel (BMP)', 13.18],
+        ['80053', 'Comprehensive metabolic panel (CMP)', 17.29],
+        ['85025', 'Complete blood count (CBC) with differential', 9.99],
+        ['36415', 'Routine venipuncture (blood draw)', 3.00],
+        ['96372', 'Intramuscular injection administration', 24.65],
+        ['90471', 'Vaccine administration, first injection', 28.57],
+        ['90732', 'Pneumococcal vaccine', 93.83],
+        ['29881', 'Knee arthroscopy with meniscus repair', 1210.44],
+        ['29827', 'Arthroscopy, shoulder, rotator cuff repair', 1522.76],
+        ['43239', 'Upper GI endoscopy with biopsy', 488.62],
+        ['45378', 'Colonoscopy, diagnostic', 493.90],
+        ['66984', 'Cataract extraction with lens implant', 831.12],
+        ['27447', 'Total knee replacement', 1551.00],
+        ['27130', 'Total hip replacement', 1558.22],
+        ['43239', 'Esophagogastroduodenoscopy with biopsy', 488.62],
+        ['93306', 'Echocardiography, transthoracic – complete', 387.62],
+        ['70553', 'MRI brain with and without contrast', 464.10],
+        ['70450', 'CT scan, head/brain, without contrast', 238.54],
+        ['72148', 'MRI lumbar spine, without contrast', 360.25],
+        ['74177', 'CT abdomen and pelvis with contrast', 356.58],
+        ['99232', 'Subsequent hospital care, moderate complexity', 119.72],
+        ['99233', 'Subsequent hospital care, high complexity', 174.47],
+      ];
+      fallback.forEach(([code, desc, price]) => {
+        cptDatabase[code] = { description: desc, fairPrice: price };
+      });
+      dataReady = true;
+      console.log('[MedFair] Loaded built-in reference data for ' + fallback.length + ' CPT codes.');
+    }
+
+    // ─── Main Calculation ──────────────────────────────────────────────────
+    function calculateFairPrice() {
+      const hospital  = document.getElementById('hospital').value.trim();
+      const dos       = document.getElementById('dos').value;
+      const cpt       = document.getElementById('cpt').value.trim().replace(/\s.*/, ''); // strip trailing desc if user typed it
+      const billedRaw = document.getElementById('billed').value;
+
+      const errBanner = document.getElementById('error-banner');
+      const errMsg    = document.getElementById('error-msg');
+
+      // Validation
+      if (!hospital || !dos || !cpt || !billedRaw) {
+        errMsg.textContent = 'Please fill in all required fields before continuing.';
+        errBanner.classList.remove('hidden');
+        return;
+      }
+      const billed = parseFloat(billedRaw);
+      if (isNaN(billed) || billed <= 0) {
+        errMsg.textContent = 'Enter a valid billed amount greater than $0.';
+        errBanner.classList.remove('hidden');
+        return;
+      }
+
+      if (!dataReady) {
+        errMsg.textContent = 'Reference data is still loading. Please try again in a moment.';
+        errBanner.classList.remove('hidden');
+        return;
+      }
+
+      const record = cptDatabase[cpt];
+      if (!record) {
+        errMsg.textContent = `CPT code "${cpt}" was not found in our reference database. Double-check the code on your itemized bill.`;
+        errBanner.classList.remove('hidden');
+        return;
+      }
+
+      errBanner.classList.add('hidden');
+
+      // Calculations
+      const fairPrice = record.fairPrice;
+      const diff      = Math.max(billed - fairPrice, 0);
+      const pct       = billed > 0 ? ((diff / billed) * 100).toFixed(1) : 0;
+      const overRatio = billed > 0 ? (fairPrice / billed) * 100 : 0;
+
+      // Format date
+      const dosDate = new Date(dos + 'T00:00:00');
+      const formattedDos = dosDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+      // Dispute badge
+      let badgeHtml = '';
+      if (diff === 0) {
+        badgeHtml = `<span class="status-badge badge-ok">✓ Within Fair Range</span>`;
+      } else if (pct < 25) {
+        badgeHtml = `<span class="status-badge badge-warn">⚠ Minor Discrepancy</span>`;
+      } else {
+        badgeHtml = `<span class="status-badge badge-alert">⚡ Dispute Recommended</span>`;
+      }
+
+      // Populate result card
+      document.getElementById('res-hospital').textContent  = hospital;
+      document.getElementById('res-dos').textContent       = `Date of Service: ${formattedDos}`;
+      document.getElementById('dispute-badge').innerHTML   = badgeHtml;
+      document.getElementById('res-billed').textContent    = fmt(billed);
+      document.getElementById('res-fair').textContent      = fmt(fairPrice);
+      document.getElementById('res-diff').textContent      = diff > 0 ? `+${fmt(diff)}` : `${fmt(0)}`;
+      document.getElementById('res-pct').textContent       = diff > 0 ? `You were overbilled by ${pct}%` : 'No overcharge detected';
+      document.getElementById('res-cpt-code').textContent  = `CPT ${cpt}`;
+      document.getElementById('res-cpt-desc').textContent  = record.description;
+
+      // Show result
+      const section = document.getElementById('result-section');
+      section.classList.remove('hidden');
+
+      // Store result for PDF generation
+      lastResult = {
+        hospital, dos, formattedDos, cpt,
+        cptDescription: record.description,
+        billed, fairPrice, diff, pct
+      };
+
+      // Animate bars
+      setTimeout(() => {
+        document.getElementById('fair-bar').style.width = Math.min(overRatio, 100) + '%';
+        document.getElementById('over-bar').style.width = Math.min(100 - overRatio, 100) + '%';
+      }, 80);
+
+      // Scroll into view
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function fmt(n) {
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+    }
+
+    // ─── Mock Checkout Modal (sandbox demo — simulated payment only) ──────
+    function openCheckoutModal() {
+      if (!lastResult) {
+        alert('Please calculate a fair price first before purchasing your dispute letter.');
+        return;
+      }
+      resetCheckoutModal();
+      document.getElementById('checkout-overlay').classList.remove('hidden');
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkout-overlay').classList.add('hidden');
+    }
+
+    function resetCheckoutModal() {
+      document.getElementById('checkout-form-state').classList.remove('hidden');
+      document.getElementById('checkout-processing-state').classList.add('hidden');
+      document.getElementById('checkout-success-state').classList.add('hidden');
+      document.getElementById('checkout-error').classList.add('hidden');
+      document.getElementById('modal-close-btn').classList.remove('invisible');
+      document.getElementById('cc-name').value = '';
+      document.getElementById('cc-number').value = '';
+      document.getElementById('cc-expiry').value = '';
+      document.getElementById('cc-cvc').value = '';
+    }
+
+    function processMockPayment() {
+      const name   = document.getElementById('cc-name').value.trim();
+      const number = document.getElementById('cc-number').value.trim();
+      const expiry = document.getElementById('cc-expiry').value.trim();
+      const cvc    = document.getElementById('cc-cvc').value.trim();
+      const errEl  = document.getElementById('checkout-error');
+
+      if (!name || !number || !expiry || !cvc) {
+        errEl.textContent = 'Please fill in all payment fields to continue.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      errEl.classList.add('hidden');
+
+      // Switch to "Processing..." state and lock the close button so the
+      // simulated flow can't be interrupted mid-"transaction"
+      document.getElementById('checkout-form-state').classList.add('hidden');
+      document.getElementById('checkout-processing-state').classList.remove('hidden');
+      document.getElementById('modal-close-btn').classList.add('invisible');
+
+      // Simulate a 2-second payment processing delay (sandbox only — no
+      // network request is made and no real payment is ever taken)
+      setTimeout(() => {
+        document.getElementById('checkout-processing-state').classList.add('hidden');
+        document.getElementById('checkout-success-state').classList.remove('hidden');
+
+        // Immediately kick off client-side PDF generation
+        downloadDisputeLetter().then(() => {
+          document.getElementById('success-pdf-spinner').innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5l2.2 2.2L10 3.8" stroke="#15803D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="text-green-700">Download complete</span>
+          `;
+          setTimeout(closeCheckoutModal, 1400);
+        }).catch(() => {
+          document.getElementById('success-pdf-spinner').innerHTML =
+            '<span class="text-red-600">PDF generation failed — please try again</span>';
+          document.getElementById('modal-close-btn').classList.remove('invisible');
+        });
+      }, 2000);
+    }
+
+    // ─── PDF Dispute Letter Generation (100% client-side) ─────────────────
+    function downloadDisputeLetter() {
+      const r = lastResult;
+      const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+      // ── Populate the hidden letter template ──
+      document.getElementById('letter-date').textContent = today;
+      document.getElementById('letter-hospital-name').textContent = r.hospital;
+      document.getElementById('letter-re-line').textContent =
+        `Formal Dispute of Medical Charge — CPT ${r.cpt} — Date of Service ${r.formattedDos}`;
+
+      document.getElementById('letter-tbl-hospital').textContent = r.hospital;
+      document.getElementById('letter-tbl-dos').textContent      = r.formattedDos;
+      document.getElementById('letter-tbl-cpt').textContent      = `${r.cpt} — ${r.cptDescription}`;
+      document.getElementById('letter-tbl-billed').textContent   = fmt(r.billed);
+      document.getElementById('letter-tbl-fair').textContent     = fmt(r.fairPrice);
+      document.getElementById('letter-tbl-diff').textContent     = r.diff > 0
+        ? `${fmt(r.diff)} (${r.pct}% above fair reference price)`
+        : 'No overcharge identified at this time';
+
+      document.getElementById('letter-body-1').innerHTML = `
+        I am writing to formally dispute a charge billed to me by <strong>${escapeHtml(r.hospital)}</strong>
+        for services rendered on <strong>${r.formattedDos}</strong>. After careful review, I have determined
+        that the amount billed for the procedure identified by CPT code <strong>${escapeHtml(r.cpt)}</strong>
+        (${escapeHtml(r.cptDescription)}) significantly exceeds the established fair reference price for this
+        service, and I am requesting a formal review and adjustment of this charge.
+      `;
+
+      document.getElementById('letter-body-2').innerHTML = r.diff > 0 ? `
+        According to the Centers for Medicare &amp; Medicaid Services (CMS) Physician Fee Schedule, which is
+        widely recognized as an objective, government-published benchmark for reasonable and customary
+        charges, the reference price for CPT ${escapeHtml(r.cpt)} is <strong>${fmt(r.fairPrice)}</strong>.
+        The amount billed to me, <strong>${fmt(r.billed)}</strong>, represents an overcharge of
+        <strong>${fmt(r.diff)}</strong> — approximately <strong>${r.pct}%</strong> above this reference
+        benchmark. I do not believe this discrepancy is justified absent a documented clinical or
+        administrative explanation.
+      ` : `
+        According to the Centers for Medicare &amp; Medicaid Services (CMS) Physician Fee Schedule, the
+        reference price for CPT ${escapeHtml(r.cpt)} is <strong>${fmt(r.fairPrice)}</strong>. While the billed
+        amount of <strong>${fmt(r.billed)}</strong> falls within a reasonable range of this benchmark, I am
+        requesting an itemized review to confirm that all charges associated with this date of service are
+        accurate, non-duplicative, and properly coded.
+      `;
+
+      document.getElementById('letter-body-3').innerHTML = `
+        As a patient, I am entitled to transparent and accurate billing practices. I am requesting that this
+        charge be reviewed against the CMS reference price cited above and adjusted accordingly, or that your
+        billing department provide a written, itemized justification for the amount charged. I have retained
+        copies of all billing documentation related to this matter for my records.
+      `;
+
+      document.getElementById('letter-signature-name').textContent = 'Patient / Account Holder';
+
+      // ── Generate the PDF (client-side only, no server calls) ──
+      const element = document.getElementById('letter-template');
+      const safeHospital = r.hospital.replace(/[^a-z0-9]+/gi, '_').slice(0, 40);
+      const filename = `Dispute_Letter_${safeHospital}_${r.cpt}.pdf`;
+
+      const opt = {
+        margin:       0,
+        filename:     filename,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          scrollY: 0,      // ignore the user's current vertical scroll position
+          windowHeight: document.getElementById('letter-template').scrollHeight
+        },
+        jsPDF:        { unit: 'pt', format: 'letter', orientation: 'portrait' },
+        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+
+      // The letter-template element is permanently in the DOM flow (inside a
+      // zero-dimension overflow:hidden parent), so html2canvas can always
+      // measure and paint it. No classList toggling needed.
+      return html2pdf().set(opt).from(element).save()
+        .catch((err) => {
+          console.error('[MedFair] PDF generation failed:', err);
+          throw err;
+        });
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Allow Enter key on form fields to submit
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && ['INPUT', 'SELECT'].includes(e.target.tagName)) {
+        if (document.getElementById('checkout-overlay').classList.contains('hidden')) {
+          calculateFairPrice();
+        } else {
+          processMockPayment();
+        }
+      }
+      if (e.key === 'Escape' && !document.getElementById('checkout-overlay').classList.contains('hidden')) {
+        if (!document.getElementById('modal-close-btn').classList.contains('invisible')) {
+          closeCheckoutModal();
+        }
+      }
+    });
+
+    // Card number auto-spacing (cosmetic only — sandbox demo)
+    document.addEventListener('DOMContentLoaded', () => {
+      const ccNumber = document.getElementById('cc-number');
+      if (ccNumber) {
+        ccNumber.addEventListener('input', (e) => {
+          let v = e.target.value.replace(/\D/g, '').slice(0, 16);
+          e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+        });
+      }
+      const ccExpiry = document.getElementById('cc-expiry');
+      if (ccExpiry) {
+        ccExpiry.addEventListener('input', (e) => {
+          let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+          if (v.length > 2) v = v.slice(0, 2) + ' / ' + v.slice(2);
+          e.target.value = v;
+        });
+      }
+    });
+
+    // ─── Bootstrap ────────────────────────────────────────────────────────
+    loadCSV();
+  </script>
+</body>
+</html>

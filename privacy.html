@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — MedFair</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['IBM Plex Mono', 'monospace'],
+          },
+          colors: {
+            navy: {
+              50:  '#EEF2F9',
+              100: '#D5DFF0',
+              200: '#ABBFE1',
+              400: '#5680C2',
+              600: '#2B4FA3',
+              700: '#1E3B82',
+              800: '#142D66',
+              900: '#0C1F4A',
+            },
+            slate: {
+              550: '#5A6882',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .prose-legal h2 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #142D66;
+      margin-top: 2.25rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+    .prose-legal h2:first-child { margin-top: 0; }
+    .prose-legal p {
+      color: #4B5563;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .prose-legal ul {
+      list-style: disc;
+      padding-left: 1.5rem;
+      color: #4B5563;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .prose-legal li { margin-bottom: 0.4rem; }
+    .prose-legal strong { color: #1F2937; font-weight: 600; }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+  <!-- Navigation -->
+  <header class="bg-navy-800 text-white sticky top-0 z-40 shadow-md">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center gap-3">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded bg-navy-600 flex items-center justify-center flex-shrink-0">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+            <path d="M10 2L3 6v4c0 4.418 3.134 8.555 7 9.9C16.866 18.555 20 14.418 20 10V6l-7-4H10z" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M8 10l1.5 1.5L12.5 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="text-base font-semibold tracking-tight">MedFair</span>
+      </a>
+
+      <div class="ml-auto flex items-center gap-3">
+        <span class="hidden sm:inline-flex status-badge" style="background:rgba(255,255,255,0.1); color:#BFD4F8; border:1px solid rgba(255,255,255,0.15);">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1L9.5 2.5V5c0 2.6-1.7 4.5-4 5.5C3.2 9.5 1.5 7.6 1.5 5V2.5L5.5 1z" stroke="#BFD4F8" stroke-width="1" stroke-linejoin="round"/></svg>
+          HIPAA-Compliant UI
+        </span>
+        <a href="index.html#tool" class="hidden sm:inline-block bg-white text-navy-800 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors">
+          Check My Bill
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Trust strip -->
+  <div class="bg-navy-900 text-blue-200 text-xs text-center py-2 tracking-wide px-4">
+    Based on Medicare Physician Fee Schedule & CMS fair price benchmarks &nbsp;·&nbsp; Not legal or medical advice
+  </div>
+
+  <!-- Page Header -->
+  <section class="bg-navy-800 pt-12 pb-16 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-blue-100 text-xs font-medium px-3.5 py-1.5 rounded-full mb-5">
+        Legal
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-3">Privacy Policy</h1>
+      <p class="text-blue-100 text-sm">Last updated: June 1, 2026</p>
+    </div>
+  </section>
+
+  <main class="flex-1 max-w-3xl mx-auto px-4 -mt-8 pb-20 relative z-10 w-full">
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm px-6 sm:px-10 py-8 sm:py-10">
+
+      <!-- Client-side emphasis callout -->
+      <div class="bg-navy-50 border border-navy-100 rounded-lg px-5 py-4 mb-8 flex gap-3">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="flex-shrink-0 mt-0.5"><path d="M10 2L3 5v4c0 4.4 3.1 8.5 7 9.9 3.9-1.4 7-5.5 7-9.9V5l-7-3z" stroke="#1E3B82" stroke-width="1.4" stroke-linejoin="round"/><path d="M7.3 10l1.9 1.9L13 8" stroke="#1E3B82" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p class="text-sm text-navy-800 leading-relaxed">
+          <strong class="font-semibold">The short version:</strong> Every calculation MedFair performs happens entirely inside your own browser. We do not store, transmit, track, or harvest any bill information, medical data, or personal health details on our servers — because that data never reaches our servers in the first place.
+        </p>
+      </div>
+
+      <div class="prose-legal">
+
+        <h2>1. Introduction</h2>
+        <p>
+          MedFair ("MedFair," "we," "us," or "our") provides a free, browser-based tool that helps patients compare medical billing amounts against publicly available Medicare reference pricing. This Privacy Policy explains what information our website collects, how it is used, and the choices you have regarding that information. By using MedFair, you agree to the terms described below.
+        </p>
+
+        <h2>2. Information You Enter Into the Calculator</h2>
+        <p>
+          When you use the bill comparison tool, you may enter information such as a hospital or provider name, a date of service, a CPT procedure code, and a billed dollar amount. This information is processed entirely client-side, meaning all calculations are performed locally in your web browser using JavaScript running on your own device.
+        </p>
+        <p>
+          We do not transmit the information you enter into the calculator to any MedFair server, database, or third party. We do not log, store, cache, or retain any of the bill details you provide. Once you close or refresh your browser tab, that information is gone.
+        </p>
+
+        <h2>3. Information We Do Collect</h2>
+        <p>
+          While the calculator itself is fully client-side, our website may collect limited, non-sensitive technical information automatically when you visit, including:
+        </p>
+        <ul>
+          <li>Standard web server logs (such as browser type, device type, and approximate geographic region derived from IP address)</li>
+          <li>Aggregated, anonymized analytics about how visitors navigate the site (such as which pages are viewed)</li>
+          <li>Information you voluntarily submit through our Contact form, including your name, email address, and message</li>
+        </ul>
+        <p>
+          We do not use this technical information to identify you personally, and we never combine it with any data entered into the bill comparison calculator.
+        </p>
+
+        <h2>4. Payment Information</h2>
+        <p>
+          If you choose to purchase an official dispute letter through MedFair, payment details are processed through the checkout flow presented at that time. MedFair does not store full payment card numbers on our servers.
+        </p>
+
+        <h2>5. How We Use Information</h2>
+        <p>
+          Any information submitted through our Contact form is used solely to respond to your inquiry and to improve our website and services. We do not sell, rent, or trade personal information to third parties for marketing purposes.
+        </p>
+
+        <h2>6. Cookies and Tracking Technologies</h2>
+        <p>
+          MedFair may use minimal, privacy-respecting cookies or local storage strictly necessary for the website to function (such as remembering your session while you fill out the calculator). We do not use invasive third-party advertising trackers.
+        </p>
+
+        <h2>7. Data Security</h2>
+        <p>
+          Because bill and procedure information you enter into the calculator never leaves your browser, there is no transmission of that data for us to secure or that could be intercepted. For the limited data we do collect (such as contact form submissions), we use industry-standard administrative and technical safeguards to protect it from unauthorized access.
+        </p>
+
+        <h2>8. HIPAA and Health Information</h2>
+        <p>
+          MedFair is a consumer self-help tool, not a covered entity or business associate under the Health Insurance Portability and Accountability Act (HIPAA). Because we do not collect, store, or transmit the medical billing information you enter into the calculator, that information is never held on our systems in a way that would require HIPAA-regulated handling. We've designed the product this way deliberately, so that the question of HIPAA compliance for your bill data is avoided altogether rather than merely promised.
+        </p>
+
+        <h2>9. Children's Privacy</h2>
+        <p>
+          MedFair is intended for use by adults managing their own or a family member's medical billing matters. Our website is not directed at children under 13, and we do not knowingly collect personal information from children.
+        </p>
+
+        <h2>10. Your Choices</h2>
+        <p>
+          Because the calculator does not retain your bill information, there is nothing for you to request deletion of in connection with that tool. If you have submitted a message through our Contact form and would like that information removed from our records, please reach out using the contact details below.
+        </p>
+
+        <h2>11. Changes to This Policy</h2>
+        <p>
+          We may update this Privacy Policy from time to time to reflect changes in our practices or for legal and regulatory reasons. The "Last updated" date at the top of this page indicates when this policy was last revised. We encourage you to review this page periodically.
+        </p>
+
+        <h2>12. Contact Us</h2>
+        <p>
+          If you have questions about this Privacy Policy or how MedFair handles information, please contact us at <a href="mailto:support@medfair.com" class="text-navy-700 font-medium hover:underline">support@medfair.com</a> or visit our <a href="contact.html" class="text-navy-700 font-medium hover:underline">Contact page</a>.
+        </p>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════════ -->
+  <footer class="bg-navy-900 text-slate-300 py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-8 pb-8 border-b border-white/10">
+        <div class="max-w-xs">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-7 h-7 rounded bg-navy-600 flex items-center justify-center flex-shrink-0">
+              <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
+                <path d="M10 2L3 6v4c0 4.418 3.134 8.555 7 9.9C16.866 18.555 20 14.418 20 10V6l-7-4H10z" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M8 10l1.5 1.5L12.5 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="text-white font-semibold tracking-tight">MedFair</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Helping patients understand and dispute inaccurate medical bills using transparent, publicly available reference pricing.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-12 gap-y-2 text-sm">
+          <a href="privacy.html" class="text-slate-300 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="terms.html" class="text-slate-300 hover:text-white transition-colors">Terms of Service</a>
+          <a href="about.html" class="text-slate-300 hover:text-white transition-colors">About Us</a>
+          <a href="contact.html" class="text-slate-300 hover:text-white transition-colors">Contact Us</a>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 text-xs text-slate-400">
+        <span>&copy; 2025 MedFair. All rights reserved.</span>
+        <span>Not affiliated with CMS or Medicare. Reference pricing for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

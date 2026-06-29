@@ -1,0 +1,92 @@
+cpt_code,description,fair_price
+99201,Office visit – new patient, straightforward,67.25
+99202,Office visit – new patient, low complexity,109.04
+99203,Office visit – new patient, moderate complexity,158.44
+99204,Office visit – new patient, moderate-high complexity,233.99
+99205,Office visit – new patient, high complexity,291.84
+99211,Office visit – established patient, minimal,25.50
+99212,Office visit – established patient, low complexity,75.42
+99213,Office visit – established patient, moderate complexity,111.91
+99214,Office visit – established patient, moderate-high complexity,167.49
+99215,Office visit – established patient, high complexity,221.20
+99281,Emergency department visit – minimal,52.10
+99282,Emergency department visit – low complexity,95.15
+99283,Emergency department visit – moderate complexity,148.65
+99284,Emergency department visit – high complexity,244.87
+99285,Emergency department visit – very high complexity,344.23
+99231,Subsequent hospital care – low complexity,79.41
+99232,Subsequent hospital care – moderate complexity,119.72
+99233,Subsequent hospital care – high complexity,174.47
+99238,Hospital discharge day management – 30 min or less,154.22
+99239,Hospital discharge day management – more than 30 min,206.00
+93000,Electrocardiogram (ECG/EKG) with interpretation,19.24
+93306,Echocardiography transthoracic – complete,387.62
+93308,Echocardiography transthoracic – follow-up,225.14
+93510,Left heart catheterization,1102.78
+71046,Chest X-ray – 2 views,44.73
+70553,MRI brain with and without contrast,464.10
+70450,CT scan head/brain – without contrast,238.54
+72148,MRI lumbar spine – without contrast,360.25
+72141,MRI cervical spine – without contrast,342.50
+73721,MRI joint of lower extremity – without contrast,318.44
+74177,CT abdomen and pelvis with contrast,356.58
+74178,CT abdomen and pelvis with and without contrast,441.27
+71250,CT thorax – without contrast,262.90
+80048,Basic metabolic panel (BMP),13.18
+80053,Comprehensive metabolic panel (CMP),17.29
+80061,Lipid panel,16.17
+80076,Hepatic function panel,12.44
+85025,Complete blood count (CBC) with differential,9.99
+85027,CBC without differential,8.88
+84443,Thyroid stimulating hormone (TSH),28.55
+83036,Hemoglobin A1c,13.31
+84132,Potassium serum,7.73
+84155,Protein serum,6.87
+36415,Routine venipuncture (blood draw),3.00
+96372,Intramuscular injection administration,24.65
+96374,IV push injection – single drug,87.66
+96365,IV infusion therapy – first hour,133.38
+90471,Vaccine administration – first injection,28.57
+90472,Vaccine administration – each additional injection,15.13
+90732,Pneumococcal vaccine,93.83
+90658,Influenza vaccine,26.19
+90714,Td vaccine (tetanus/diphtheria),39.47
+29881,Knee arthroscopy with meniscal repair,1210.44
+29827,Arthroscopy shoulder – rotator cuff repair,1522.76
+29826,Arthroscopy shoulder – decompression,963.11
+27447,Total knee replacement,1551.00
+27130,Total hip replacement,1558.22
+29880,Knee arthroscopy – meniscectomy,1099.62
+43239,Upper GI endoscopy with biopsy,488.62
+45378,Colonoscopy – diagnostic,493.90
+45380,Colonoscopy with biopsy,624.17
+43235,Upper GI endoscopy – diagnostic,373.48
+66984,Cataract surgery with lens implant,831.12
+67210,Laser photocoagulation – retinal,399.55
+28296,Bunionectomy,1246.58
+63030,Lumbar diskectomy,1880.44
+22612,Lumbar spinal fusion,4218.33
+33533,Coronary artery bypass graft (CABG),8144.72
+33405,Aortic valve replacement,6912.50
+33430,Mitral valve replacement,7100.80
+49505,Inguinal hernia repair – open,1195.22
+49650,Laparoscopic hernia repair,1422.89
+47562,Laparoscopic cholecystectomy,1312.07
+44950,Appendectomy – open,1108.43
+44970,Laparoscopic appendectomy,1208.77
+59400,Routine obstetric care including antepartum and postpartum – vaginal delivery,2619.00
+59510,Routine obstetric care including antepartum and postpartum – cesarean,3234.00
+27130,Total hip arthroplasty,1558.22
+27446,Knee replacement – unicompartmental,1278.11
+97110,Therapeutic exercise – each 15 minutes,32.23
+97530,Therapeutic activities – each 15 minutes,36.44
+97012,Mechanical traction therapy,18.94
+90837,Psychotherapy – 60 minutes,189.46
+90834,Psychotherapy – 45 minutes,138.87
+90832,Psychotherapy – 30 minutes,88.51
+99406,Smoking cessation counseling – intermediate (3 to 10 min),14.08
+99407,Smoking cessation counseling – intensive (greater than 10 min),28.17
+G0008,Administration of influenza vaccine,16.22
+G0009,Administration of pneumococcal vaccine,16.22
+G0121,Colorectal cancer screening – colonoscopy not high risk,493.90
+G0123,Cervical cancer screening – thin layer prep,23.55
