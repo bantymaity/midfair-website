@@ -1,0 +1,113 @@
+# ═══════════════════════════════════════════════════════════════════════
+# Decap CMS — config.yml
+# Docs: https://decapcms.org/docs/configuration-options/
+# ═══════════════════════════════════════════════════════════════════════
+
+# ── Backend ─────────────────────────────────────────────────────────────
+# git-gateway proxies commits through Netlify so editors never need a
+# GitHub account. Netlify Identity handles authentication.
+backend:
+  name: git-gateway
+  branch: main            # change to 'master' if that is your default branch
+
+# ── Media / File Uploads ─────────────────────────────────────────────────
+# Images dropped into the editor are saved here and referenced from here.
+media_folder: "images/blog"         # where files are stored in the repo
+public_folder: "/images/blog"       # the URL path used in published HTML
+
+# ── Editorial Workflow (optional but recommended) ────────────────────────
+# Adds Draft → In Review → Ready staging states before publishing.
+# Remove this line if you want posts to publish immediately on Save.
+publish_mode: editorial_workflow
+
+# ── Site URL ─────────────────────────────────────────────────────────────
+# Used by the CMS preview pane and confirmation emails.
+site_url: https://medfair.us
+display_url: https://medfair.us
+logo_url: https://medfair.us/apple-touch-icon.png
+
+# ── Collections ──────────────────────────────────────────────────────────
+# Each collection maps to a folder of files in your repository.
+collections:
+
+  # ── Blog Posts ──────────────────────────────────────────────────────
+  - name: "blog"                    # used in routes: /admin/#/collections/blog
+    label: "Blog Posts"             # label shown in the CMS sidebar
+    folder: "blog"                  # repo folder where .md files are saved
+    create: true                    # allow editors to create new posts
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"   # filename pattern
+    preview_path: "blog/{{slug}}"   # live preview URL path
+    editor:
+      preview: true                 # show split editor/preview pane
+
+    # Fields that appear in the editor form for each post
+    fields:
+
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        hint: "Keep under 60 characters for best SEO results."
+
+      - label: "Publish Date"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+        date_format: "MMMM D, YYYY"
+        time_format: false
+        default: ""
+
+      - label: "Author"
+        name: "author"
+        widget: "string"
+        default: "MedFair Editorial Team"
+
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Billing Basics",  value: "billing-basics" }
+          - { label: "Federal Law",     value: "federal-law" }
+          - { label: "Negotiation",     value: "negotiation" }
+          - { label: "Patient Rights",  value: "patient-rights" }
+          - { label: "Insurance",       value: "insurance" }
+
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+        hint: "Comma-separated keywords (e.g. EOB, CPT codes, Medicare)."
+
+      - label: "SEO Meta Description"
+        name: "description"
+        widget: "text"
+        hint: "Under 160 characters. Appears in Google search results."
+        pattern: ['.{0,160}', "Must be 160 characters or fewer"]
+
+      - label: "Featured Image"
+        name: "featured_image"
+        widget: "image"
+        required: false
+        hint: "Recommended size: 1200 × 630 px (same as OG image)."
+
+      - label: "Featured Image Alt Text"
+        name: "featured_image_alt"
+        widget: "string"
+        required: false
+        hint: "Describe the image for screen readers and SEO."
+
+      - label: "Read Time (minutes)"
+        name: "read_time"
+        widget: "number"
+        min: 1
+        max: 60
+        default: 5
+
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
+        hint: "Write your article here. Use headings (H2, H3) for structure."
+
+      - label: "Draft"
+        name: "draft"
+        widget: "boolean"
+        default: false
+        hint: "Set to ON to save without publishing live."
