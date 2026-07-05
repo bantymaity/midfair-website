@@ -1,21 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <!-- Netlify Identity Widget -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-<script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
-        });
-      }
-    });
-  }
-</script>
   <!-- ═══════════════════════════════════════════════════════════════════
        CORE / CHARSET / VIEWPORT
        Always first — charset must appear within the first 1024 bytes.
@@ -1379,16 +1364,5 @@
     // ─── Bootstrap ────────────────────────────────────────────────────────
     loadCSV();
   </script>
-  <script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
-        });
-      }
-    });
-  }
-</script>
 </body>
 </html>
