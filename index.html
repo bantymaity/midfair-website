@@ -1364,5 +1364,22 @@
     // ─── Bootstrap ────────────────────────────────────────────────────────
     loadCSV();
   </script>
+  <!-- Netlify Identity redirect handler.
+       Required so that confirmation/invite email links (which land on the
+       homepage) redirect the user back to /admin/ after authenticating.
+       Safe to include on every page — does nothing if Identity is not active. -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', function(user) {
+        if (!user) {
+          window.netlifyIdentity.on('login', function() {
+            document.location.href = '/admin/';
+          });
+        }
+      });
+    }
+  </script>
+
 </body>
 </html>

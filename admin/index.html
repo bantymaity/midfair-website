@@ -4,11 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MedFair CMS — Admin</title>
-  <!-- Decap CMS (formerly Netlify CMS) — always pin to a stable release.
-       Check latest: https://github.com/decaporg/decap-cms/releases       -->
+
+  <!--
+    IMPORTANT — TWO scripts are required for Decap CMS on Netlify:
+
+    1. Netlify Identity Widget  — handles login/logout via Netlify Identity.
+       Must load BEFORE the CMS script.
+
+    2. Decap CMS               — the actual editor UI.
+       Mounts itself into <body> automatically on load.
+
+    A blank white page is almost always caused by one of these being
+    missing, swapped in order, or blocked by an ad blocker / CSP header.
+  -->
+
+  <!-- 1. Netlify Identity Widget (REQUIRED for Netlify git-gateway auth) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <!-- 2. Decap CMS — pinned to latest stable v3 release -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </head>
 <body>
-  <!-- Decap CMS mounts itself here automatically. No other HTML needed. -->
+  <!--
+    Decap CMS mounts itself here automatically. No other HTML is needed.
+
+    TROUBLESHOOTING a blank page:
+      • Open DevTools (F12) → Console. Look for 404s or auth errors.
+      • Confirm Netlify Identity is ENABLED in your Netlify site settings.
+      • Confirm Git Gateway is ENABLED under Identity → Services.
+      • Confirm you have accepted your Netlify Identity invite email.
+      • Confirm admin/config.yml is committed and deployed (not just local).
+      • If using an ad blocker, try in a private/incognito window.
+  -->
 </body>
 </html>
