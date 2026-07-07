@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page.title }} — MedFair</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+    
+    /* ========================================================
+       ম্যাজিক ডিজাইন (যা আপনার সাধারণ লেখাকে প্রফেশনাল করবে)
+       ======================================================== */
+    .blog-post-content p { color: #334155; font-size: 1.125rem; line-height: 1.8; margin-bottom: 1.5rem; }
+    .blog-post-content h2 { color: #1e3a8a; font-size: 1.75rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 1.25rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+    .blog-post-content h3 { color: #0f172a; font-size: 1.25rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
+    .blog-post-content blockquote { background-color: #eff6ff; border-left: 5px solid #3b82f6; padding: 1.25rem 1.5rem; margin: 2rem 0; border-radius: 0 0.5rem 0.5rem 0; font-style: italic; color: #1e40af; }
+    .blog-post-content ul { list-style-type: none; padding-left: 0; margin-bottom: 1.5rem; }
+    .blog-post-content ul li { position: relative; padding-left: 2rem; margin-bottom: 0.75rem; color: #334155; font-size: 1.125rem; }
+    .blog-post-content ul li::before { content: "✔"; position: absolute; left: 0; color: #10b981; font-weight: bold; font-size: 1.1rem; }
+    .blog-post-content a { color: #2563eb; font-weight: 600; text-decoration: none; }
+    .blog-post-content a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+  <header class="bg-[#142D66] text-white shadow-md">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center gap-3">
+      <a href="/" class="text-xl font-bold tracking-tight flex items-center gap-2">
+        <span class="bg-blue-600 p-1 rounded">🛡️</span> MedFair
+      </a>
+      <a href="/#tool" class="ml-auto bg-white text-[#142D66] text-sm font-semibold px-4 py-2 rounded hover:bg-blue-50">Check My Bill</a>
+    </nav>
+  </header>
+
+  <main class="flex-1 max-w-4xl mx-auto px-4 py-12 w-full">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 sm:p-10">
+      <h1 class="text-3xl sm:text-4xl font-bold text-[#0C1F4A] mb-8">{{ page.title }}</h1>
+      
+      <div class="blog-post-content">
+        {{ content }}
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-[#0C1F4A] text-slate-300 py-8 text-center mt-auto">
+    <p class="text-sm">&copy; 2026 MedFair. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
