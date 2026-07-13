@@ -1,22 +1,11 @@
+---
+layout: null
+---
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   sitemap.xml — medfair.us
   Protocol: https://www.sitemaps.org/protocol.html
   Submit to Google Search Console: https://search.google.com/search-console
-  Submit to Bing Webmaster Tools:  https://www.bing.com/webmasters
-
-  Priority guide used here:
-    1.0  — Homepage / primary tool (most important)
-    0.8  — High-value supporting pages (Blog, About)
-    0.6  — Standard legal/trust pages (Privacy, Terms, Contact)
-
-  changefreq guide:
-    weekly   — pages likely updated with new content (Blog, Homepage)
-    monthly  — pages updated occasionally (About)
-    yearly   — rarely changed legal pages (Privacy, Terms, Contact)
-
-  Dates reflect last meaningful content update. Update <lastmod> on
-  every deploy that changes page content.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -26,31 +15,27 @@
   <!-- Homepage + core tool -->
   <url>
     <loc>https://medfair.us/</loc>
-    <lastmod>2025-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- Blog — high crawl frequency; new posts increase indexable content -->
+  <!-- Blog — high crawl frequency -->
   <url>
     <loc>https://medfair.us/blog.html</loc>
-    <lastmod>2025-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- About — brand/E-E-A-T signal; updated occasionally -->
+  <!-- About — brand/E-E-A-T signal -->
   <url>
     <loc>https://medfair.us/about.html</loc>
-    <lastmod>2025-06-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- Contact — trust signal; rarely changes -->
+  <!-- Contact — trust signal -->
   <url>
     <loc>https://medfair.us/contact.html</loc>
-    <lastmod>2025-06-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -58,7 +43,6 @@
   <!-- Privacy Policy — required trust/legal page -->
   <url>
     <loc>https://medfair.us/privacy.html</loc>
-    <lastmod>2025-06-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -66,9 +50,20 @@
   <!-- Terms of Service — required trust/legal page -->
   <url>
     <loc>https://medfair.us/terms.html</loc>
-    <lastmod>2025-06-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
+
+  <!-- ========================================== -->
+  <!-- DYNAMIC BLOG POSTS (অটোমেটিক ব্লগ এখানে অ্যাড হবে) -->
+  <!-- ========================================== -->
+  {% for post in site.posts %}
+  <url>
+    <loc>{{ site.url }}{{ site.baseurl }}{{ post.url }}</loc>
+    <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  {% endfor %}
 
 </urlset>
