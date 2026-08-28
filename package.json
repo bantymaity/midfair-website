@@ -4,7 +4,7 @@
   "private": true,
   "description": "MedFair Vercel serverless function: in-memory document upload + Gemini 1.5 Flash analysis",
   "dependencies": {
-    "@google/genai": "^0.21.0",
+    "@google/genai": "latest",
     "@vercel/kv": "^2.0.0",
     "busboy": "^1.6.0",
     "resend": "^4.0.1"
