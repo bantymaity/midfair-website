@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>MedFair Insights — Navigating US Healthcare Billing &amp; Medical Debt</title>
+<meta name="description" content="Practical, plain-English guides on fighting surprise medical bills, understanding your EOB, appealing insurance denials, and knowing your medical debt rights under US law." />
+<link rel="canonical" href="https://medfair.us/blog.html" />
+<meta name="robots" content="index, follow" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "MedFair Insights",
+  "url": "https://medfair.us/blog.html",
+  "publisher": { "@type": "Organization", "name": "MedFair", "url": "https://medfair.us" }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Inter+Tight:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: { navy:{DEFAULT:'#0B1B3A',2:'#0F2A5C',3:'#132F66'}, electric:{DEFAULT:'#2F6BFF',2:'#00C2FF'} },
+      fontFamily: { sans:['Inter','ui-sans-serif','system-ui'], tight:['Inter Tight','Inter','ui-sans-serif'] },
+      boxShadow: { soft:'0 2px 8px -2px rgba(11,27,58,0.08), 0 8px 24px -8px rgba(11,27,58,0.10)', lift:'0 12px 40px -12px rgba(11,27,58,0.25), 0 4px 12px -4px rgba(47,107,255,0.15)', glow:'0 0 0 1px rgba(47,107,255,0.15), 0 8px 30px -6px rgba(47,107,255,0.35)' }
+    } }
+  }
+</script>
+<style>
+  :root{ --navy:#0B1B3A; --navy-2:#0F2A5C; --electric:#2F6BFF; --electric-2:#00C2FF; }
+  html{scroll-behavior:smooth;}
+  body{ font-family:'Inter',ui-sans-serif,system-ui,sans-serif; background:#fff; }
+  h1,h2,h3,.font-display{ font-family:'Inter Tight','Inter',ui-sans-serif,sans-serif; }
+  ::selection{ background:var(--electric); color:#fff; }
+  .glass-navbar{ background:rgba(255,255,255,0.72); backdrop-filter:blur(16px) saturate(180%); -webkit-backdrop-filter:blur(16px) saturate(180%); }
+  .glass{ background:rgba(255,255,255,0.6); backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%); border:1px solid rgba(255,255,255,0.5); }
+  .grad-trust{ background:linear-gradient(120deg,var(--navy) 0%,var(--navy-2) 35%,var(--electric) 78%,var(--electric-2) 100%); }
+  .grad-text{ background:linear-gradient(100deg,var(--navy) 10%,var(--electric) 55%,var(--electric-2) 90%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .grad-btn{ background:linear-gradient(100deg,var(--navy) 0%,var(--electric) 70%,var(--electric-2) 100%); }
+  .reveal{ opacity:0; transform:translateY(32px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+  @keyframes blobPulse{ 0%,100%{transform:scale(1) translate(0,0);} 50%{transform:scale(1.12) translate(20px,-10px);} }
+  .blob{ animation:blobPulse 10s ease-in-out infinite; }
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:#F8FAFC; }
+  ::-webkit-scrollbar-thumb{ background:linear-gradient(var(--navy),var(--electric)); border-radius:10px; }
+
+  /* Blog card */
+  .post-card{ transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease; }
+  .post-card:hover{ transform: translateY(-8px); box-shadow: 0 20px 45px -14px rgba(11,27,58,0.28), 0 6px 16px -6px rgba(47,107,255,0.18); }
+  .post-thumb{ overflow:hidden; }
+  .post-thumb img{ transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .post-card:hover .post-thumb img{ transform: scale(1.08); }
+  .badge-insurance{ background:rgba(47,107,255,0.1); color:var(--electric); }
+  .badge-debt{ background:rgba(11,27,58,0.08); color:var(--navy); }
+  .badge-bills{ background:rgba(0,194,255,0.12); color:#0891b2; }
+  .read-link{ transition: gap .25s ease; }
+  .read-link:hover{ gap:.6rem; }
+  .line-clamp-2{ display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+</style>
+</head>
+<body class="bg-white text-slate-900 antialiased overflow-x-hidden selection:bg-electric selection:text-white">
+
+<header class="fixed top-0 inset-x-0 z-50">
+  <nav class="glass-navbar mx-auto mt-2 sm:mt-3 max-w-6xl rounded-2xl sm:rounded-full flex items-center justify-between px-4 sm:px-6 py-3 shadow-soft border border-white/60" data-testid="main-navbar">
+    <a href="index.html" class="flex items-center gap-2 font-tight font-extrabold text-navy text-lg tracking-tight" data-testid="logo-link">
+      <span class="w-8 h-8 rounded-xl grad-trust flex items-center justify-center text-white text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+      MedFair
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+      <a href="index.html#how-it-works" class="hover:text-navy transition-colors">How it works</a>
+      <a href="index.html#tool" class="hover:text-navy transition-colors">Analyze a Document</a>
+      <a href="blog.html" class="text-navy font-semibold">Blog</a>
+      <a href="about.html" class="hover:text-navy transition-colors">About</a>
+    </div>
+    <a href="index.html#tool" class="grad-btn text-white text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full shadow-glow hover:brightness-110 active:scale-95 transition-all" data-testid="nav-cta-button">Analyze Free</a>
+  </nav>
+</header>
+
+<main>
+<!-- Blog Hero -->
+<section class="relative pt-36 sm:pt-40 pb-14 sm:pb-20 overflow-hidden">
+  <div class="absolute -top-20 -left-32 w-[380px] h-[380px] rounded-full bg-electric/10 blur-3xl blob" aria-hidden="true"></div>
+  <div class="max-w-4xl mx-auto px-5 sm:px-6 text-center">
+    <span class="reveal is-visible inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs font-semibold text-navy shadow-soft mb-6">
+      <i class="fa-solid fa-book-open text-electric"></i> Guides &amp; Insights
+    </span>
+    <h1 class="reveal is-visible font-tight font-extrabold tracking-tight text-4xl sm:text-5xl lg:text-6xl leading-[1.05] text-navy" data-testid="blog-heading">
+      MedFair Insights: <span class="grad-text">Navigating US Healthcare Billing &amp; Debt</span>
+    </h1>
+    <p class="reveal is-visible mt-6 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+      Plain-English guides to help you understand your bills, decode your denials, and know exactly where you stand — written for patients, not billing departments.
+    </p>
+  </div>
+</section>
+
+<!-- Blog Grid -->
+<section class="pb-20 sm:pb-28">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" data-testid="blog-grid">
+
+      <!-- Post 1 -->
+      <a href="#" class="post-card reveal group bg-white rounded-[1.75rem] border border-slate-100 shadow-soft overflow-hidden flex flex-col" data-testid="blog-card-facility-fee">
+        <div class="post-thumb h-48 sm:h-52">
+          <img src="https://images.unsplash.com/photo-1615770922480-0b9ae80afeba?q=85&w=800&auto=format&fit=crop" alt="Modern hospital facility exterior" class="w-full h-full object-cover" loading="lazy" />
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="badge-bills text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">Medical Bills</span>
+            <span class="text-xs text-slate-400">Jun 18, 2026</span>
+          </div>
+          <h2 class="font-tight font-bold text-lg text-navy leading-snug mb-2 group-hover:text-electric transition-colors">How to Fight a Surprise Hospital Facility Fee</h2>
+          <p class="text-sm text-slate-600 leading-relaxed line-clamp-2 mb-5">Facility fees can add hundreds of dollars to a routine visit with almost no warning. Here's exactly what they are, when they're legal, and the three-step script to get them reduced or removed.</p>
+          <span class="read-link mt-auto inline-flex items-center gap-2 text-sm font-bold text-navy">Read Article <i class="fa-solid fa-arrow-right text-electric text-xs"></i></span>
+        </div>
+      </a>
+
+      <!-- Post 2 -->
+      <a href="#" class="post-card reveal group bg-white rounded-[1.75rem] border border-slate-100 shadow-soft overflow-hidden flex flex-col" data-testid="blog-card-eob-guide">
+        <div class="post-thumb h-48 sm:h-52">
+          <img src="https://images.unsplash.com/photo-1603796846097-bee99e4a601f?q=85&w=800&auto=format&fit=crop" alt="Reviewing insurance paperwork at a desk" class="w-full h-full object-cover" loading="lazy" />
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="badge-insurance text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">Insurance</span>
+            <span class="text-xs text-slate-400">Jun 11, 2026</span>
+          </div>
+          <h2 class="font-tight font-bold text-lg text-navy leading-snug mb-2 group-hover:text-electric transition-colors">Understanding Your EOB: A Step-by-Step Guide</h2>
+          <p class="text-sm text-slate-600 leading-relaxed line-clamp-2 mb-5">Your Explanation of Benefits is not a bill — but it holds the key to every dispute you'll ever file. We break down every line, code, and column so nothing catches you off guard.</p>
+          <span class="read-link mt-auto inline-flex items-center gap-2 text-sm font-bold text-navy">Read Article <i class="fa-solid fa-arrow-right text-electric text-xs"></i></span>
+        </div>
+      </a>
+
+      <!-- Post 3 -->
+      <a href="#" class="post-card reveal group bg-white rounded-[1.75rem] border border-slate-100 shadow-soft overflow-hidden flex flex-col" data-testid="blog-card-fdcpa-rights">
+        <div class="post-thumb h-48 sm:h-52">
+          <img src="https://images.unsplash.com/photo-1611187401217-0fee54edf7ce?q=85&w=800&auto=format&fit=crop" alt="Gavel representing consumer debt law" class="w-full h-full object-cover" loading="lazy" />
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="badge-debt text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">Medical Debt</span>
+            <span class="text-xs text-slate-400">Jun 4, 2026</span>
+          </div>
+          <h2 class="font-tight font-bold text-lg text-navy leading-snug mb-2 group-hover:text-electric transition-colors">The FDCPA and Your Medical Debt Rights</h2>
+          <p class="text-sm text-slate-600 leading-relaxed line-clamp-2 mb-5">Debt collectors have far fewer rights than they want you to believe. Learn exactly what the Fair Debt Collection Practices Act protects you from — and how to send a validation request that works.</p>
+          <span class="read-link mt-auto inline-flex items-center gap-2 text-sm font-bold text-navy">Read Article <i class="fa-solid fa-arrow-right text-electric text-xs"></i></span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="relative py-20 sm:py-28 grad-trust overflow-hidden">
+  <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(circle at 20% 20%, white 0, transparent 40%), radial-gradient(circle at 80% 80%, white 0, transparent 35%);"></div>
+  <div class="reveal relative max-w-2xl mx-auto px-5 sm:px-6 text-center">
+    <h2 class="font-tight font-extrabold text-3xl sm:text-4xl text-white leading-tight">Stop reading about it. See what's in your bill.</h2>
+    <a href="index.html#tool" class="inline-flex items-center gap-2 bg-white text-navy font-bold text-base px-8 py-4 rounded-2xl shadow-lift mt-8 hover:scale-105 active:scale-95 transition-transform" data-testid="blog-final-cta">
+      <i class="fa-solid fa-bolt"></i> Analyze My Document Free
+    </a>
+  </div>
+</section>
+</main>
+
+<footer class="bg-navy text-white/60 py-14">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pb-8 border-b border-white/10">
+      <a href="index.html" class="flex items-center gap-2 font-tight font-extrabold text-white text-lg">
+        <span class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-electric-2 text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+        MedFair
+      </a>
+      <div class="flex flex-wrap gap-6 text-sm">
+        <a href="blog.html" class="hover:text-white transition-colors">Blog</a>
+        <a href="about.html" class="hover:text-white transition-colors">About</a>
+        <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+        <a href="privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-white transition-colors">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <p class="text-xs text-white/40 mt-8 max-w-2xl leading-relaxed">MedFair provides informational, AI-generated summaries only and does not constitute legal, medical, or financial advice. Always consult a licensed professional regarding your specific situation. &copy; 2026 MedFair. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, { threshold:0.12, rootMargin:'0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => io.observe(el));
+  }
+</script>
+</body>
+</html>

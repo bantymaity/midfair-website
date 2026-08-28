@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>MedFair — Fight Back Against Medical Bills, Denials &amp; Debt</title>
+<meta name="description" content="MedFair uses AI to instantly analyze medical bills, insurance denials, and medical debt — then builds your dispute letter. HIPAA compliant. Zero storage." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Inter+Tight:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<!-- html2pdf.js: used to generate the dispute-letter PDF client-side after payment success -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<!-- Lemon Squeezy checkout overlay (official CDN script) -->
+<script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
+
+<!-- html-docx-js: used to offer a Word (.docx) copy of the dispute letter alongside the PDF -->
+<script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+
+<!-- Tailwind (CDN, config inline) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: { DEFAULT: '#0B1B3A', 2: '#0F2A5C', 3: '#132F66' },
+          electric: { DEFAULT: '#2F6BFF', 2: '#00C2FF' },
+          ink: '#0A1226'
+        },
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+          tight: ['Inter Tight', 'Inter', 'ui-sans-serif'],
+        },
+        boxShadow: {
+          soft: '0 2px 8px -2px rgba(11,27,58,0.08), 0 8px 24px -8px rgba(11,27,58,0.10)',
+          lift: '0 12px 40px -12px rgba(11,27,58,0.25), 0 4px 12px -4px rgba(47,107,255,0.15)',
+          glow: '0 0 0 1px rgba(47,107,255,0.15), 0 8px 30px -6px rgba(47,107,255,0.35)',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root{
+    --navy:#0B1B3A; --navy-2:#0F2A5C; --electric:#2F6BFF; --electric-2:#00C2FF;
+    --slate-50:#F8FAFC; --slate-100:#F1F5F9; --slate-200:#E7EBF1; --slate-300:#D6DEE8;
+    --slate-400:#94A3B8; --slate-500:#64748B; --slate-600:#475569; --slate-900:#0F172A;
+  }
+  *{-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',ui-sans-serif,system-ui,sans-serif;
+    background:#ffffff; color:var(--slate-900);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.font-display{font-family:'Inter Tight','Inter',ui-sans-serif,sans-serif;}
+  ::selection{ background: var(--electric); color:#fff; }
+
+  /* Custom slim scrollbar */
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:var(--slate-50); }
+  ::-webkit-scrollbar-thumb{ background:linear-gradient(var(--navy),var(--electric)); border-radius:10px; }
+
+  /* Grain overlay */
+  .grain{
+    position:fixed; inset:0; z-index:9998; pointer-events:none; opacity:0.035; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Preloader */
+  #preloader{
+    position:fixed; inset:0; z-index:9999; background:var(--navy);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    animation: preloaderOut .6s ease-in-out 1.7s forwards;
+  }
+  #preloader .pl-mark{ font-family:'Inter Tight'; font-weight:800; font-size:2rem; color:#fff; letter-spacing:-0.02em; opacity:0; animation: fadeIn .5s ease .1s forwards; }
+  #preloader .pl-bar{ width:120px; height:2px; background:rgba(255,255,255,0.15); margin-top:22px; overflow:hidden; border-radius:2px; }
+  #preloader .pl-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--electric),var(--electric-2)); animation: fillBar 1.1s cubic-bezier(.4,0,.2,1) .3s forwards; }
+  @keyframes fadeIn{ to{ opacity:1; } }
+  @keyframes fillBar{ to{ width:100%; } }
+  @keyframes preloaderOut{ 0%{ opacity:1; } 99%{ opacity:0; visibility:visible; } 100%{ opacity:0; visibility:hidden; pointer-events:none; } }
+
+  /* Glassmorphism */
+  .glass{
+    background:rgba(255,255,255,0.6);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border:1px solid rgba(255,255,255,0.5);
+  }
+  .glass-dark{
+    background:rgba(11,27,58,0.55);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border:1px solid rgba(255,255,255,0.08);
+  }
+  .glass-navbar{
+    background:rgba(255,255,255,0.72);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+
+  /* Gradient helpers */
+  .grad-trust{ background: linear-gradient(120deg, var(--navy) 0%, var(--navy-2) 35%, var(--electric) 78%, var(--electric-2) 100%); }
+  .grad-text{
+    background: linear-gradient(100deg, var(--navy) 10%, var(--electric) 55%, var(--electric-2) 90%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .grad-btn{ background: linear-gradient(100deg, var(--navy) 0%, var(--electric) 70%, var(--electric-2) 100%); }
+
+  /* Masked line reveal (pure CSS, runs automatically after preload) */
+  .line-mask{ overflow:hidden; display:block; }
+  .line-inner{ display:block; transform:translateY(110%); animation: lineReveal .9s cubic-bezier(.16,1,.3,1) forwards; animation-delay:1.85s; }
+  .line-mask:nth-of-type(2) .line-inner{ animation-delay:1.98s; }
+  .line-mask:nth-of-type(3) .line-inner{ animation-delay:2.11s; }
+  @keyframes lineReveal{ to{ transform:translateY(0%); } }
+
+  /* Reveal on scroll (IntersectionObserver toggles .is-visible) */
+  .reveal{ opacity:0; transform:translateY(36px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  /* Floating doc cards */
+  .float-card{ transition: transform .15s ease-out; will-change:transform; }
+
+  /* Marquee */
+  .marquee-track{ display:flex; width:max-content; animation: marquee 32s linear infinite; }
+  @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  /* Blob pulse */
+  @keyframes blobPulse{ 0%,100%{ transform:scale(1) translate(0,0);} 50%{ transform:scale(1.12) translate(20px,-10px);} }
+  .blob{ animation: blobPulse 10s ease-in-out infinite; }
+
+  /* Spotlight card */
+  .spotlight{ position:relative; overflow:hidden; }
+  .spotlight::before{
+    content:''; position:absolute; inset:-2px; border-radius:inherit; opacity:0; pointer-events:none;
+    background: radial-gradient(280px circle at var(--x,50%) var(--y,50%), rgba(47,107,255,0.16), transparent 70%);
+    transition: opacity .3s ease;
+  }
+  .spotlight:hover::before{ opacity:1; }
+
+  /* Upload zone */
+  .drop-zone{ border:2px dashed var(--slate-300); transition: all .25s ease; }
+  .drop-zone.drag-active{ border-color:var(--electric); background:rgba(47,107,255,0.05); transform:scale(1.01); }
+
+  /* Tabs */
+  .tab-btn{ position:relative; transition: color .25s ease; }
+  .tab-pill{
+    position:absolute; inset:4px; border-radius:9999px; z-index:0;
+    background:linear-gradient(100deg,var(--navy),var(--electric));
+    transition: transform .35s cubic-bezier(.65,0,.35,1);
+  }
+
+  /* Spinner */
+  .spinner{ border:3px solid rgba(47,107,255,0.15); border-top-color:var(--electric); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  /* Progress shimmer */
+  .progress-fill{ background:linear-gradient(90deg,var(--navy),var(--electric),var(--electric-2)); }
+
+  /* Manifesto number */
+  .chapter-num{ font-family:'Inter Tight'; font-weight:900; -webkit-text-stroke:1.5px rgba(11,27,58,0.14); color:transparent; }
+
+  /* Chip pulse dot */
+  .pulse-dot{ position:relative; }
+  .pulse-dot::before{
+    content:''; position:absolute; inset:0; border-radius:9999px; background:#22C55E; opacity:.6;
+    animation: pulseDot 1.8s ease-out infinite;
+  }
+  @keyframes pulseDot{ 0%{ transform:scale(1); opacity:.6; } 100%{ transform:scale(2.6); opacity:0; } }
+
+  /* Custom cursor for large pointers only */
+  @media (hover:hover) and (pointer:fine){
+    .cta-cursor{ cursor: pointer; }
+  }
+
+  /* Result fade */
+  .result-enter{ animation: resultIn .6s cubic-bezier(.16,1,.3,1) forwards; }
+  @keyframes resultIn{ from{ opacity:0; transform:translateY(18px) scale(.98); } to{ opacity:1; transform:translateY(0) scale(1); } }
+
+  /* focus ring accessibility */
+  button:focus-visible, input:focus-visible, a:focus-visible{ outline:2px solid var(--electric); outline-offset:2px; }
+
+  /* Hide scrollbar for tab row on tiny screens */
+  .no-scrollbar::-webkit-scrollbar{ display:none; }
+  .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+</style>
+</head>
+
+<body class="bg-white text-slate-900 antialiased overflow-x-hidden selection:bg-electric selection:text-white">
+
+<!-- Preloader -->
+<div id="preloader">
+  <div class="pl-mark"><i class="fa-solid fa-shield-heart mr-2"></i>MedFair</div>
+  <div class="pl-bar"><div class="pl-fill" id="pl-fill"></div></div>
+</div>
+
+<div class="grain"></div>
+
+<!-- ================= NAV ================= -->
+<header class="fixed top-0 inset-x-0 z-50">
+  <nav class="glass-navbar mx-auto mt-2 sm:mt-3 max-w-6xl rounded-2xl sm:rounded-full flex items-center justify-between px-4 sm:px-6 py-3 shadow-soft border border-white/60" data-testid="main-navbar">
+    <a href="#top" class="flex items-center gap-2 font-tight font-extrabold text-navy text-lg tracking-tight" data-testid="logo-link">
+      <span class="w-8 h-8 rounded-xl grad-trust flex items-center justify-center text-white text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+      MedFair
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+      <a href="#how-it-works" class="hover:text-navy transition-colors" data-testid="nav-how-it-works">How it works</a>
+      <a href="#tool" class="hover:text-navy transition-colors" data-testid="nav-tool">Analyze a Document</a>
+      <a href="blog.html" class="hover:text-navy transition-colors" data-testid="nav-blog">Blog</a>
+      <a href="#trust" class="hover:text-navy transition-colors" data-testid="nav-trust">Security</a>
+    </div>
+    <a href="#tool" class="grad-btn text-white text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full shadow-glow hover:brightness-110 active:scale-95 transition-all" data-testid="nav-cta-button">
+      Analyze Free
+    </a>
+  </nav>
+</header>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="relative min-h-[100svh] flex items-center pt-28 pb-16 sm:pt-32 overflow-hidden bg-white">
+  <!-- ambient blobs -->
+  <div class="absolute -top-32 -left-32 w-[420px] h-[420px] rounded-full bg-electric/10 blur-3xl blob" aria-hidden="true"></div>
+  <div class="absolute top-1/3 -right-40 w-[480px] h-[480px] rounded-full bg-navy/10 blur-3xl blob" style="animation-delay:-4s" aria-hidden="true"></div>
+
+  <div class="relative max-w-6xl mx-auto px-5 sm:px-6 w-full grid lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
+    <div>
+      <div class="reveal inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs font-semibold text-navy shadow-soft mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 pulse-dot"></span>
+        Trusted by patients across all 50 states
+      </div>
+
+      <h1 class="font-tight font-extrabold tracking-tight text-4xl sm:text-5xl lg:text-6xl leading-[1.04] text-navy" data-testid="hero-heading">
+        <span class="line-mask"><span class="line-inner">Medical bills are</span></span>
+        <span class="line-mask"><span class="line-inner grad-text">confusing on purpose.</span></span>
+        <span class="line-mask"><span class="line-inner">We make them make sense.</span></span>
+      </h1>
+
+      <p class="reveal mt-6 text-base sm:text-lg text-slate-600 max-w-lg leading-relaxed">
+        Upload any medical bill, insurance denial, or debt collection letter. Our AI finds the errors, explains your rights, and drafts your dispute — in under 60 seconds.
+      </p>
+
+      <div class="reveal mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <a href="#tool" class="cta-cursor grad-btn text-white font-semibold text-base px-7 py-4 rounded-2xl shadow-lift hover:brightness-110 active:scale-95 transition-all text-center" data-testid="hero-cta-analyze">
+          <i class="fa-solid fa-bolt mr-2"></i>Analyze My Document — Free
+        </a>
+        <a href="#how-it-works" class="cta-cursor bg-white border border-slate-200 text-navy font-semibold text-base px-7 py-4 rounded-2xl shadow-soft hover:border-electric hover:text-electric transition-all text-center" data-testid="hero-cta-learn">
+          See how it works
+        </a>
+      </div>
+
+      <div class="reveal mt-10 grid grid-cols-3 gap-4 max-w-md">
+        <div>
+          <div class="font-tight font-extrabold text-2xl sm:text-3xl text-navy"><span class="counter" data-target="80">0</span>%</div>
+          <div class="text-xs text-slate-500 mt-1 leading-tight">of bills contain errors</div>
+        </div>
+        <div>
+          <div class="font-tight font-extrabold text-2xl sm:text-3xl text-navy">$<span class="counter" data-target="1240">0</span></div>
+          <div class="text-xs text-slate-500 mt-1 leading-tight">avg. savings found</div>
+        </div>
+        <div>
+          <div class="font-tight font-extrabold text-2xl sm:text-3xl text-navy"><span class="counter" data-target="60">0</span>s</div>
+          <div class="text-xs text-slate-500 mt-1 leading-tight">to full AI analysis</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating mockup -->
+    <div class="reveal relative h-[420px] sm:h-[480px] lg:h-[560px]" id="hero-parallax">
+      <div class="float-card absolute top-2 left-2 sm:left-8 w-[78%] rounded-3xl overflow-hidden shadow-lift border border-white/60" style="transform:rotate(-6deg)" data-base-rotate="-6">
+        <img src="https://images.unsplash.com/photo-1562071707-7249ab429b2a?q=85&w=900&auto=format&fit=crop" class="w-full h-56 sm:h-64 object-cover" alt="Person reviewing bills on laptop" />
+        <div class="p-4 bg-white">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-bold text-electric bg-electric/10 px-2 py-0.5 rounded-full">MEDICAL BILL</span>
+            <i class="fa-solid fa-circle-check text-emerald-500"></i>
+          </div>
+          <div class="h-2 w-4/5 bg-slate-100 rounded-full mb-1.5"></div>
+          <div class="h-2 w-3/5 bg-slate-100 rounded-full"></div>
+        </div>
+      </div>
+
+      <div class="float-card absolute bottom-4 right-0 sm:right-2 w-[64%] rounded-3xl glass p-5 shadow-lift" style="transform:rotate(4deg)" data-base-rotate="4">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="w-9 h-9 rounded-xl grad-trust flex items-center justify-center text-white text-sm"><i class="fa-solid fa-file-invoice-dollar"></i></span>
+          <div>
+            <div class="font-bold text-sm text-navy">Duplicate Charge Found</div>
+            <div class="text-[11px] text-slate-500">Line item #14 &amp; #22</div>
+          </div>
+        </div>
+        <div class="text-xs text-slate-600 leading-relaxed">Potential overbilling: <span class="font-bold text-navy">$412.00</span></div>
+      </div>
+
+      <div class="float-card absolute left-0 sm:left-4 w-16 h-16 rounded-2xl glass shadow-lift flex items-center justify-center text-electric text-2xl" style="top:50%; margin-top:-32px; transform:rotate(-10deg)" data-base-rotate="-10">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- scroll cue -->
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-slate-400 text-xs flex flex-col items-center gap-1" aria-hidden="true">
+    <span>Scroll</span>
+    <i class="fa-solid fa-chevron-down animate-bounce"></i>
+  </div>
+</section>
+
+<!-- ================= MARQUEE ================= -->
+<div class="bg-navy py-4 overflow-hidden select-none" data-testid="marquee-band">
+  <div class="marquee-track text-white/80 font-tight font-semibold text-sm sm:text-base tracking-wide">
+    <div class="flex items-center gap-8 pr-8">
+      <span>HIPAA COMPLIANT</span><i class="fa-solid fa-lock text-electric-2 text-xs"></i>
+      <span>ZERO DOCUMENT STORAGE</span><i class="fa-solid fa-shield-halved text-electric-2 text-xs"></i>
+      <span>INSTANT AI ANALYSIS</span><i class="fa-solid fa-bolt text-electric-2 text-xs"></i>
+      <span>NO INSURANCE JARGON</span><i class="fa-solid fa-comments text-electric-2 text-xs"></i>
+      <span>BUILT FOR YOUR RIGHTS</span><i class="fa-solid fa-scale-balanced text-electric-2 text-xs"></i>
+    </div>
+    <div class="flex items-center gap-8 pr-8" aria-hidden="true">
+      <span>HIPAA COMPLIANT</span><i class="fa-solid fa-lock text-electric-2 text-xs"></i>
+      <span>ZERO DOCUMENT STORAGE</span><i class="fa-solid fa-shield-halved text-electric-2 text-xs"></i>
+      <span>INSTANT AI ANALYSIS</span><i class="fa-solid fa-bolt text-electric-2 text-xs"></i>
+      <span>NO INSURANCE JARGON</span><i class="fa-solid fa-comments text-electric-2 text-xs"></i>
+      <span>BUILT FOR YOUR RIGHTS</span><i class="fa-solid fa-scale-balanced text-electric-2 text-xs"></i>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PROBLEM ================= -->
+<section class="py-20 sm:py-28 bg-slate-50">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6 grid lg:grid-cols-2 gap-12 items-center">
+    <div class="reveal order-2 lg:order-1">
+      <span class="text-xs font-bold tracking-widest text-electric uppercase">The Problem</span>
+      <h2 class="font-tight font-extrabold text-3xl sm:text-4xl text-navy mt-3 leading-tight">The system counts on you<br class="hidden sm:block"> not reading the fine print.</h2>
+      <p class="mt-5 text-slate-600 leading-relaxed">Hospitals overbill. Insurers deny claims they know are valid. Debt collectors chase invalid charges. Most people pay anyway — because fighting back feels impossible without a law degree.</p>
+      <ul class="mt-6 space-y-3">
+        <li class="flex items-start gap-3 text-sm text-slate-700"><i class="fa-solid fa-circle-exclamation text-electric mt-0.5"></i>Duplicate &amp; upcoded charges hidden in itemized bills</li>
+        <li class="flex items-start gap-3 text-sm text-slate-700"><i class="fa-solid fa-circle-exclamation text-electric mt-0.5"></i>Vague denial codes designed to discourage appeals</li>
+        <li class="flex items-start gap-3 text-sm text-slate-700"><i class="fa-solid fa-circle-exclamation text-electric mt-0.5"></i>Debt collectors pursuing bills past the statute of limitations</li>
+      </ul>
+    </div>
+    <div class="reveal order-1 lg:order-2 relative">
+      <div class="rounded-[2rem] overflow-hidden shadow-lift" style="clip-path: polygon(0 6%, 100% 0, 100% 94%, 0 100%);">
+        <img src="https://images.unsplash.com/photo-1758598497429-6eb3895d5bfa?q=85&w=1000&auto=format&fit=crop" class="w-full h-[340px] sm:h-[420px] object-cover" alt="Person overwhelmed by medical paperwork" />
+      </div>
+      <div class="absolute -bottom-6 -left-4 sm:-left-8 glass rounded-2xl px-5 py-4 shadow-lift">
+        <div class="font-tight font-extrabold text-2xl text-navy"><span class="counter" data-target="49">0</span>%</div>
+        <div class="text-[11px] text-slate-500">of claim denials are never appealed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS (manifesto chapters) ================= -->
+<section id="how-it-works" class="py-20 sm:py-28 bg-white">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6">
+    <div class="reveal max-w-xl mb-16 sm:mb-24">
+      <span class="text-xs font-bold tracking-widest text-electric uppercase">How MedFair works</span>
+      <h2 class="font-tight font-extrabold text-3xl sm:text-4xl lg:text-5xl text-navy mt-3 leading-tight">Three steps. Zero legal knowledge required.</h2>
+    </div>
+
+    <!-- Chapter 01 -->
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-24 sm:mb-32">
+      <div class="reveal order-2 lg:order-1 relative">
+        <span class="chapter-num text-[7rem] sm:text-[9rem] leading-none block absolute -top-10 sm:-top-16 -left-2 select-none">01</span>
+        <div class="relative rounded-[2rem] overflow-hidden shadow-lift mt-10">
+          <img src="https://images.unsplash.com/photo-1631557776808-91908aba7ca0?q=85&w=1000&auto=format&fit=crop" class="w-full h-72 object-cover" alt="Uploading a document securely" />
+        </div>
+      </div>
+      <div class="reveal order-1 lg:order-2">
+        <h3 class="font-tight font-bold text-2xl sm:text-3xl text-navy mb-3">Upload securely</h3>
+        <p class="text-slate-600 leading-relaxed">Snap a photo or upload your bill, denial letter, or collection notice. It's encrypted in transit and never touches a database — analyzed in memory, then permanently discarded.</p>
+      </div>
+    </div>
+
+    <!-- Chapter 02 -->
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-24 sm:mb-32">
+      <div class="reveal">
+        <span class="chapter-num text-[7rem] sm:text-[9rem] leading-none block relative -top-10 sm:-top-16 -left-2 select-none">02</span>
+        <h3 class="font-tight font-bold text-2xl sm:text-3xl text-navy mb-3 -mt-10 sm:-mt-16">AI reads the fine print</h3>
+        <p class="text-slate-600 leading-relaxed">In seconds, MedFair cross-references billing codes, denial reasons, and collection law to flag errors, overcharges, and violations most patients never catch.</p>
+      </div>
+      <div class="reveal relative rounded-[2rem] overflow-hidden shadow-lift">
+        <img src="https://images.unsplash.com/photo-1758691461990-03b49d969495?q=85&w=1000&auto=format&fit=crop" class="w-full h-72 object-cover" alt="Analyzing document details" />
+      </div>
+    </div>
+
+    <!-- Chapter 03 -->
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <div class="reveal order-2 lg:order-1 relative">
+        <span class="chapter-num text-[7rem] sm:text-[9rem] leading-none block absolute -top-10 sm:-top-16 -left-2 select-none">03</span>
+        <div class="relative rounded-[2rem] overflow-hidden shadow-lift mt-10">
+          <img src="https://images.unsplash.com/photo-1601912871034-478820957c78?q=85&w=1000&auto=format&fit=crop" class="w-full h-72 object-cover" alt="Relieved person after resolving bill" />
+        </div>
+      </div>
+      <div class="reveal order-1 lg:order-2">
+        <h3 class="font-tight font-bold text-2xl sm:text-3xl text-navy mb-3">Get your action plan</h3>
+        <p class="text-slate-600 leading-relaxed">Receive a plain-English summary and a step-by-step plan — plus a ready-to-send dispute letter citing the exact codes and laws on your side.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TOOL SECTION ================= -->
+<section id="tool" class="py-20 sm:py-28 bg-slate-50 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-[420px] h-[420px] rounded-full bg-electric/10 blur-3xl blob" aria-hidden="true"></div>
+  <div class="max-w-3xl mx-auto px-5 sm:px-6 relative">
+    <div class="reveal text-center mb-10">
+      <span class="text-xs font-bold tracking-widest text-electric uppercase">Free instant analysis</span>
+      <h2 class="font-tight font-extrabold text-3xl sm:text-4xl text-navy mt-3">What are you dealing with?</h2>
+      <p class="text-slate-600 mt-3 max-w-md mx-auto">Pick a category, upload your document, and watch MedFair break it down in real time.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="reveal relative flex bg-white rounded-full p-1.5 shadow-soft border border-slate-200 mb-8 max-w-xl mx-auto overflow-x-auto no-scrollbar" role="tablist" data-testid="category-tabs">
+      <div id="tab-pill" class="tab-pill" style="width:calc(33.333% - 4px);"></div>
+      <button class="tab-btn flex-1 min-w-[110px] z-10 py-3 px-3 rounded-full text-xs sm:text-sm font-semibold text-white transition-colors" data-tab="bill" role="tab" aria-selected="true" data-testid="tab-medical-bill">
+        <i class="fa-solid fa-file-invoice-dollar mr-1.5"></i>Medical Bill
+      </button>
+      <button class="tab-btn flex-1 min-w-[110px] z-10 py-3 px-3 rounded-full text-xs sm:text-sm font-semibold text-slate-500 transition-colors" data-tab="denial" role="tab" aria-selected="false" data-testid="tab-insurance-denial">
+        <i class="fa-solid fa-file-circle-xmark mr-1.5"></i>Insurance Denial
+      </button>
+      <button class="tab-btn flex-1 min-w-[110px] z-10 py-3 px-3 rounded-full text-xs sm:text-sm font-semibold text-slate-500 transition-colors" data-tab="debt" role="tab" aria-selected="false" data-testid="tab-medical-debt">
+        <i class="fa-solid fa-hand-holding-dollar mr-1.5"></i>Medical Debt
+      </button>
+    </div>
+
+    <!-- Tool card -->
+    <div class="reveal bg-white rounded-[2rem] shadow-lift border border-slate-100 p-5 sm:p-8" data-testid="tool-card">
+
+      <!-- tab context line -->
+      <p id="tab-context" class="text-sm text-slate-500 mb-5 text-center transition-opacity">Upload an itemized medical bill — we'll scan every line for overcharges and duplicate fees.</p>
+
+      <!-- IDLE: drop zone -->
+      <div id="upload-idle">
+        <label for="file-input" class="drop-zone spotlight cursor-pointer rounded-2xl flex flex-col items-center justify-center text-center px-6 py-12 sm:py-16" id="drop-zone" data-testid="upload-drop-zone">
+          <div class="w-16 h-16 rounded-2xl grad-trust text-white flex items-center justify-center text-2xl mb-4 shadow-glow">
+            <i class="fa-solid fa-cloud-arrow-up" id="drop-icon"></i>
+          </div>
+          <p class="font-tight font-bold text-navy text-base sm:text-lg">Drag &amp; drop your document</p>
+          <p class="text-sm text-slate-500 mt-1">or <span class="text-electric font-semibold underline">tap to upload</span> — PDF, JPG, PNG</p>
+          <input id="file-input" type="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" data-testid="file-input" />
+        </label>
+      </div>
+
+      <!-- PROCESSING -->
+      <div id="upload-processing" class="hidden flex-col items-center justify-center text-center px-6 py-14" data-testid="processing-state">
+        <div class="spinner w-12 h-12 mb-5"></div>
+        <p class="font-tight font-bold text-navy text-base sm:text-lg" id="processing-title">Analyzing your document securely…</p>
+        <p class="text-sm text-slate-500 mt-1" id="processing-sub">Reading line items and checking billing codes</p>
+        <div class="w-full max-w-xs h-2 bg-slate-100 rounded-full mt-6 overflow-hidden">
+          <div id="progress-bar" class="progress-fill h-full w-0 rounded-full transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Privacy badge -->
+      <div class="mt-6 flex items-center justify-center gap-2.5 glass rounded-2xl px-4 py-3 text-center border border-slate-100" data-testid="privacy-badge">
+        <i class="fa-solid fa-lock text-emerald-600"></i>
+        <p class="text-xs sm:text-[13px] text-slate-600 leading-snug"><span class="font-bold text-navy">100% Secure. HIPAA Compliant.</span> Documents are analyzed in real-time and instantly deleted. Zero storage.</p>
+      </div>
+
+      <!-- RESULT -->
+      <div id="upload-result" class="hidden mt-8" data-testid="ai-summary-section">
+        <div class="result-enter">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-11 h-11 rounded-xl grad-trust text-white flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+            <div>
+              <h3 id="result-title" class="font-tight font-bold text-navy text-lg sm:text-xl" data-testid="ai-summary-title">Duplicate Charges &amp; 2 Billing Errors Found</h3>
+              <p class="text-xs text-slate-500">Analysis by Gemini 1.5 Flash</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 rounded-2xl p-5 mb-5">
+            <p class="text-xs font-bold tracking-wide text-slate-500 uppercase mb-3">Key findings</p>
+            <ul id="result-bullets" class="space-y-3" data-testid="ai-summary-bullets"></ul>
+          </div>
+
+          <div class="bg-navy/[0.03] rounded-2xl p-5 border border-navy/5">
+            <p class="text-xs font-bold tracking-wide text-electric uppercase mb-3">Your action plan</p>
+            <p id="result-action-plan" class="text-sm text-slate-700 leading-relaxed" data-testid="ai-summary-actions"></p>
+          </div>
+
+          <div class="mt-7 text-center">
+            <button id="unlock-download-btn" class="cta-cursor w-full sm:w-auto inline-flex items-center justify-center gap-2 grad-btn text-white font-bold text-base px-8 py-4 rounded-2xl shadow-lift hover:brightness-110 active:scale-95 transition-all" data-testid="download-dispute-letter-button">
+              <i class="fa-solid fa-lock"></i> <span id="unlock-btn-label">Download Full Dispute Letter — $9.99</span>
+            </button>
+            <p class="text-xs text-slate-400 mt-3" id="unlock-status-text">Secure checkout powered by Lemon Squeezy.</p>
+            <button id="download-docx-btn" class="hidden mt-3 mx-auto flex items-center gap-2 text-sm font-semibold text-navy hover:text-electric transition-colors" data-testid="download-docx-button">
+              <i class="fa-solid fa-file-word text-electric"></i> Also download as Word (.docx)
+            </button>
+            <button id="reset-btn" class="mt-4 text-sm text-slate-500 hover:text-electric font-medium transition-colors" data-testid="analyze-another-button">
+              <i class="fa-solid fa-rotate-left mr-1.5"></i>Analyze another document
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ERROR -->
+      <div id="upload-error" class="hidden mt-6 text-center bg-red-50 border border-red-100 rounded-2xl p-6" data-testid="analysis-error-message">
+        <i class="fa-solid fa-triangle-exclamation text-red-500 text-2xl mb-2"></i>
+        <p class="text-sm text-red-700 font-medium" id="error-text">Something went wrong analyzing your document.</p>
+        <button id="error-retry-btn" class="mt-4 text-sm font-semibold text-electric hover:underline" data-testid="error-retry-button">Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Hidden print-ready letter container used by html2pdf.js to generate the downloadable PDF.
+     Intentionally NO MedFair branding/logo/watermark inside — this must read as a plain formal letter. -->
+<div id="letter-pdf-container" style="position:fixed; left:-9999px; top:0; width:612pt; background:#ffffff; padding:0; font-family:'Times New Roman',Times,serif; font-size:12pt; line-height:1.6; color:#000000;">
+  <div id="letter-pdf-content"></div>
+</div>
+
+<!-- ================= TRUST / SECURITY ================= -->
+<section id="trust" class="py-20 sm:py-28 bg-white">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6">
+    <div class="reveal text-center max-w-xl mx-auto mb-14">
+      <span class="text-xs font-bold tracking-widest text-electric uppercase">Security first</span>
+      <h2 class="font-tight font-extrabold text-3xl sm:text-4xl text-navy mt-3">Your data never sticks around.</h2>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-5">
+      <div class="reveal spotlight bg-slate-50 rounded-2xl p-7 border border-slate-100">
+        <div class="w-12 h-12 rounded-xl grad-trust text-white flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-shield-heart"></i></div>
+        <h3 class="font-tight font-bold text-navy mb-2">HIPAA Compliant</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">Every step of our pipeline follows HIPAA-grade security and privacy standards.</p>
+      </div>
+      <div class="reveal spotlight bg-slate-50 rounded-2xl p-7 border border-slate-100">
+        <div class="w-12 h-12 rounded-xl grad-trust text-white flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-lock"></i></div>
+        <h3 class="font-tight font-bold text-navy mb-2">Bank-Level Encryption</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">256-bit TLS encryption in transit — the same standard used by major banks.</p>
+      </div>
+      <div class="reveal spotlight bg-slate-50 rounded-2xl p-7 border border-slate-100">
+        <div class="w-12 h-12 rounded-xl grad-trust text-white flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-trash-can"></i></div>
+        <h3 class="font-tight font-bold text-navy mb-2">Zero Storage</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">Documents are analyzed in memory and instantly, permanently deleted. Always.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINAL CTA ================= -->
+<section class="relative py-24 sm:py-32 grad-trust overflow-hidden">
+  <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(circle at 20% 20%, white 0, transparent 40%), radial-gradient(circle at 80% 80%, white 0, transparent 35%);"></div>
+  <div class="reveal relative max-w-3xl mx-auto px-5 sm:px-6 text-center">
+    <h2 class="font-tight font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Stop overpaying for healthcare<br class="hidden sm:block"> you already received.</h2>
+    <p class="text-white/80 mt-5 max-w-lg mx-auto">Free to analyze. No account needed. Takes less time than reading your bill in the first place.</p>
+    <a href="#tool" class="cta-cursor inline-flex items-center gap-2 bg-white text-navy font-bold text-base px-8 py-4 rounded-2xl shadow-lift mt-8 hover:scale-105 active:scale-95 transition-transform" data-testid="final-cta-button">
+      <i class="fa-solid fa-bolt"></i> Analyze My Document Free
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-navy text-white/60 py-14">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pb-8 border-b border-white/10">
+      <a href="#top" class="flex items-center gap-2 font-tight font-extrabold text-white text-lg">
+        <span class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-electric-2 text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+        MedFair
+      </a>
+      <div class="flex flex-wrap gap-6 text-sm">
+        <a href="#how-it-works" class="hover:text-white transition-colors">How it works</a>
+        <a href="#tool" class="hover:text-white transition-colors">Analyze a Document</a>
+        <a href="#trust" class="hover:text-white transition-colors">Security</a>
+        <a href="blog.html" class="hover:text-white transition-colors">Blog</a>
+        <a href="about.html" class="hover:text-white transition-colors">About</a>
+        <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+        <a href="privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-white transition-colors">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <p class="text-xs text-white/40 mt-8 max-w-2xl leading-relaxed">MedFair provides informational, AI-generated summaries only and does not constitute legal, medical, or financial advice. Always consult a licensed professional regarding your specific situation. &copy; 2026 MedFair. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ---------- Preloader (pure CSS-driven, JS just removes it from the DOM flow) ----------
+  const preloader = document.getElementById('preloader');
+  if(preloader){
+    setTimeout(()=>{ preloader.style.display='none'; }, 2300);
+  }
+
+  // ---------- Generic scroll reveal (IntersectionObserver, no rAF dependency) ----------
+  if('IntersectionObserver' in window){
+    const revealObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.15, rootMargin:'0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  }else{
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+  }
+
+  // ---------- Counters ----------
+  function animateCounter(el){
+    const target = parseFloat(el.dataset.target);
+    const duration = 1400;
+    const start = performance.now();
+    function step(now){
+      const progress = Math.min((now - start) / duration, 1);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - progress, 3)));
+      if(progress < 1) requestAnimationFrame(step);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+  }
+  if('IntersectionObserver' in window){
+    const counterObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){ animateCounter(entry.target); counterObserver.unobserve(entry.target); }
+      });
+    }, { threshold:0.4 });
+    document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+  }
+
+  // ---------- Hero parallax on mouse ----------
+  const parallaxWrap = document.getElementById('hero-parallax');
+  if(parallaxWrap){
+    const cards = parallaxWrap.querySelectorAll('.float-card');
+    parallaxWrap.addEventListener('mousemove', (e)=>{
+      const rect = parallaxWrap.getBoundingClientRect();
+      const x = (e.clientX - rect.left)/rect.width - 0.5;
+      const y = (e.clientY - rect.top)/rect.height - 0.5;
+      cards.forEach((c,i)=>{
+        const depth = (i+1)*10;
+        c.style.transform = `translate(${x*depth}px, ${y*depth}px) rotate(${c.dataset.baseRotate || 0}deg)`;
+      });
+    });
+    parallaxWrap.addEventListener('mouseleave', ()=>{
+      cards.forEach(c=> c.style.transform = `rotate(${c.dataset.baseRotate || 0}deg)`);
+    });
+  }
+
+  // ---------- Spotlight hover ----------
+  document.querySelectorAll('.spotlight').forEach((el)=>{
+    el.addEventListener('mousemove', (e)=>{
+      const rect = el.getBoundingClientRect();
+      el.style.setProperty('--x', (e.clientX-rect.left)+'px');
+      el.style.setProperty('--y', (e.clientY-rect.top)+'px');
+    });
+  });
+
+  // ---------- Tabs ----------
+  const ANALYZE_ENDPOINT = '/api/analyze'; // Vercel serverless function — deploy index.html + /api together
+  const TAB_CONTENT = {
+    bill: {
+      context: "Upload an itemized medical bill — we'll scan every line for overcharges and duplicate fees.",
+      dropLabel: "Drag & drop your medical bill",
+      icon: 'fa-file-invoice-dollar',
+      processingTitle: 'Scanning line items and billing codes…',
+      processingSub: 'Cross-referencing CPT codes against fair-price data',
+    },
+    denial: {
+      context: "Upload your insurance denial (EOB) letter — we'll decode the reason and your appeal odds.",
+      dropLabel: 'Drag & drop your denial letter',
+      icon: 'fa-file-circle-xmark',
+      processingTitle: 'Decoding denial reason codes…',
+      processingSub: 'Matching against your plan\'s appeal requirements',
+    },
+    debt: {
+      context: 'Upload a collection letter or medical debt notice — we\'ll check if it\'s even valid.',
+      dropLabel: 'Drag & drop your collection notice',
+      icon: 'fa-hand-holding-dollar',
+      processingTitle: 'Checking validity & statute of limitations…',
+      processingSub: 'Reviewing collector compliance with FDCPA rules',
+    }
+  };
+
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabPill = document.getElementById('tab-pill');
+  const tabContext = document.getElementById('tab-context');
+  const dropIcon = document.getElementById('drop-icon');
+  let activeTab = 'bill';
+
+  function moveTabPill(btn){
+    const parent = btn.parentElement;
+    const pw = parent.clientWidth;
+    const bw = btn.offsetWidth;
+    const bl = btn.offsetLeft;
+    tabPill.style.width = bw + 'px';
+    tabPill.style.transform = `translateX(${bl - 4}px)`;
+  }
+
+  function setActiveTab(tab, btn){
+    activeTab = tab;
+    tabButtons.forEach(b=>{
+      b.classList.toggle('text-white', b===btn);
+      b.classList.toggle('text-slate-500', b!==btn);
+      b.setAttribute('aria-selected', b===btn ? 'true':'false');
+    });
+    moveTabPill(btn);
+    tabContext.style.transition = 'opacity .15s ease';
+    tabContext.style.opacity = '0';
+    setTimeout(()=>{
+      tabContext.textContent = TAB_CONTENT[tab].context;
+      dropIcon.className = 'fa-solid ' + TAB_CONTENT[tab].icon;
+      tabContext.style.transition = 'opacity .25s ease';
+      tabContext.style.opacity = '1';
+    }, 150);
+    resetUpload();
+  }
+
+  tabButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=> setActiveTab(btn.dataset.tab, btn));
+  });
+  window.addEventListener('resize', ()=> moveTabPill(document.querySelector('.tab-btn[aria-selected="true"]')));
+  setTimeout(()=> moveTabPill(tabButtons[0]), 50);
+
+  // ---------- Upload flow ----------
+  const idleEl = document.getElementById('upload-idle');
+  const processingEl = document.getElementById('upload-processing');
+  const resultEl = document.getElementById('upload-result');
+  const errorEl = document.getElementById('upload-error');
+  const errorText = document.getElementById('error-text');
+  const errorRetryBtn = document.getElementById('error-retry-btn');
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const progressBar = document.getElementById('progress-bar');
+  const processingTitle = document.getElementById('processing-title');
+  const processingSub = document.getElementById('processing-sub');
+  const resultTitle = document.getElementById('result-title');
+  const resultBullets = document.getElementById('result-bullets');
+  const resultActionPlan = document.getElementById('result-action-plan');
+  const resetBtn = document.getElementById('reset-btn');
+  const unlockBtn = document.getElementById('unlock-download-btn');
+  const unlockBtnLabel = document.getElementById('unlock-btn-label');
+
+  const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'application/pdf'];
+  const MAX_FILE_MB = 10;
+  let currentFullLetterHTML = '';
+  let lastFile = null;
+
+  function resetUpload(){
+    idleEl.classList.remove('hidden');
+    processingEl.classList.add('hidden');
+    processingEl.classList.remove('flex');
+    resultEl.classList.add('hidden');
+    errorEl.classList.add('hidden');
+    progressBar.style.width = '0%';
+    fileInput.value = '';
+    currentFullLetterHTML = '';
+    lastFile = null;
+    pdfGeneratedForCurrentAnalysis = false;
+    currentOrderToken = null;
+    stopPolling();
+    if(docxBtn) docxBtn.classList.add('hidden');
+  }
+
+  function showError(message){
+    idleEl.classList.add('hidden');
+    processingEl.classList.add('hidden');
+    processingEl.classList.remove('flex');
+    resultEl.classList.add('hidden');
+    errorEl.classList.remove('hidden');
+    errorText.textContent = message || 'Something went wrong analyzing your document. Please try again.';
+  }
+
+  function renderResult(analysis){
+    resultTitle.textContent = analysis.summary_title || 'Analysis Complete';
+    resultBullets.innerHTML = (analysis.key_findings || []).map((text)=>
+      `<li class="flex items-start gap-3 text-sm text-slate-700"><i class="fa-solid fa-circle-exclamation text-electric mt-0.5"></i><span>${text}</span></li>`
+    ).join('');
+    resultActionPlan.textContent = analysis.action_plan || '';
+    currentFullLetterHTML = analysis.full_letter_content || '';
+  }
+
+  function startProcessing(file){
+    lastFile = file;
+    const data = TAB_CONTENT[activeTab];
+    idleEl.classList.add('hidden');
+    resultEl.classList.add('hidden');
+    errorEl.classList.add('hidden');
+    processingEl.classList.remove('hidden');
+    processingEl.classList.add('flex');
+    processingTitle.textContent = data.processingTitle;
+    processingSub.textContent = data.processingSub;
+    progressBar.style.width = '0%';
+    requestAnimationFrame(()=>{ progressBar.style.width = '85%'; });
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('category', activeTab);
+
+    fetch(ANALYZE_ENDPOINT, { method: 'POST', body: formData })
+      .then(async (resp)=>{
+        progressBar.style.width = '100%';
+        if(!resp.ok){
+          const errBody = await resp.json().catch(()=>({ error: 'Analysis failed. Please try again.' }));
+          throw new Error(errBody.error || 'Analysis failed. Please try again.');
+        }
+        return resp.json();
+      })
+      .then((analysis)=>{
+        setTimeout(()=>{
+          processingEl.classList.add('hidden');
+          processingEl.classList.remove('flex');
+          renderResult(analysis);
+          resultEl.classList.remove('hidden');
+          resultEl.querySelector('.result-enter').style.animation = 'none';
+          requestAnimationFrame(()=>{ resultEl.querySelector('.result-enter').style.animation = ''; });
+          resultEl.scrollIntoView({ behavior:'smooth', block:'center' });
+        }, 300);
+      })
+      .catch((err)=>{
+        showError(err.message);
+      });
+  }
+
+  function handleSelectedFile(file){
+    if(!file) return;
+    if(!ALLOWED_TYPES.includes(file.type)){
+      showError('Only JPG, PNG, or PDF files are supported.');
+      return;
+    }
+    if(file.size > MAX_FILE_MB * 1024 * 1024){
+      showError(`File exceeds the ${MAX_FILE_MB}MB limit.`);
+      return;
+    }
+    startProcessing(file);
+  }
+
+  fileInput.addEventListener('change', ()=>{ if(fileInput.files.length) handleSelectedFile(fileInput.files[0]); });
+
+  ['dragenter','dragover'].forEach(evt=>{
+    dropZone.addEventListener(evt, (e)=>{ e.preventDefault(); dropZone.classList.add('drag-active'); });
+  });
+  ['dragleave','drop'].forEach(evt=>{
+    dropZone.addEventListener(evt, (e)=>{ e.preventDefault(); dropZone.classList.remove('drag-active'); });
+  });
+  dropZone.addEventListener('drop', (e)=>{
+    e.preventDefault();
+    if(e.dataTransfer.files.length) handleSelectedFile(e.dataTransfer.files[0]);
+  });
+
+  resetBtn.addEventListener('click', resetUpload);
+  errorRetryBtn.addEventListener('click', ()=>{
+    if(lastFile) startProcessing(lastFile);
+    else resetUpload();
+  });
+
+  // ---------- Lemon Squeezy checkout + backend-verified PDF release ----------
+  // The PDF is generated only after /api/order-status confirms api/webhook.js has
+  // verified a signed Lemon Squeezy payment — the client-side "Checkout.Success"
+  // event below is used ONLY as a signal to start polling, never trusted directly.
+  const CREATE_CHECKOUT_ENDPOINT = '/api/create-checkout';
+  const ORDER_STATUS_ENDPOINT = '/api/order-status';
+  const unlockStatusText = document.getElementById('unlock-status-text');
+  const docxBtn = document.getElementById('download-docx-btn');
+  let pdfGeneratedForCurrentAnalysis = false;
+  let currentOrderToken = null;
+  let pollTimer = null;
+
+  function setUnlockStatus(message){
+    if(unlockStatusText) unlockStatusText.textContent = message;
+  }
+
+  function setUnlockBtnBusy(isBusy, label){
+    unlockBtn.disabled = isBusy;
+    unlockBtn.classList.toggle('opacity-70', isBusy);
+    if(label) unlockBtnLabel.textContent = label;
+  }
+
+  function triggerDataUriDownload(dataUri, filename){
+    const link = document.createElement('a');
+    link.href = dataUri;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+
+  function downloadLetterAsDocx(){
+    if(!currentFullLetterHTML || !window.htmlDocx) return;
+    const htmlString = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="font-family:'Times New Roman',serif; font-size:12pt;">${currentFullLetterHTML}</body></html>`;
+    const blob = htmlDocx.asBlob(htmlString);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'MedFair-Dispute-Letter.docx';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+  docxBtn.addEventListener('click', downloadLetterAsDocx);
+
+  function generateAndDownloadLetterPDF(email){
+    if(!currentFullLetterHTML || pdfGeneratedForCurrentAnalysis) return;
+    pdfGeneratedForCurrentAnalysis = true;
+    setUnlockBtnBusy(true, 'Generating your PDF…');
+    setUnlockStatus('Payment verified by our server — building your PDF now.');
+
+    const letterContentEl = document.getElementById('letter-pdf-content');
+    letterContentEl.innerHTML = currentFullLetterHTML;
+
+    html2pdf()
+      .from(document.getElementById('letter-pdf-container'))
+      .set({
+        filename: 'MedFair-Dispute-Letter.pdf',
+        margin: [72, 72, 72, 72], // 1-inch margins, formal US Letter document
+        jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' },
+        html2canvas: { scale: 2 },
+        pagebreak: { mode: ['css', 'legacy'] },
+      })
+      .toPdf()
+      .output('datauristring')
+      .then((dataUri)=>{
+        triggerDataUriDownload(dataUri, 'MedFair-Dispute-Letter.pdf');
+        setUnlockBtnBusy(false, 'Downloaded — Get Another Copy');
+        setUnlockStatus(email ? `Downloaded — a receipt with a backup link is on its way to ${email}.` : 'Your dispute letter has been downloaded.');
+        docxBtn.classList.remove('hidden');
+      })
+      .catch(()=>{
+        pdfGeneratedForCurrentAnalysis = false;
+        setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
+        setUnlockStatus('Could not generate the PDF. Please try again.');
+      });
+  }
+
+  function stopPolling(){
+    if(pollTimer){ clearTimeout(pollTimer); pollTimer = null; }
+  }
+
+  function pollOrderStatus(token, attempt){
+    attempt = attempt || 0;
+    if(pdfGeneratedForCurrentAnalysis) return;
+    fetch(`${ORDER_STATUS_ENDPOINT}?token=${encodeURIComponent(token)}`)
+      .then((r)=> r.json())
+      .then((data)=>{
+        if(data.verified){
+          setUnlockStatus('Payment verified by our server.');
+          generateAndDownloadLetterPDF(data.email);
+          return;
+        }
+        if(attempt >= 24){ // ~60s of polling at 2.5s intervals
+          setUnlockBtnBusy(false, 'Check Payment Status');
+          setUnlockStatus("Still confirming with Lemon Squeezy — this can take a minute. You'll get an email as soon as it's verified.");
+          return;
+        }
+        pollTimer = setTimeout(()=> pollOrderStatus(token, attempt + 1), 2500);
+      })
+      .catch(()=>{
+        if(attempt >= 24){
+          setUnlockBtnBusy(false, 'Check Payment Status');
+          setUnlockStatus('Could not confirm payment status. Click to check again.');
+          return;
+        }
+        pollTimer = setTimeout(()=> pollOrderStatus(token, attempt + 1), 2500);
+      });
+  }
+
+  function initLemonSqueezy(){
+    if(!window.LemonSqueezy){
+      setTimeout(initLemonSqueezy, 300); // lemon.js loads with `defer`, may not be ready yet
+      return;
+    }
+    window.LemonSqueezy.Setup({
+      eventHandler: (event)=>{
+        if(event.event === 'Checkout.Success'){
+          if(!currentOrderToken) return;
+          setUnlockBtnBusy(true, 'Confirming payment…');
+          setUnlockStatus('Confirming your payment with our server — do not close this page.');
+          pollOrderStatus(currentOrderToken);
+        } else if(event.event === 'Checkout.Closed'){
+          stopPolling();
+          if(!pdfGeneratedForCurrentAnalysis){
+            setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
+            setUnlockStatus('Checkout closed. Click below to try again.');
+          }
+        }
+      }
+    });
+  }
+  window.addEventListener('load', initLemonSqueezy);
+
+  unlockBtn.addEventListener('click', ()=>{
+    if(!currentFullLetterHTML || unlockBtn.disabled) return;
+
+    // "Check Payment Status" retry path — we already have a token from a prior attempt.
+    if(currentOrderToken && !pdfGeneratedForCurrentAnalysis && unlockBtnLabel.textContent === 'Check Payment Status'){
+      setUnlockBtnBusy(true, 'Confirming payment…');
+      pollOrderStatus(currentOrderToken);
+      return;
+    }
+
+    if(!window.LemonSqueezy || !window.LemonSqueezy.Url){
+      setUnlockStatus('Secure checkout is still loading — please try again in a moment.');
+      return;
+    }
+
+    setUnlockBtnBusy(true, 'Preparing secure checkout…');
+    setUnlockStatus('Preparing your checkout…');
+
+    fetch(CREATE_CHECKOUT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ letterHTML: currentFullLetterHTML }),
+    })
+      .then((r)=>{ if(!r.ok) throw new Error('checkout-prep-failed'); return r.json(); })
+      .then(({ checkoutUrl, orderToken })=>{
+        currentOrderToken = orderToken;
+        pdfGeneratedForCurrentAnalysis = false;
+        setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
+        setUnlockStatus('Opening secure checkout…');
+        window.LemonSqueezy.Url.Open(checkoutUrl);
+      })
+      .catch(()=>{
+        setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
+        setUnlockStatus('Could not start checkout. Please try again.');
+      });
+  });
+})();
+</script>
+
+</body>
+</html>

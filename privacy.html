@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Privacy Policy — MedFair | Zero Storage, Ephemeral Document Processing</title>
+<meta name="description" content="Read MedFair's Privacy Policy. Our Ephemeral Processing rule means your medical bills and EOBs are analyzed in-memory in real time and instantly deleted — zero database storage of medical records." />
+<link rel="canonical" href="https://medfair.us/privacy.html" />
+<meta name="robots" content="index, follow" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Inter+Tight:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: { navy:{DEFAULT:'#0B1B3A',2:'#0F2A5C',3:'#132F66'}, electric:{DEFAULT:'#2F6BFF',2:'#00C2FF'} },
+      fontFamily: { sans:['Inter','ui-sans-serif','system-ui'], tight:['Inter Tight','Inter','ui-sans-serif'] },
+      boxShadow: { soft:'0 2px 8px -2px rgba(11,27,58,0.08), 0 8px 24px -8px rgba(11,27,58,0.10)', lift:'0 12px 40px -12px rgba(11,27,58,0.25), 0 4px 12px -4px rgba(47,107,255,0.15)', glow:'0 0 0 1px rgba(47,107,255,0.15), 0 8px 30px -6px rgba(47,107,255,0.35)' }
+    } }
+  }
+</script>
+<style>
+  :root{ --navy:#0B1B3A; --navy-2:#0F2A5C; --electric:#2F6BFF; --electric-2:#00C2FF; }
+  html{scroll-behavior:smooth;}
+  body{ font-family:'Inter',ui-sans-serif,system-ui,sans-serif; background:#fff; }
+  h1,h2,h3,.font-display{ font-family:'Inter Tight','Inter',ui-sans-serif,sans-serif; }
+  ::selection{ background:var(--electric); color:#fff; }
+  .glass-navbar{ background:rgba(255,255,255,0.72); backdrop-filter:blur(16px) saturate(180%); -webkit-backdrop-filter:blur(16px) saturate(180%); }
+  .glass{ background:rgba(255,255,255,0.6); backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%); border:1px solid rgba(255,255,255,0.5); }
+  .grad-trust{ background:linear-gradient(120deg,var(--navy) 0%,var(--navy-2) 35%,var(--electric) 78%,var(--electric-2) 100%); }
+  .grad-text{ background:linear-gradient(100deg,var(--navy) 10%,var(--electric) 55%,var(--electric-2) 90%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .grad-btn{ background:linear-gradient(100deg,var(--navy) 0%,var(--electric) 70%,var(--electric-2) 100%); }
+  .reveal{ opacity:0; transform:translateY(32px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+  .legal h2{ font-size:1.5rem; font-weight:800; color:var(--navy); margin-top:2.75rem; margin-bottom:1rem; scroll-margin-top:110px; }
+  .legal h3{ font-size:1.125rem; font-weight:700; color:var(--navy); margin-top:1.5rem; margin-bottom:.5rem; }
+  .legal p{ color:#475569; line-height:1.75; margin-bottom:1rem; }
+  .legal ul{ list-style:none; margin-bottom:1rem; }
+  .legal li{ color:#475569; line-height:1.7; margin-bottom:.6rem; padding-left:1.6rem; position:relative; }
+  .legal li::before{ content:'\f058'; font-family:'Font Awesome 6 Free'; font-weight:900; color:var(--electric); position:absolute; left:0; top:2px; font-size:.8rem; }
+  .toc a{ display:block; padding:.5rem .75rem; border-radius:.6rem; font-size:.8rem; color:#475569; transition:all .2s ease; }
+  .toc a:hover{ background:rgba(47,107,255,0.08); color:var(--navy); }
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:#F8FAFC; }
+  ::-webkit-scrollbar-thumb{ background:linear-gradient(var(--navy),var(--electric)); border-radius:10px; }
+</style>
+</head>
+<body class="bg-white text-slate-900 antialiased overflow-x-hidden selection:bg-electric selection:text-white">
+
+<header class="fixed top-0 inset-x-0 z-50">
+  <nav class="glass-navbar mx-auto mt-2 sm:mt-3 max-w-6xl rounded-2xl sm:rounded-full flex items-center justify-between px-4 sm:px-6 py-3 shadow-soft border border-white/60" data-testid="main-navbar">
+    <a href="index.html" class="flex items-center gap-2 font-tight font-extrabold text-navy text-lg tracking-tight" data-testid="logo-link">
+      <span class="w-8 h-8 rounded-xl grad-trust flex items-center justify-center text-white text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+      MedFair
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+      <a href="index.html#how-it-works" class="hover:text-navy transition-colors">How it works</a>
+      <a href="index.html#tool" class="hover:text-navy transition-colors">Analyze a Document</a>
+      <a href="blog.html" class="hover:text-navy transition-colors">Blog</a>
+      <a href="about.html" class="hover:text-navy transition-colors">About</a>
+      <a href="contact.html" class="hover:text-navy transition-colors">Contact</a>
+    </div>
+    <a href="index.html#tool" class="grad-btn text-white text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full shadow-glow hover:brightness-110 active:scale-95 transition-all" data-testid="nav-cta-button">Analyze Free</a>
+  </nav>
+</header>
+
+<main>
+<section class="pt-36 sm:pt-40 pb-10 sm:pb-14">
+  <div class="max-w-4xl mx-auto px-5 sm:px-6 text-center">
+    <span class="inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs font-semibold text-navy shadow-soft mb-6">
+      <i class="fa-solid fa-lock text-electric"></i> Last updated: July 2026
+    </span>
+    <h1 class="font-tight font-extrabold tracking-tight text-4xl sm:text-5xl leading-[1.05] text-navy" data-testid="privacy-heading">Privacy Policy</h1>
+    <p class="mt-5 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">MedFair was built around one non-negotiable principle: <span class="grad-text font-semibold">your medical documents are never stored.</span></p>
+  </div>
+</section>
+
+<section class="pb-20 sm:pb-28">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6 grid lg:grid-cols-[220px_1fr] gap-12">
+    <aside class="hidden lg:block sticky top-28 self-start toc" aria-label="Table of contents">
+      <p class="text-xs font-bold tracking-widest text-electric uppercase mb-2 px-3">On this page</p>
+      <a href="#ephemeral">Ephemeral Processing</a>
+      <a href="#collect">Information We Collect</a>
+      <a href="#use">How We Use Information</a>
+      <a href="#hipaa">HIPAA-Aligned Practices</a>
+      <a href="#cookies">Cookies &amp; Analytics</a>
+      <a href="#thirdparty">Third-Party Services</a>
+      <a href="#children">Children's Privacy</a>
+      <a href="#changes">Changes to This Policy</a>
+      <a href="#contact">Contact Us</a>
+    </aside>
+
+    <article class="legal max-w-2xl">
+      <p>This Privacy Policy explains how MedFair ("MedFair," "we," "us," or "our") handles information when you use our website and AI-powered medical bill, insurance denial, and medical debt analysis tools (the "Service"). By using the Service, you agree to the practices described here.</p>
+
+      <h2 id="ephemeral"><i class="fa-solid fa-bolt text-electric mr-2"></i>Ephemeral Processing — Our Core Privacy Rule</h2>
+      <p><strong class="text-navy">MedFair does not permanently store your medical documents.</strong> When you upload a medical bill, Explanation of Benefits (EOB), denial letter, or debt collection notice, that file is:</p>
+      <ul>
+        <li>Transmitted using encrypted, secure connections</li>
+        <li>Loaded into temporary, in-memory processing only — never written to a persistent database or disk</li>
+        <li>Analyzed by our AI system in real time, typically within seconds</li>
+        <li>Discarded the moment your on-screen analysis is complete, with no backup or retained copy</li>
+      </ul>
+      <p>We call this our <strong class="text-navy">Ephemeral Processing</strong> rule. There is no long-term medical-record database for a bad actor to breach, and no permanent document archive on our servers.</p>
+      <p><strong class="text-navy">One narrow exception:</strong> if you choose to purchase the Full Dispute Letter, the generated letter text is held in a short-lived, encrypted checkout cache for up to <strong class="text-navy">one hour</strong> — solely so our payment processor's confirmation can be securely verified server-side and your receipt/backup download link can be sent. That cache entry is automatically and permanently deleted after one hour regardless of whether the purchase completes, and is never used for anything besides completing that single transaction.</p>
+
+      <h2 id="collect"><i class="fa-solid fa-database text-electric mr-2"></i>Information We Collect</h2>
+      <p>Because we do not require an account to use our core analysis tool, we collect very little information:</p>
+      <ul>
+        <li><strong class="text-navy">Uploaded documents</strong> — processed ephemerally as described above, never stored</li>
+        <li><strong class="text-navy">Contact information</strong> — if you email us or submit our contact form, we retain your name, email address, and message so we can respond to you</li>
+        <li><strong class="text-navy">Payment information</strong> — if you purchase a Full Dispute Letter, payment is handled by a third-party payment processor; MedFair does not store your full card number</li>
+        <li><strong class="text-navy">Basic usage analytics</strong> — anonymized, aggregate technical data (such as browser type or page views) used only to improve the Service</li>
+      </ul>
+
+      <h2 id="use"><i class="fa-solid fa-gears text-electric mr-2"></i>How We Use Information</h2>
+      <p>We use the limited information we retain to: respond to support requests, process payments, maintain and improve the Service, detect fraud or abuse, and comply with applicable law. We do not sell your personal information, and we do not use uploaded medical documents for advertising or model training beyond the single real-time analysis you requested.</p>
+
+      <h2 id="hipaa"><i class="fa-solid fa-shield-heart text-electric mr-2"></i>HIPAA-Aligned Practices</h2>
+      <p>MedFair is a direct-to-consumer tool, not a "covered entity" or "business associate" as defined under the Health Insurance Portability and Accountability Act (HIPAA). That said, we have voluntarily built our infrastructure to align with HIPAA's core safeguards, including encrypted transmission, strict access controls, and — most importantly — the Ephemeral Processing rule described above, which eliminates the risk of a stored medical-record breach entirely.</p>
+
+      <h2 id="cookies"><i class="fa-solid fa-cookie text-electric mr-2"></i>Cookies &amp; Analytics</h2>
+      <p>We may use minimal, privacy-respecting cookies or similar technologies to keep the Service functioning correctly (for example, remembering your selected tab) and to understand aggregate, anonymized usage trends. We do not use tracking cookies to build advertising profiles.</p>
+
+      <h2 id="thirdparty"><i class="fa-solid fa-link text-electric mr-2"></i>Third-Party Services</h2>
+      <p>We rely on trusted infrastructure and payment providers to operate the Service. These providers are contractually bound to appropriate confidentiality and security standards. We do not share your uploaded documents with any third party — because, per our Ephemeral Processing rule, no copy of them exists past the moment of analysis.</p>
+
+      <h2 id="children"><i class="fa-solid fa-child text-electric mr-2"></i>Children's Privacy</h2>
+      <p>The Service is intended for adults aged 18 and older who are managing their own or a family member's medical billing matters. We do not knowingly collect information from children under 13.</p>
+
+      <h2 id="changes"><i class="fa-solid fa-clock-rotate-left text-electric mr-2"></i>Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time to reflect changes in our practices or applicable law. We will post the updated policy on this page with a revised "Last updated" date.</p>
+
+      <h2 id="contact"><i class="fa-solid fa-envelope text-electric mr-2"></i>Contact Us</h2>
+      <p>If you have any questions about this Privacy Policy or our data practices, please email us at <a href="mailto:support@medfair.us" class="text-electric font-semibold hover:underline">support@medfair.us</a>.</p>
+    </article>
+  </div>
+</section>
+</main>
+
+<footer class="bg-navy text-white/60 py-14">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pb-8 border-b border-white/10">
+      <a href="index.html" class="flex items-center gap-2 font-tight font-extrabold text-white text-lg">
+        <span class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-electric-2 text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+        MedFair
+      </a>
+      <div class="flex flex-wrap gap-6 text-sm">
+        <a href="blog.html" class="hover:text-white transition-colors">Blog</a>
+        <a href="about.html" class="hover:text-white transition-colors">About</a>
+        <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+        <a href="privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-white transition-colors">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <p class="text-xs text-white/40 mt-8 max-w-2xl leading-relaxed">MedFair provides informational, AI-generated summaries only and does not constitute legal, medical, or financial advice. Always consult a licensed professional regarding your specific situation. &copy; 2026 MedFair. All rights reserved.</p>
+  </div>
+</footer>
+</body>
+</html>

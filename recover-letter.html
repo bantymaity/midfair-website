@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Download My Letter Again — MedFair</title>
+<meta name="robots" content="noindex, nofollow" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Inter+Tight:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: { navy:{DEFAULT:'#0B1B3A',2:'#0F2A5C'}, electric:{DEFAULT:'#2F6BFF',2:'#00C2FF'} },
+      fontFamily: { sans:['Inter','ui-sans-serif'], tight:['Inter Tight','Inter','ui-sans-serif'] },
+      boxShadow: { lift:'0 12px 40px -12px rgba(11,27,58,0.25), 0 4px 12px -4px rgba(47,107,255,0.15)' }
+    } }
+  }
+</script>
+<style>
+  :root{ --navy:#0B1B3A; --electric:#2F6BFF; --electric-2:#00C2FF; }
+  body{ font-family:'Inter',ui-sans-serif,sans-serif; background:#F8FAFC; }
+  h1,h2,.font-tight{ font-family:'Inter Tight','Inter',ui-sans-serif; }
+  .grad-btn{ background:linear-gradient(100deg,var(--navy) 0%,var(--electric) 70%,var(--electric-2) 100%); }
+  .spinner{ border:3px solid rgba(47,107,255,0.15); border-top-color:var(--electric); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+</style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-5">
+
+<div class="max-w-md w-full bg-white rounded-[1.75rem] shadow-lift border border-slate-100 p-8 text-center" data-testid="recover-letter-card">
+  <a href="index.html" class="inline-flex items-center gap-2 font-tight font-extrabold text-navy text-lg mb-6">
+    <span class="w-8 h-8 rounded-xl grad-btn flex items-center justify-center text-white text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+    MedFair
+  </a>
+
+  <div id="state-loading">
+    <div class="spinner w-10 h-10 mx-auto mb-5"></div>
+    <p class="text-sm text-slate-600" data-testid="recover-status-text">Verifying your link and preparing your letter…</p>
+  </div>
+
+  <div id="state-success" class="hidden">
+    <div class="w-14 h-14 rounded-2xl grad-btn text-white flex items-center justify-center text-2xl mx-auto mb-4"><i class="fa-solid fa-file-arrow-down"></i></div>
+    <h1 class="font-tight font-bold text-navy text-lg mb-2">Your letter is downloading</h1>
+    <p class="text-sm text-slate-500 mb-5">If the download didn't start automatically, click below.</p>
+    <button id="retry-download-btn" class="grad-btn text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lift" data-testid="recover-download-button">
+      <i class="fa-solid fa-download mr-2"></i>Download Again
+    </button>
+  </div>
+
+  <div id="state-error" class="hidden">
+    <div class="w-14 h-14 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center text-2xl mx-auto mb-4"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h1 class="font-tight font-bold text-navy text-lg mb-2">This link has expired</h1>
+    <p class="text-sm text-slate-500 mb-5" id="error-message">This recovery link is no longer valid. Links stay active for one hour after purchase.</p>
+    <a href="mailto:support@medfair.us" class="text-sm font-semibold text-electric hover:underline" data-testid="recover-support-link">Contact support@medfair.us</a>
+  </div>
+</div>
+
+<!-- Hidden print-ready letter container — same formal-letter styling as index.html, no branding -->
+<div id="letter-pdf-container" style="position:fixed; left:-9999px; top:0; width:612pt; background:#ffffff; padding:0; font-family:'Times New Roman',Times,serif; font-size:12pt; line-height:1.6; color:#000000;">
+  <div id="letter-pdf-content"></div>
+</div>
+
+<script>
+(function(){
+  const ORDER_STATUS_ENDPOINT = '/api/order-status';
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+
+  const loadingEl = document.getElementById('state-loading');
+  const successEl = document.getElementById('state-success');
+  const errorEl = document.getElementById('state-error');
+  const errorMessage = document.getElementById('error-message');
+  const retryBtn = document.getElementById('retry-download-btn');
+  let letterHTML = '';
+
+  function showError(message){
+    loadingEl.classList.add('hidden');
+    successEl.classList.add('hidden');
+    errorEl.classList.remove('hidden');
+    if(message) errorMessage.textContent = message;
+  }
+
+  function downloadLetter(){
+    if(!letterHTML) return;
+    document.getElementById('letter-pdf-content').innerHTML = letterHTML;
+    html2pdf()
+      .from(document.getElementById('letter-pdf-container'))
+      .set({
+        filename: 'MedFair-Dispute-Letter.pdf',
+        margin: [72, 72, 72, 72],
+        jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' },
+        html2canvas: { scale: 2 },
+      })
+      .save();
+  }
+
+  retryBtn.addEventListener('click', downloadLetter);
+
+  if(!token){
+    showError('No recovery token was found in this link.');
+    return;
+  }
+
+  fetch(`${ORDER_STATUS_ENDPOINT}?token=${encodeURIComponent(token)}`)
+    .then((r)=> r.json())
+    .then((data)=>{
+      if(!data.verified || !data.letterHTML){
+        showError();
+        return;
+      }
+      letterHTML = data.letterHTML;
+      loadingEl.classList.add('hidden');
+      successEl.classList.remove('hidden');
+      downloadLetter();
+    })
+    .catch(()=> showError('Something went wrong loading your letter. Please try again shortly.'));
+})();
+</script>
+</body>
+</html>

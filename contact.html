@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Contact MedFair — Get Help With Medical Bills &amp; Denials</title>
+<meta name="description" content="Reach the MedFair team at support@medfair.us. We're a fully digital, HIPAA-aligned medical billing advocate for US patients — no phone calls, no offices, just fast email support." />
+<link rel="canonical" href="https://medfair.us/contact.html" />
+<meta name="robots" content="index, follow" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Inter+Tight:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: { navy:{DEFAULT:'#0B1B3A',2:'#0F2A5C',3:'#132F66'}, electric:{DEFAULT:'#2F6BFF',2:'#00C2FF'} },
+      fontFamily: { sans:['Inter','ui-sans-serif','system-ui'], tight:['Inter Tight','Inter','ui-sans-serif'] },
+      boxShadow: { soft:'0 2px 8px -2px rgba(11,27,58,0.08), 0 8px 24px -8px rgba(11,27,58,0.10)', lift:'0 12px 40px -12px rgba(11,27,58,0.25), 0 4px 12px -4px rgba(47,107,255,0.15)', glow:'0 0 0 1px rgba(47,107,255,0.15), 0 8px 30px -6px rgba(47,107,255,0.35)' }
+    } }
+  }
+</script>
+<style>
+  :root{ --navy:#0B1B3A; --navy-2:#0F2A5C; --electric:#2F6BFF; --electric-2:#00C2FF; }
+  html{scroll-behavior:smooth;}
+  body{ font-family:'Inter',ui-sans-serif,system-ui,sans-serif; background:#fff; }
+  h1,h2,h3,.font-display{ font-family:'Inter Tight','Inter',ui-sans-serif,sans-serif; }
+  ::selection{ background:var(--electric); color:#fff; }
+  .glass-navbar{ background:rgba(255,255,255,0.72); backdrop-filter:blur(16px) saturate(180%); -webkit-backdrop-filter:blur(16px) saturate(180%); }
+  .glass{ background:rgba(255,255,255,0.6); backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%); border:1px solid rgba(255,255,255,0.5); }
+  .grad-trust{ background:linear-gradient(120deg,var(--navy) 0%,var(--navy-2) 35%,var(--electric) 78%,var(--electric-2) 100%); }
+  .grad-text{ background:linear-gradient(100deg,var(--navy) 10%,var(--electric) 55%,var(--electric-2) 90%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .grad-btn{ background:linear-gradient(100deg,var(--navy) 0%,var(--electric) 70%,var(--electric-2) 100%); }
+  .reveal{ opacity:0; transform:translateY(32px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+  @keyframes blobPulse{ 0%,100%{transform:scale(1) translate(0,0);} 50%{transform:scale(1.12) translate(20px,-10px);} }
+  .blob{ animation:blobPulse 10s ease-in-out infinite; }
+  input, textarea{ transition: border-color .2s ease, box-shadow .2s ease; }
+  input:focus, textarea:focus{ outline:none; border-color:var(--electric); box-shadow:0 0 0 4px rgba(47,107,255,0.12); }
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:#F8FAFC; }
+  ::-webkit-scrollbar-thumb{ background:linear-gradient(var(--navy),var(--electric)); border-radius:10px; }
+  .success-pop{ animation: popIn .4s cubic-bezier(.16,1,.3,1) forwards; }
+  @keyframes popIn{ from{ opacity:0; transform:scale(.95) translateY(8px); } to{ opacity:1; transform:scale(1) translateY(0); } }
+</style>
+</head>
+<body class="bg-white text-slate-900 antialiased overflow-x-hidden selection:bg-electric selection:text-white">
+
+<header class="fixed top-0 inset-x-0 z-50">
+  <nav class="glass-navbar mx-auto mt-2 sm:mt-3 max-w-6xl rounded-2xl sm:rounded-full flex items-center justify-between px-4 sm:px-6 py-3 shadow-soft border border-white/60" data-testid="main-navbar">
+    <a href="index.html" class="flex items-center gap-2 font-tight font-extrabold text-navy text-lg tracking-tight" data-testid="logo-link">
+      <span class="w-8 h-8 rounded-xl grad-trust flex items-center justify-center text-white text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+      MedFair
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+      <a href="index.html#how-it-works" class="hover:text-navy transition-colors">How it works</a>
+      <a href="index.html#tool" class="hover:text-navy transition-colors">Analyze a Document</a>
+      <a href="blog.html" class="hover:text-navy transition-colors">Blog</a>
+      <a href="about.html" class="hover:text-navy transition-colors">About</a>
+      <a href="contact.html" class="text-navy font-semibold">Contact</a>
+    </div>
+    <a href="index.html#tool" class="grad-btn text-white text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full shadow-glow hover:brightness-110 active:scale-95 transition-all" data-testid="nav-cta-button">Analyze Free</a>
+  </nav>
+</header>
+
+<main>
+<section class="relative pt-36 sm:pt-40 pb-16 sm:pb-20 overflow-hidden">
+  <div class="absolute -top-20 -right-32 w-[380px] h-[380px] rounded-full bg-electric/10 blur-3xl blob" aria-hidden="true"></div>
+  <div class="max-w-6xl mx-auto px-5 sm:px-6 grid lg:grid-cols-2 gap-14 items-start">
+
+    <div class="reveal is-visible">
+      <span class="inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs font-semibold text-navy shadow-soft mb-6">
+        <i class="fa-solid fa-envelope text-electric"></i> We reply within 24–48 hours
+      </span>
+      <h1 class="font-tight font-extrabold tracking-tight text-4xl sm:text-5xl leading-[1.05] text-navy" data-testid="contact-heading">
+        Questions about your bill? <span class="grad-text">Talk to us.</span>
+      </h1>
+      <p class="mt-6 text-base sm:text-lg text-slate-600 max-w-md leading-relaxed">
+        MedFair is a fully digital company — every conversation happens over email, so there's a written record of everything discussed about your case.
+      </p>
+
+      <div class="mt-8 glass rounded-2xl p-6 shadow-soft inline-flex items-center gap-4">
+        <span class="w-12 h-12 rounded-xl grad-trust flex items-center justify-center text-white text-lg shrink-0"><i class="fa-solid fa-at"></i></span>
+        <div>
+          <div class="text-xs text-slate-500">Email us directly</div>
+          <a href="mailto:support@medfair.us" class="font-tight font-bold text-navy text-lg hover:text-electric transition-colors" data-testid="support-email-link">support@medfair.us</a>
+        </div>
+      </div>
+
+      <ul class="mt-8 space-y-3 text-sm text-slate-600">
+        <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i>100% digital — no phone tag, no waiting on hold</li>
+        <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i>Every reply comes from a real member of the MedFair team</li>
+        <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i>Never share full documents over email — use the secure uploader on our homepage instead</li>
+      </ul>
+    </div>
+
+    <div class="reveal is-visible">
+      <div class="bg-white rounded-[2rem] shadow-lift border border-slate-100 p-6 sm:p-8" data-testid="contact-form-card">
+        <form id="contact-form" data-testid="contact-form" novalidate>
+          <div id="form-success" class="hidden success-pop text-center py-10" data-testid="contact-success-message">
+            <div class="w-16 h-16 rounded-2xl grad-trust text-white flex items-center justify-center text-2xl mx-auto mb-4 shadow-glow"><i class="fa-solid fa-paper-plane"></i></div>
+            <h3 class="font-tight font-bold text-navy text-xl mb-2">Message sent!</h3>
+            <p class="text-sm text-slate-500">Thanks for reaching out — our team will reply to your email within 24–48 hours.</p>
+            <button type="button" id="send-another" class="mt-6 text-sm text-electric font-semibold hover:underline" data-testid="send-another-button">Send another message</button>
+          </div>
+
+          <div id="form-fields">
+            <h2 class="font-tight font-bold text-xl text-navy mb-6">Send us a message</h2>
+
+            <label class="block mb-4">
+              <span class="text-xs font-semibold text-slate-600 mb-1.5 block">Full Name</span>
+              <input required type="text" id="contact-name" name="name" placeholder="Jane Doe" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm bg-slate-50" data-testid="contact-name-input" />
+            </label>
+
+            <label class="block mb-4">
+              <span class="text-xs font-semibold text-slate-600 mb-1.5 block">Email Address</span>
+              <input required type="email" id="contact-email" name="email" placeholder="jane@email.com" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm bg-slate-50" data-testid="contact-email-input" />
+            </label>
+
+            <label class="block mb-4">
+              <span class="text-xs font-semibold text-slate-600 mb-1.5 block">Subject</span>
+              <select required id="contact-subject" name="subject" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm bg-slate-50" data-testid="contact-subject-select">
+                <option value="" disabled selected>Choose a topic</option>
+                <option>Question about a medical bill analysis</option>
+                <option>Question about an insurance denial analysis</option>
+                <option>Question about medical debt</option>
+                <option>Billing / payment issue ($9.99 charge)</option>
+                <option>Privacy or data question</option>
+                <option>Something else</option>
+              </select>
+            </label>
+
+            <label class="block mb-6">
+              <span class="text-xs font-semibold text-slate-600 mb-1.5 block">Message</span>
+              <textarea required id="contact-message" name="message" rows="5" placeholder="Tell us what's going on — no need to attach documents, just describe your situation." class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm bg-slate-50 resize-none" data-testid="contact-message-input"></textarea>
+            </label>
+
+            <button type="submit" class="cta-cursor w-full grad-btn text-white font-bold text-base px-8 py-4 rounded-2xl shadow-lift hover:brightness-110 active:scale-95 transition-all" data-testid="contact-submit-button">
+              <i class="fa-solid fa-paper-plane mr-2"></i>Send Message
+            </button>
+            <p class="text-xs text-slate-400 mt-3 text-center">We never ask for medical documents by email. Use the secure analyzer on the homepage instead.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="bg-navy text-white/60 py-14">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pb-8 border-b border-white/10">
+      <a href="index.html" class="flex items-center gap-2 font-tight font-extrabold text-white text-lg">
+        <span class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-electric-2 text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+        MedFair
+      </a>
+      <div class="flex flex-wrap gap-6 text-sm">
+        <a href="blog.html" class="hover:text-white transition-colors">Blog</a>
+        <a href="about.html" class="hover:text-white transition-colors">About</a>
+        <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+        <a href="privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-white transition-colors">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <p class="text-xs text-white/40 mt-8 max-w-2xl leading-relaxed">MedFair provides informational, AI-generated summaries only and does not constitute legal, medical, or financial advice. Always consult a licensed professional regarding your specific situation. &copy; 2026 MedFair. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  const form = document.getElementById('contact-form');
+  const fields = document.getElementById('form-fields');
+  const success = document.getElementById('form-success');
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    if(!form.checkValidity()){ form.reportValidity(); return; }
+    fields.classList.add('hidden');
+    success.classList.remove('hidden');
+  });
+  document.getElementById('send-another').addEventListener('click', ()=>{
+    form.reset();
+    success.classList.add('hidden');
+    fields.classList.remove('hidden');
+  });
+</script>
+</body>
+</html>
