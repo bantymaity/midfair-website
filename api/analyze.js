@@ -130,29 +130,39 @@ module.exports = async function handler(req, res) {
   }
 
   // ---- 2. Send the file directly to Gemini 1.5 Flash (no disk, no DB) ----
-  let responseText;
-  try {
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    const base64Data = fileBuffer.toString('base64');
+ let responseText;
+    try {
+        const apiKey = process.env.GEMINI_API_KEY;
+        // Direct URL to Google's server (Bypassing SDK)
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
+        const base64Data = fileBuffer.toString('base64');
 
-  const result = await ai.models.generateContent({
-            model: 'gemini-1.5-flash',
-            contents: 'Hello Gemini, are you working?'
+        const geminiRes = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [
+                        { inlineData: { mimeType: fileMimeType, data: base64Data } },
+                        { text: buildPrompt(category) }
+                    ]
+                }],
+                generationConfig: {
+                    responseMimeType: 'application/json',
+                    temperature: 0.2
+                }
+            })
         });
 
-    responseText = result.text;
-  } catch (err) {
-    console.error('Gemini API error:', err);
-    return res.status(502).json({ error: 'AI analysis failed. Please try again in a moment.' });
-  }
+        const data = await geminiRes.json();
 
-  // ---- 3. Validate strict JSON shape before returning to the client ----
-  let analysis;
-  try {
-    analysis = JSON.parse(stripCodeFences(responseText || ''));
-  } catch (err) {
-    console.error('Failed to parse Gemini JSON response:', responseText);
-    return res.status(502).json({ error: 'The AI returned an unreadable response. Please try again.' });
+        // Catch raw errors from Google
+        if (!geminiRes.ok) {
+            console.error('Direct API Error:', JSON.stringify(data, null, 2));
+            return res.status(500).json({ error: 'AI analysis failed at Google Server.' });
+        }
+
+        responseText = data.candidates[0].content.parts[0].text;
   }
 
   const missingFields = REQUIRED_RESPONSE_FIELDS.filter((key) => !(key in analysis));
