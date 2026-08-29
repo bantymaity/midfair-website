@@ -7,7 +7,6 @@
 // this is a HIPAA-aligned "Ephemeral Processing" requirement, not optional.
 
 const Busboy = require('busboy');
-const { GoogleGenAI } = require('@google/genai');
 
 // Required only when this file is deployed as a Next.js API route (harmless otherwise,
 // plain Vercel functions in a bare /api folder never auto-parse multipart bodies).
@@ -130,41 +129,51 @@ module.exports = async function handler(req, res) {
   }
 
   // ---- 2. Send the file directly to Gemini 1.5 Flash (no disk, no DB) ----
- let responseText;
-    try {
-        const apiKey = process.env.GEMINI_API_KEY;
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;`
-        const base64Data = fileBuffer.toString('base64');
+  let responseText;
+  try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const base64Data = fileBuffer.toString('base64');
 
-        const geminiRes = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [
-                        { inlineData: { mimeType: fileMimeType, data: base64Data } },
-                        { text: buildPrompt(category) }
-                    ]
-                }],
-                generationConfig: {
-                    responseMimeType: 'application/json',
-                    temperature: 0.2
-                }
-            })
-        });
-
-        const data = await geminiRes.json();
-
-        if (!geminiRes.ok) {
-            console.error('Direct API Error:', JSON.stringify(data, null, 2));
-            return res.status(500).json({ error: 'AI analysis failed at Google Server.' });
+    const geminiRes = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { inlineData: { mimeType: fileMimeType, data: base64Data } },
+            { text: buildPrompt(category) }
+          ]
+        }],
+        generationConfig: {
+          responseMimeType: 'application/json',
+          temperature: 0.2
         }
+      })
+    });
 
-        responseText = data.candidates[0].content.parts[0].text;
-    } catch (err) {
-        console.error('Gemini Direct API error:', err);
-        return res.status(500).json({ error: 'Failed to communicate with AI model.' });
+    const data = await geminiRes.json();
+
+    if (!geminiRes.ok) {
+      console.error('Direct API Error:', JSON.stringify(data, null, 2));
+      return res.status(500).json({ error: 'AI analysis failed at Google Server.' });
     }
+
+    responseText = data.candidates[0].content.parts[0].text;
+  } catch (err) {
+    console.error('Gemini Direct API error:', err);
+    return res.status(500).json({ error: 'Failed to communicate with AI model.' });
+  }
+
+  // ---- 3. Parse and Validate the AI Response ----
+  let analysis;
+  try {
+    const cleanText = stripCodeFences(responseText);
+    analysis = JSON.parse(cleanText);
+  } catch (parseError) {
+    console.error('Failed to parse JSON:', responseText);
+    return res.status(500).json({ error: 'AI returned invalid data format.' });
+  }
 
   const missingFields = REQUIRED_RESPONSE_FIELDS.filter((key) => !(key in analysis));
   if (missingFields.length > 0) {
