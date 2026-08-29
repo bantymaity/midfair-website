@@ -137,10 +137,15 @@ module.exports = async function handler(req, res) {
 
     const result = await ai.models.generateContent({
       model: 'gemini-1.5-flash',
-      contents: [
-        { inlineData: { mimeType: fileMimeType, data: base64Data } },
-        { text: buildPrompt(category) },
-      ],
+     contents: [
+          {
+            role: 'user',
+            parts: [
+              { inlineData: { mimeType: fileMimeType, data: base64Data } },
+              { text: buildPrompt(category) }
+            ]
+          }
+        ],
       config: {
         responseMimeType: 'application/json',
         temperature: 0.2,
