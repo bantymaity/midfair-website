@@ -169,7 +169,7 @@ module.exports = async function handler(req, res) {
   const missingFields = REQUIRED_RESPONSE_FIELDS.filter((key) => !(key in analysis));
   if (missingFields.length > 0) {
     console.error('Gemini response missing fields:', missingFields, analysis);
-    return res.status(502).json({ error: `AI response was incomplete (missing: ${missingFields.join(', ')}).` });
+    return res.status(500).json({ error: "AI response was incomplete." });
   }
 
   // fileBuffer / base64Data fall out of scope here and are never persisted anywhere.
