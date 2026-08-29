@@ -1,13 +1,15 @@
 // api/analyze.js
-// Vercel Serverless Function — MedFair AI Document Analyzer
+// Vercel Serverless Function — MedFair AI Document Analyzer (OpenAI GPT-4o-mini Version)
 //
 // Accepts a multipart/form-data upload (JPG, PNG, or PDF), sends it directly to
-// Google Gemini 1.5 Flash for analysis, and returns strict JSON. The uploaded file
+// OpenAI GPT-4o-mini for analysis, and returns strict JSON. The uploaded file
 // is processed ENTIRELY IN MEMORY and is never written to disk or a database —
 // this is a HIPAA-aligned "Ephemeral Processing" requirement, not optional.
 
 const Busboy = require('busboy');
 
+// Required only when this file is deployed as a Next.js API route (harmless otherwise,
+// plain Vercel functions in a bare /api folder never auto-parse multipart bodies).
 module.exports.config = {
   api: { bodyParser: false },
 };
@@ -75,6 +77,8 @@ function parseMultipartInMemory(req) {
       if (fileTooLarge) return reject(Object.assign(new Error('File exceeds the 10MB limit.'), { code: 'FILE_TOO_LARGE' }));
       if (!sawFile) return reject(Object.assign(new Error('No file was uploaded.'), { code: 'NO_FILE' }));
 
+      // Buffer lives only in this function's RAM for the lifetime of this request —
+      // it is never written to disk and is garbage-collected once the response is sent.
       const fileBuffer = Buffer.concat(fileChunks);
       resolve({ fileBuffer, fileMimeType, fileName, category });
     });
@@ -101,10 +105,11 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed. Use POST.' });
   }
 
-  if (!process.env.GEMINI_API_KEY) {
-    return res.status(500).json({ error: 'Server misconfigured: GEMINI_API_KEY is not set.' });
+  if (!process.env.OPENAI_API_KEY) {
+    return res.status(500).json({ error: 'Server misconfigured: OPENAI_API_KEY is not set.' });
   }
 
+  // ---- 1. Parse the upload strictly in memory ----
   let parsed;
   try {
     parsed = await parseMultipartInMemory(req);
@@ -121,42 +126,49 @@ module.exports = async function handler(req, res) {
     return res.status(415).json({ error: 'Only JPG, PNG, or PDF files are supported.' });
   }
 
+  // ---- 2. Send the file directly to OpenAI GPT-4o-mini (no disk, no DB) ----
   let responseText;
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    const apiKey = process.env.OPENAI_API_KEY;
     const base64Data = fileBuffer.toString('base64');
+    const dataUri = `data:${fileMimeType};base64,${base64Data}`;
 
-    const geminiRes = await fetch(url, {
+    const openAiRes = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
       body: JSON.stringify({
-        contents: [{
-          parts: [
-            { inlineData: { mimeType: fileMimeType, data: base64Data } },
-            { text: buildPrompt(category) }
-          ]
-        }],
-        generationConfig: {
-          responseMimeType: 'application/json',
-          temperature: 0.2
-        }
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: buildPrompt(category) },
+              { type: 'image_url', image_url: { url: dataUri } }
+            ]
+          }
+        ],
+        response_format: { type: 'json_object' },
+        temperature: 0.2
       })
     });
 
-    const data = await geminiRes.json();
+    const data = await openAiRes.json();
 
-    if (!geminiRes.ok) {
-      console.error('Direct API Error:', JSON.stringify(data, null, 2));
-      return res.status(500).json({ error: 'AI analysis failed at Google Server.' });
+    if (!openAiRes.ok) {
+      console.error('OpenAI API Error:', JSON.stringify(data, null, 2));
+      return res.status(500).json({ error: 'AI analysis failed at OpenAI Server.' });
     }
 
-    responseText = data.candidates[0].content.parts[0].text;
+    responseText = data.choices[0].message.content;
   } catch (err) {
-    console.error('Gemini Direct API error:', err);
+    console.error('OpenAI API Exception:', err);
     return res.status(500).json({ error: 'Failed to communicate with AI model.' });
   }
 
+  // ---- 3. Parse and Validate the AI Response (Same as before) ----
   let analysis;
   try {
     const cleanText = stripCodeFences(responseText);
@@ -168,9 +180,10 @@ module.exports = async function handler(req, res) {
 
   const missingFields = REQUIRED_RESPONSE_FIELDS.filter((key) => !(key in analysis));
   if (missingFields.length > 0) {
-    console.error('Gemini response missing fields:', missingFields, analysis);
+    console.error('AI response missing fields:', missingFields, analysis);
     return res.status(500).json({ error: "AI response was incomplete." });
   }
 
+  // fileBuffer / base64Data fall out of scope here and are never persisted anywhere.
   return res.status(200).json(analysis);
 };
