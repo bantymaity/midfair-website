@@ -1,8 +1,8 @@
 // api/analyze.js
-// Vercel Serverless Function — MedFair AI Document Analyzer
+// Vercel Serverless Function — MedFair AI Document Analyzer (OpenRouter Version)
 //
 // Accepts a multipart/form-data upload (JPG, PNG, or PDF), sends it directly to
-// Google Gemini 1.5 Flash REST API for analysis, and returns strict JSON. The uploaded file
+// OpenRouter's gpt-4o-mini model for analysis, and returns strict JSON. The uploaded file
 // is processed ENTIRELY IN MEMORY and is never written to disk or a database —
 // this is a HIPAA-aligned "Ephemeral Processing" requirement, not optional.
 
@@ -90,8 +90,6 @@ function parseMultipartInMemory(req) {
 }
 
 function stripCodeFences(text) {
-  // Gemini's JSON mode should already return raw JSON, but strip fences defensively
-  // in case a model revision ever wraps output in ```json ... ``` again.
   return text.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
 }
 
@@ -107,8 +105,8 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed. Use POST.' });
   }
 
-  if (!process.env.GEMINI_API_KEY) {
-    return res.status(500).json({ error: 'Server misconfigured: GEMINI_API_KEY is not set.' });
+  if (!process.env.OPENROUTER_API_KEY) {
+    return res.status(500).json({ error: 'Server misconfigured: OPENROUTER_API_KEY is not set.' });
   }
 
   // ---- 1. Parse the upload strictly in memory ----
@@ -128,40 +126,47 @@ module.exports = async function handler(req, res) {
     return res.status(415).json({ error: 'Only JPG, PNG, or PDF files are supported.' });
   }
 
-  // ---- 2. Send the file directly to Gemini 1.5 Flash via Stable REST API ----
+  // ---- 2. Send the file directly to OpenRouter (openai/gpt-4o-mini) ----
   let responseText;
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const apiKey = process.env.OPENROUTER_API_KEY;
     const base64Data = fileBuffer.toString('base64');
+    const dataUri = `data:${fileMimeType};base64,${base64Data}`;
 
-    const geminiRes = await fetch(url, {
+    const openRouterRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'HTTP-Referer': 'https://www.medfair.us',
+        'X-Title': 'MedFair'
+      },
       body: JSON.stringify({
-        contents: [{
-          parts: [
-            { inlineData: { mimeType: fileMimeType, data: base64Data } },
-            { text: buildPrompt(category) }
-          ]
-        }],
-        generationConfig: {
-          responseMimeType: 'application/json',
-          temperature: 0.2
-        }
+        model: 'openai/gpt-4o-mini',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: buildPrompt(category) },
+              { type: 'image_url', image_url: { url: dataUri } }
+            ]
+          }
+        ],
+        response_format: { type: 'json_object' },
+        temperature: 0.2
       })
     });
 
-    const data = await geminiRes.json();
+    const data = await openRouterRes.json();
 
-    if (!geminiRes.ok) {
-      console.error('Direct API Error:', JSON.stringify(data, null, 2));
-      return res.status(500).json({ error: 'AI analysis failed at Google Server.' });
+    if (!openRouterRes.ok) {
+      console.error('OpenRouter API Error:', JSON.stringify(data, null, 2));
+      return res.status(500).json({ error: 'AI analysis failed at OpenRouter Server.' });
     }
 
-    responseText = data.candidates[0].content.parts[0].text;
+    responseText = data.choices[0].message.content;
   } catch (err) {
-    console.error('Gemini Direct API error:', err);
+    console.error('OpenRouter API Exception:', err);
     return res.status(500).json({ error: 'Failed to communicate with AI model.' });
   }
 
@@ -177,7 +182,7 @@ module.exports = async function handler(req, res) {
 
   const missingFields = REQUIRED_RESPONSE_FIELDS.filter((key) => !(key in analysis));
   if (missingFields.length > 0) {
-    console.error('Gemini response missing fields:', missingFields, analysis);
+    console.error('AI response missing fields:', missingFields, analysis);
     return res.status(500).json({ error: "AI response was incomplete." });
   }
 
