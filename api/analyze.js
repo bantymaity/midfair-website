@@ -133,7 +133,6 @@ module.exports = async function handler(req, res) {
  let responseText;
     try {
         const apiKey = process.env.GEMINI_API_KEY;
-        // Direct URL to Google's server (Bypassing SDK)
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
         const base64Data = fileBuffer.toString('base64');
 
@@ -156,14 +155,16 @@ module.exports = async function handler(req, res) {
 
         const data = await geminiRes.json();
 
-        // Catch raw errors from Google
         if (!geminiRes.ok) {
             console.error('Direct API Error:', JSON.stringify(data, null, 2));
             return res.status(500).json({ error: 'AI analysis failed at Google Server.' });
         }
 
         responseText = data.candidates[0].content.parts[0].text;
-  }
+    } catch (err) {
+        console.error('Gemini Direct API error:', err);
+        return res.status(500).json({ error: 'Failed to communicate with AI model.' });
+    }
 
   const missingFields = REQUIRED_RESPONSE_FIELDS.filter((key) => !(key in analysis));
   if (missingFields.length > 0) {
