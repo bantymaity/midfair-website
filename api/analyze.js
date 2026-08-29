@@ -136,7 +136,7 @@ module.exports = async function handler(req, res) {
     const base64Data = fileBuffer.toString('base64');
 
     const result = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       contents: [
         { inlineData: { mimeType: fileMimeType, data: base64Data } },
         { text: buildPrompt(category) },
