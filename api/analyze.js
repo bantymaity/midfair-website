@@ -8,8 +8,6 @@
 
 const Busboy = require('busboy');
 
-// Required only when this file is deployed as a Next.js API route (harmless otherwise,
-// plain Vercel functions in a bare /api folder never auto-parse multipart bodies).
 module.exports.config = {
   api: { bodyParser: false },
 };
@@ -77,8 +75,6 @@ function parseMultipartInMemory(req) {
       if (fileTooLarge) return reject(Object.assign(new Error('File exceeds the 10MB limit.'), { code: 'FILE_TOO_LARGE' }));
       if (!sawFile) return reject(Object.assign(new Error('No file was uploaded.'), { code: 'NO_FILE' }));
 
-      // Buffer lives only in this function's RAM for the lifetime of this request —
-      // it is never written to disk and is garbage-collected once the response is sent.
       const fileBuffer = Buffer.concat(fileChunks);
       resolve({ fileBuffer, fileMimeType, fileName, category });
     });
@@ -90,8 +86,6 @@ function parseMultipartInMemory(req) {
 }
 
 function stripCodeFences(text) {
-  // Gemini's JSON mode should already return raw JSON, but strip fences defensively
-  // in case a model revision ever wraps output in ```json ... ``` again.
   return text.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
 }
 
@@ -111,7 +105,6 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Server misconfigured: GEMINI_API_KEY is not set.' });
   }
 
-  // ---- 1. Parse the upload strictly in memory ----
   let parsed;
   try {
     parsed = await parseMultipartInMemory(req);
@@ -128,11 +121,10 @@ module.exports = async function handler(req, res) {
     return res.status(415).json({ error: 'Only JPG, PNG, or PDF files are supported.' });
   }
 
-  // ---- 2. Send the file directly to Gemini 1.5 Flash (no disk, no DB) ----
   let responseText;
   try {
     const apiKey = process.env.GEMINI_API_KEY;
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;`
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
     const base64Data = fileBuffer.toString('base64');
 
     const geminiRes = await fetch(url, {
@@ -165,7 +157,6 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Failed to communicate with AI model.' });
   }
 
-  // ---- 3. Parse and Validate the AI Response ----
   let analysis;
   try {
     const cleanText = stripCodeFences(responseText);
@@ -181,6 +172,5 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: "AI response was incomplete." });
   }
 
-  // fileBuffer / base64Data fall out of scope here and are never persisted anywhere.
   return res.status(200).json(analysis);
 };
