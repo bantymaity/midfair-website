@@ -133,7 +133,7 @@ module.exports = async function handler(req, res) {
  let responseText;
     try {
         const apiKey = process.env.GEMINI_API_KEY;
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;`
         const base64Data = fileBuffer.toString('base64');
 
         const geminiRes = await fetch(url, {
