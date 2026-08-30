@@ -9,10 +9,6 @@ const { kv } = require('@vercel/kv');
 
 const CACHE_TTL_SECONDS = 60 * 60; // 1 hour — auto-expires even if payment never completes
 
-// TODO: replace with your real Lemon Squeezy checkout URL, e.g.
-// https://your-store.lemonsqueezy.com/checkout/buy/your-variant-id
-const LEMON_CHECKOUT_BASE_URL = 'https://YOUR-STORE.lemonsqueezy.com/checkout/buy/YOUR_VARIANT_ID';
-
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -39,6 +35,44 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Could not prepare checkout. Please try again.' });
   }
 
-  const checkoutUrl = `${LEMON_CHECKOUT_BASE_URL}?checkout[custom][order_token]=${encodeURIComponent(orderToken)}`;
-  return res.status(200).json({ checkoutUrl, orderToken });
+  // --- SMART SYSTEM: Lemon Squeezy API (No hardcoded links) ---
+  try {
+    const variantId = process.env.LEMON_SQUEEZY_VARIANT_ID;
+    const storeId = process.env.LEMON_SQUEEZY_STORE_ID;
+    const apiKey = process.env.LEMON_SQUEEZY_API_KEY;
+
+    const lsRes = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/vnd.api+json',
+        'Content-Type': 'application/vnd.api+json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        data: {
+          type: 'checkouts',
+          attributes: {
+            checkout_data: { custom: { order_token: orderToken } }
+          },
+          relationships: {
+            store: { data: { type: 'stores', id: storeId } },
+            variant: { data: { type: 'variants', id: variantId } }
+          }
+        }
+      })
+    });
+
+    const lsData = await lsRes.json();
+    if (!lsRes.ok) {
+       console.error("Lemon Squeezy API Error:", lsData);
+       return res.status(500).json({ error: 'Failed to create checkout link via API.' });
+    }
+
+    const checkoutUrl = lsData.data.attributes.url;
+    return res.status(200).json({ checkoutUrl, orderToken });
+
+  } catch (apiErr) {
+    console.error('API execution error:', apiErr);
+    return res.status(500).json({ error: 'Internal server error while creating checkout.' });
+  }
 };
