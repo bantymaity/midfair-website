@@ -35,10 +35,11 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Could not prepare checkout. Please try again.' });
   }
 
-  // --- SMART SYSTEM: Lemon Squeezy API (No hardcoded links) ---
+  // --- SMART SYSTEM: Lemon Squeezy API (With hardcoded IDs to fix 404 issue) ---
   try {
-    const variantId = process.env.LEMON_SQUEEZY_VARIANT_ID;
-    const storeId = process.env.LEMON_SQUEEZY_STORE_ID;
+    // শুধু এই দুটো লাইনে কোটেশনের (" ") ভেতরে আপনার আসল আইডি নম্বর দুটো বসিয়ে দিন
+    const variantId = "2075803"; 
+    const storeId = "1328203";       
     const apiKey = process.env.LEMON_SQUEEZY_API_KEY;
 
     const lsRes = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
