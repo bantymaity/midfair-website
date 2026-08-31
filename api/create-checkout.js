@@ -39,7 +39,7 @@ module.exports = async function handler(req, res) {
   try {
     // শুধু এই দুটো লাইনে কোটেশনের (" ") ভেতরে আপনার আসল আইডি নম্বর দুটো বসিয়ে দিন
     const variantId = "2075803"; 
-    const storeId = "1328203";       
+    const storeId = "416517";       
     const apiKey = process.env.LEMON_SQUEEZY_API_KEY;
 
     const lsRes = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
