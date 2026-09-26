@@ -896,17 +896,23 @@
   }
   docxBtn.addEventListener('click', downloadLetterAsDocx);
 
-  function generateAndDownloadLetterPDF(email){
-    if(!currentFullLetterHTML || pdfGeneratedForCurrentAnalysis) return;
+  // ---------- Updated PDF Generation Function ----------
+  function generateAndDownloadLetterPDF(email, serverHTML){
+    const finalHTML = serverHTML || currentFullLetterHTML;
+    if(!finalHTML || pdfGeneratedForCurrentAnalysis) return;
+    
     pdfGeneratedForCurrentAnalysis = true;
     setUnlockBtnBusy(true, 'Generating your PDF…');
     setUnlockStatus('Payment verified by our server — building your PDF now.');
 
-    const letterContentEl = document.getElementById('letter-pdf-content');
-    letterContentEl.innerHTML = currentFullLetterHTML;
+    const printContent = `
+      <div style="width:612pt; background:#ffffff; padding:0; font-family:'Times New Roman',Times,serif; font-size:12pt; line-height:1.6; color:#000000;">
+        ${finalHTML}
+      </div>
+    `;
 
     html2pdf()
-      .from(document.getElementById('letter-pdf-container'))
+      .from(printContent)
       .set({
         filename: 'MedFair-Dispute-Letter.pdf',
         margin: [72, 72, 72, 72], // 1-inch margins, formal US Letter document
@@ -933,6 +939,7 @@
     if(pollTimer){ clearTimeout(pollTimer); pollTimer = null; }
   }
 
+  // ---------- Updated Polling Function ----------
   function pollOrderStatus(token, attempt){
     attempt = attempt || 0;
     if(pdfGeneratedForCurrentAnalysis) return;
@@ -941,7 +948,7 @@
       .then((data)=>{
         if(data.verified){
           setUnlockStatus('Payment verified by our server.');
-          generateAndDownloadLetterPDF(data.email);
+          generateAndDownloadLetterPDF(data.email, data.letterHTML);
           return;
         }
         if(attempt >= 24){ // ~60s of polling at 2.5s intervals
