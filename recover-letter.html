@@ -60,11 +60,6 @@
   </div>
 </div>
 
-<!-- Hidden print-ready letter container — same formal-letter styling as index.html, no branding -->
-<div id="letter-pdf-container" style="position:fixed; left:-9999px; top:0; width:612pt; background:#ffffff; padding:0; font-family:'Times New Roman',Times,serif; font-size:12pt; line-height:1.6; color:#000000;">
-  <div id="letter-pdf-content"></div>
-</div>
-
 <script>
 (function(){
   const ORDER_STATUS_ENDPOINT = '/api/order-status';
@@ -87,9 +82,16 @@
 
   function downloadLetter(){
     if(!letterHTML) return;
-    document.getElementById('letter-pdf-content').innerHTML = letterHTML;
+    
+    // Updated smart PDF generation approach
+    const printContent = `
+      <div style="width:612pt; background:#ffffff; padding:0; font-family:'Times New Roman',Times,serif; font-size:12pt; line-height:1.6; color:#000000;">
+        ${letterHTML}
+      </div>
+    `;
+
     html2pdf()
-      .from(document.getElementById('letter-pdf-container'))
+      .from(printContent)
       .set({
         filename: 'MedFair-Dispute-Letter.pdf',
         margin: [72, 72, 72, 72],
