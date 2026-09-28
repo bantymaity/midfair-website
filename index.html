@@ -899,25 +899,42 @@
   // ---------- Updated PDF Generation Function ----------
   function generateAndDownloadLetterPDF(email, serverHTML){
     const finalHTML = serverHTML || currentFullLetterHTML;
-    if(!finalHTML || pdfGeneratedForCurrentAnalysis) return;
-    
+
+    // ১. প্রথমেই চেক করা: টেক্সট আদৌ আছে কি না! (আসল রোগ ধরার জন্য)
+    if(!finalHTML || finalHTML.trim() === '') {
+      alert("Error: পিডিএফ বানানোর জন্য কোনো টেক্সট পাওয়া যায়নি! আপনার AI API হয়তো 'full_letter_content' ঠিকমতো পাঠাচ্ছে না।");
+      setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
+      return;
+    }
+
+    if(pdfGeneratedForCurrentAnalysis) return;
+
     pdfGeneratedForCurrentAnalysis = true;
     setUnlockBtnBusy(true, 'Generating your PDF…');
     setUnlockStatus('Payment verified by our server — building your PDF now.');
 
-    const printContent = `
-      <div style="width:612pt; background:#ffffff; padding:0; font-family:'Times New Roman',Times,serif; font-size:12pt; line-height:1.6; color:#000000;">
-        ${finalHTML}
-      </div>
-    `;
+    // ২. html2pdf-এর জন্য একটা ডাইনামিক ও নিরাপদ এলিমেন্ট তৈরি করা (সাদা পেজ আটকানোর জন্য)
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = finalHTML;
+
+    // চিঠির মতো পারফেক্ট স্টাইল দেওয়া
+    Object.assign(tempContainer.style, {
+      width: '612pt',
+      padding: '40px',
+      background: '#ffffff',
+      color: '#000000',
+      fontFamily: '"Times New Roman", Times, serif',
+      fontSize: '12pt',
+      lineHeight: '1.6'
+    });
 
     html2pdf()
-      .from(printContent)
+      .from(tempContainer)
       .set({
         filename: 'MedFair-Dispute-Letter.pdf',
-        margin: [72, 72, 72, 72], // 1-inch margins, formal US Letter document
+        margin: [40, 40, 40, 40], // ১ ইঞ্চি মার্জিন
         jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 2, logging: true }, // logging অন করা হলো যাতে কনসোলে এরর দেখা যায়
         pagebreak: { mode: ['css', 'legacy'] },
       })
       .toPdf()
@@ -926,9 +943,10 @@
         triggerDataUriDownload(dataUri, 'MedFair-Dispute-Letter.pdf');
         setUnlockBtnBusy(false, 'Downloaded — Get Another Copy');
         setUnlockStatus(email ? `Downloaded — a receipt with a backup link is on its way to ${email}.` : 'Your dispute letter has been downloaded.');
-        docxBtn.classList.remove('hidden');
+        if(docxBtn) docxBtn.classList.remove('hidden');
       })
-      .catch(()=>{
+      .catch((err)=>{
+        console.error("PDF Error:", err);
         pdfGeneratedForCurrentAnalysis = false;
         setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
         setUnlockStatus('Could not generate the PDF. Please try again.');
