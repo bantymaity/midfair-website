@@ -499,8 +499,8 @@
               <div class="flex items-start gap-3">
                 <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5 shrink-0"></i>
                 <div class="text-xs text-amber-900 leading-relaxed">
-                  <p class="font-bold text-sm text-amber-950 mb-1">Auto-Download Blocked by Browser?</p>
-                  <p>If your PDF didn't start downloading automatically, please <strong>turn off your browser's auto-download blocker</strong> (click the blocked download icon in your top address bar and select <em>"Always allow"</em>), then click the button below:</p>
+                  <p class="font-bold text-sm text-amber-950 mb-1">Auto-Download Blocked by Chrome?</p>
+                  <p>Chrome often blocks automatic downloads after payment. Please <strong>turn off your browser's auto-download blocker</strong> (tap the blocked download icon in your address bar &rarr; <em>"Always allow"</em>) or tap the button below to save immediately:</p>
                   <button type="button" id="manual-blocker-download-btn" class="mt-2.5 inline-flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition-colors">
                     <i class="fa-solid fa-download"></i> Download PDF Now
                   </button>
@@ -853,6 +853,7 @@
   let lastFile = null;
   let isGeneratingPdf = false;
   let paymentSucceededInModal = false;
+  let readyPdfBlob = null;
   let currentOrderToken = null;
   let pollTimer = null;
 
@@ -912,13 +913,35 @@
     personalizeModal.classList.add('hidden');
   }
 
+  function removeReadyPopup(){
+    const existing = document.getElementById('pdf-ready-popup');
+    if(existing) existing.remove();
+  }
+
   closePersonalizeModalBtn.addEventListener('click', closePersonalizeModal);
   editDetailsBtn.addEventListener('click', openPersonalizeModal);
 
+  function saveBlobDirectly(blob, filename){
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.rel = 'noopener';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      link.remove();
+      URL.revokeObjectURL(url);
+    }, 3000);
+  }
+
   if(manualBlockerDownloadBtn){
     manualBlockerDownloadBtn.addEventListener('click', ()=>{
-      if(isOrderVerified && currentFullLetterHTML){
-        buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail);
+      if(readyPdfBlob){
+        saveBlobDirectly(readyPdfBlob, 'MedFair-Dispute-Letter.pdf');
+      } else if(isOrderVerified && currentFullLetterHTML){
+        buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail, true);
       }
     });
   }
@@ -936,8 +959,9 @@
     };
 
     currentFullLetterHTML = compileLetterHTML(rawLetterTemplate, extractedDetails);
+    readyPdfBlob = null;
     closePersonalizeModal();
-    buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail);
+    buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail, true);
   });
 
   function resetUpload(){
@@ -956,9 +980,11 @@
     lastFile = null;
     isGeneratingPdf = false;
     paymentSucceededInModal = false;
+    readyPdfBlob = null;
     currentOrderToken = null;
     stopPolling();
     closePersonalizeModal();
+    removeReadyPopup();
     if(blockerWarningBox) blockerWarningBox.classList.add('hidden');
     if(postPaymentActions) postPaymentActions.classList.add('hidden');
     if(unlockBtnIcon) unlockBtnIcon.className = 'fa-solid fa-lock';
@@ -1080,19 +1106,70 @@
     if(!currentFullLetterHTML || !window.htmlDocx) return;
     const htmlString = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="font-family:'Times New Roman',serif; font-size:12pt; line-height:1.6;">${currentFullLetterHTML}</body></html>`;
     const blob = htmlDocx.asBlob(htmlString);
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'MedFair-Dispute-Letter.docx';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    saveBlobDirectly(blob, 'MedFair-Dispute-Letter.docx');
   }
   docxBtn.addEventListener('click', downloadLetterAsDocx);
 
-  // ---------- Build & Auto-Download PDF using native html2pdf .save() ----------
-  function buildAndDownloadPDFFromHTML(finalHTML, email){
+  // ---------- Instant Download Popup for Chrome (PC & Mobile) ----------
+  function showReadyDownloadPopup(email){
+    removeReadyPopup();
+
+    const modal = document.createElement('div');
+    modal.id = 'pdf-ready-popup';
+    Object.assign(modal.style, {
+      position: 'fixed',
+      inset: '0',
+      backgroundColor: 'rgba(11, 27, 58, 0.80)',
+      backdropFilter: 'blur(6px)',
+      zIndex: '999995',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '16px'
+    });
+
+    modal.innerHTML = `
+      <div style="background:#ffffff; border-radius:24px; max-width:420px; width:100%; padding:28px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.3);">
+        <div style="width:56px; height:56px; border-radius:16px; background:#ECFDF5; color:#059669; display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 14px;">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h3 style="font-family:'Inter Tight',sans-serif; font-weight:800; font-size:22px; color:#0B1B3A; margin:0 0 8px;">Your Dispute Letter is Ready!</h3>
+        <p style="font-size:13px; color:#475569; line-height:1.5; margin:0 0 18px;">
+          Payment verified${email ? ` (${email})` : ''}. If Chrome blocked the automatic download, turn off your auto-download blocker or tap below to save immediately:
+        </p>
+        <button id="popup-instant-pdf-btn" style="width:100%; background:linear-gradient(100deg,#0B1B3A 0%,#2F6BFF 70%,#00C2FF 100%); color:#ffffff; font-weight:700; font-size:15px; padding:14px 20px; border:none; border-radius:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fa-solid fa-download"></i> Download PDF Now
+        </button>
+        <div style="margin-top:14px; display:flex; justify-content:center; gap:14px; font-size:12px;">
+          <button id="popup-edit-details-btn" style="background:none; border:none; color:#2F6BFF; font-weight:600; cursor:pointer; text-decoration:underline;">Edit Name &amp; Address</button>
+          <span style="color:#CBD5E1;">|</span>
+          <button id="popup-close-btn" style="background:none; border:none; color:#64748B; cursor:pointer;">Close</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document.getElementById('popup-instant-pdf-btn').addEventListener('click', ()=>{
+      if(readyPdfBlob){
+        saveBlobDirectly(readyPdfBlob, 'MedFair-Dispute-Letter.pdf');
+      } else {
+        buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail, true);
+      }
+    });
+
+    document.getElementById('popup-edit-details-btn').addEventListener('click', ()=>{
+      modal.remove();
+      openPersonalizeModal();
+    });
+
+    document.getElementById('popup-close-btn').addEventListener('click', ()=>{
+      modal.remove();
+    });
+  }
+
+  // ---------- Mobile & Chrome Safe PDF Builder ----------
+  function buildAndDownloadPDFFromHTML(finalHTML, email, isDirectUserClick = false){
     if(!finalHTML || !finalHTML.trim()) {
       alert("Error: পিডিএফ বানানোর জন্য কোনো টেক্সট পাওয়া যায়নি!");
       setUnlockBtnBusy(false, 'Download PDF Again');
@@ -1136,15 +1213,18 @@
     document.body.appendChild(overlay);
     window.scrollTo(0, 0);
 
+    // মোবাইল Chrome মেমোরি ক্র্যাশ এড়াতে ফোনে scale 1.5 এবং ডেস্কটপে 2
+    const captureScale = window.innerWidth < 768 ? 1.5 : 2;
+
     setTimeout(() => {
       html2pdf()
         .set({
           filename: 'MedFair-Dispute-Letter.pdf',
           margin: [35, 35, 35, 35],
-          image: { type: 'jpeg', quality: 0.98 },
+          image: { type: 'jpeg', quality: 0.96 },
           jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' },
           html2canvas: {
-            scale: 2,
+            scale: captureScale,
             useCORS: true,
             scrollY: 0,
             scrollX: 0,
@@ -1153,13 +1233,23 @@
           pagebreak: { mode: ['css', 'legacy'] },
         })
         .from(paperBox)
-        .save()
-        .then(() => {
+        .toPdf()
+        .output('blob')
+        .then((pdfBlob) => {
+          readyPdfBlob = pdfBlob;
+          // অটো-ডাউনলোডের চেষ্টা (Edge বা পারমিশন দেওয়া ব্রাউজারে সাথে সাথে ডাউনলোড হবে)
+          saveBlobDirectly(pdfBlob, 'MedFair-Dispute-Letter.pdf');
+
           if(unlockBtnIcon) unlockBtnIcon.className = 'fa-solid fa-file-pdf';
           setUnlockBtnBusy(false, 'Download PDF Again');
-          setUnlockStatus(email ? `Payment verified! Your PDF has downloaded (receipt sent to ${email}).` : 'Payment verified! Your dispute letter PDF has downloaded.');
+          setUnlockStatus(email ? `Payment verified! Your PDF is ready (receipt sent to ${email}).` : 'Payment verified! Your dispute letter PDF is ready.');
           if(blockerWarningBox) blockerWarningBox.classList.remove('hidden');
           if(postPaymentActions) postPaymentActions.classList.remove('hidden');
+
+          // PC Chrome ও Phone Chrome-এ ইউজার যাতে ১ ট্যাপেই নামাতে পারেন সেজন্য পপআপ দেখানো
+          if(!isDirectUserClick){
+            showReadyDownloadPopup(email);
+          }
         })
         .catch((err) => {
           console.error("PDF Error:", err);
@@ -1168,6 +1258,7 @@
           setUnlockStatus('Auto-download was interrupted. Please turn off any auto-download blocker and click below.');
           if(blockerWarningBox) blockerWarningBox.classList.remove('hidden');
           if(postPaymentActions) postPaymentActions.classList.remove('hidden');
+          showReadyDownloadPopup(email);
         })
         .finally(() => {
           isGeneratingPdf = false;
@@ -1175,10 +1266,10 @@
             overlay.parentNode.removeChild(overlay);
           }
         });
-    }, 450);
+    }, 350);
   }
 
-  // পেমেন্ট ভেরিফাই হওয়ার সাথে সাথেই সরাসরি অটো-ডাউনলোড শুরু করবে
+  // পেমেন্ট ভেরিফাই হওয়ার সাথে সাথেই PDF বিল্ড ও ডাউনলোড শুরু করবে
   function handlePaymentVerified(email, serverHTML){
     isOrderVerified = true;
     verifiedCustomerEmail = email || '';
@@ -1189,7 +1280,7 @@
       extractedDetails.patient_contact = verifiedCustomerEmail;
     }
     currentFullLetterHTML = compileLetterHTML(rawLetterTemplate, extractedDetails);
-    buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail);
+    buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail, false);
   }
 
   function stopPolling(){
@@ -1272,9 +1363,13 @@
   unlockBtn.addEventListener('click', ()=>{
     if(!rawLetterTemplate || unlockBtn.disabled) return;
 
-    // ১. পেমেন্ট ভেরিফাই হয়ে থাকলে সরাসরি আবার PDF ডাউনলোড করবে
+    // ১. পেমেন্ট ভেরিফাই হয়ে থাকলে কোনো অপেক্ষা ছাড়াই সরাসরি PDF ডাউনলোড করবে
     if(isOrderVerified){
-      buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail);
+      if(readyPdfBlob){
+        saveBlobDirectly(readyPdfBlob, 'MedFair-Dispute-Letter.pdf');
+      } else {
+        buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail, true);
+      }
       return;
     }
 
@@ -1305,6 +1400,7 @@
         currentOrderToken = orderToken;
         paymentSucceededInModal = false;
         isOrderVerified = false;
+        readyPdfBlob = null;
         setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
         setUnlockStatus('Opening secure checkout…');
         window.LemonSqueezy.Url.Open(checkoutUrl);
