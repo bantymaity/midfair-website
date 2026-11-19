@@ -27,18 +27,36 @@ const CATEGORY_CONTEXT = {
     "a MEDICAL DEBT COLLECTION NOTICE. Focus on the exact amount claimed, the original creditor/provider, the collection agency name, the age of the debt, and whether a proper FDCPA validation notice was included.",
 };
 
+const CATEGORY_LEGAL_RULES = {
+  bill:
+    "Cite patient rights to an accurate, itemized statement under federal billing transparency standards and protection against unexpected/excessive charges under the federal No Surprises Act (Public Law 116-260). Formally demand a complete itemized bill with CPT/HCPCS codes, suspension of any collection activity while the account is under dispute, and a written adjustment within 30 days.",
+  denial:
+    "Cite internal appeal rights under the Affordable Care Act (ACA) and ERISA (29 U.S.C. § 1133) where applicable. Formally demand a full clinical review, the specific plan provisions and medical necessity criteria relied upon for the denial, and reversal of the adverse benefit determination within 30 days.",
+  debt:
+    "Cite the Fair Debt Collection Practices Act (FDCPA, 15 U.S.C. § 1692g) and Fair Credit Reporting Act (FCRA). Formally demand written validation of the alleged debt, proof of assignment from the original healthcare provider, a complete itemized accounting, and immediate cessation of collection calls or negative credit reporting until full validation is provided.",
+};
+
 function buildPrompt(category) {
   const context = CATEGORY_CONTEXT[category] || CATEGORY_CONTEXT.bill;
-  return `You are MedFair's AI medical billing analyst. The attached file is ${context}
+  const legalGuidance = CATEGORY_LEGAL_RULES[category] || CATEGORY_LEGAL_RULES.bill;
 
-Carefully read the ENTIRE document image/PDF and extract the EXACT, SPECIFIC details that are visibly present: real CPT/HCPCS codes, real dollar amounts, real dates, real provider/payer/collector names, real denial reason codes, and exact procedure or diagnosis descriptions. Do NOT invent, guess, or generalize any figure that is not actually legible in the document — if something specific can't be read, say so plainly instead of fabricating it.
+  return `You are MedFair's senior AI medical billing advocate and consumer rights analyst. The attached file is ${context}
+
+Carefully read the ENTIRE document image/PDF and extract the EXACT, SPECIFIC details that are visibly present: real CPT/HCPCS codes, real dollar amounts, real dates, real provider/payer/collector names, account/invoice/claim numbers, and exact procedure or diagnosis descriptions. Do NOT invent, guess, or generalize any figure that is not actually legible in the document — if something specific cannot be read, omit it or use a clear bracketed placeholder instead of fabricating data.
 
 Respond with ONLY a raw JSON object — no markdown, no code fences, no commentary before or after it — matching EXACTLY this structure:
 {
-  "summary_title": "A short alert headline based on the specific findings in THIS file",
+  "summary_title": "A short, punchy alert headline based on the specific findings in THIS file",
   "key_findings": ["Specific detail 1 actually found in the document", "Specific detail 2 actually found in the document", "Specific detail 3 actually found in the document"],
   "action_plan": "Short, concrete next-step advice specific to this document (2-3 sentences max)",
-  "full_letter_content": "A highly specific, print-ready dispute/appeal letter as an HTML string using ONLY <p>, <br>, and <strong> tags. It MUST reference the exact medical data extracted above (codes, amounts, dates, names) and be ready to send as-is."
+  "full_letter_content": "A comprehensive, formal, print-ready US dispute/appeal letter formatted cleanly in HTML using ONLY <p>, <br>, and <strong> tags (no markdown, no CSS styles, no outer html/body tags). It MUST follow this exact professional legal structure:
+  1. Sender Header Block at the top: <p>[Your Full Name]<br>[Your Street Address]<br>[City, State, ZIP Code]<br>[Your Phone Number] | [Your Email Address]<br><br>[Current Date]</p>
+  2. Recipient Block: <p><strong>Attn: Billing Dispute &amp; Patient Financial Services</strong><br>[Extract exact Hospital / Insurance Payer / Collection Agency Name from document, or use placeholder]<br>[Extract Recipient Address from document, or use placeholder: Recipient Street Address, City, State, ZIP]</p>
+  3. Subject Line in bold: <p><strong>RE: Formal Billing Dispute &amp; Request for Account Review — Patient: [Patient Name if visible, else Your Name] | Account/Invoice/Claim #: [Exact Number from document, or Account Number] | Date of Service: [Exact Date from document]</strong></p>
+  4. Formal Salutation: <p>Dear Billing Department / Claims Review Officer,</p>
+  5. Opening & Specific Factual Dispute: State clearly that you are formally disputing the charges/denial/collection notice. List every specific discrepancy, duplicate charge, math error, CPT code issue, or unjustified charge found in the document with exact dollar figures and dates in well-structured paragraphs.
+  6. Legal Basis & Formal Demands: ${legalGuidance}
+  7. Closing & Signature Block: Request written confirmation within 30 days, followed by <p>Sincerely,<br><br><br>___________________________<br><strong>[Your Printed Name]</strong><br>Enclosures: Copy of Statement / Supporting Documentation</p>"
 }`;
 }
 
