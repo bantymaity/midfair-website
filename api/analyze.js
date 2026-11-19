@@ -42,21 +42,36 @@ function buildPrompt(category) {
 
   return `You are MedFair's senior AI medical billing advocate and consumer rights analyst. The attached file is ${context}
 
-Carefully read the ENTIRE document image/PDF and extract the EXACT, SPECIFIC details that are visibly present: real CPT/HCPCS codes, real dollar amounts, real dates, real provider/payer/collector names, account/invoice/claim numbers, and exact procedure or diagnosis descriptions. Do NOT invent, guess, or generalize any figure that is not actually legible in the document — if something specific cannot be read, omit it or use a clear bracketed placeholder instead of fabricating data.
+Carefully read the ENTIRE document image/PDF and extract ALL visible details:
+- Patient's full name, street address, city/state/zip, phone, or email (if printed on the document).
+- Hospital / Provider / Insurance Company / Collection Agency name and full mailing address (if printed on the document).
+- Account number, Invoice number, or Claim number.
+- Date(s) of service, exact CPT/HCPCS codes, exact dollar amounts, and procedure/diagnosis descriptions.
+
+Do NOT invent or fabricate any figure or name that is not visibly legible in the document. If a contact/address/account field is NOT visible in the document, leave its value as an empty string "" in "extracted_details".
 
 Respond with ONLY a raw JSON object — no markdown, no code fences, no commentary before or after it — matching EXACTLY this structure:
 {
   "summary_title": "A short, punchy alert headline based on the specific findings in THIS file",
   "key_findings": ["Specific detail 1 actually found in the document", "Specific detail 2 actually found in the document", "Specific detail 3 actually found in the document"],
   "action_plan": "Short, concrete next-step advice specific to this document (2-3 sentences max)",
-  "full_letter_content": "A comprehensive, formal, print-ready US dispute/appeal letter formatted cleanly in HTML using ONLY <p>, <br>, and <strong> tags (no markdown, no CSS styles, no outer html/body tags). It MUST follow this exact professional legal structure:
-  1. Sender Header Block at the top: <p>[Your Full Name]<br>[Your Street Address]<br>[City, State, ZIP Code]<br>[Your Phone Number] | [Your Email Address]<br><br>[Current Date]</p>
-  2. Recipient Block: <p><strong>Attn: Billing Dispute &amp; Patient Financial Services</strong><br>[Extract exact Hospital / Insurance Payer / Collection Agency Name from document, or use placeholder]<br>[Extract Recipient Address from document, or use placeholder: Recipient Street Address, City, State, ZIP]</p>
-  3. Subject Line in bold: <p><strong>RE: Formal Billing Dispute &amp; Request for Account Review — Patient: [Patient Name if visible, else Your Name] | Account/Invoice/Claim #: [Exact Number from document, or Account Number] | Date of Service: [Exact Date from document]</strong></p>
-  4. Formal Salutation: <p>Dear Billing Department / Claims Review Officer,</p>
-  5. Opening & Specific Factual Dispute: State clearly that you are formally disputing the charges/denial/collection notice. List every specific discrepancy, duplicate charge, math error, CPT code issue, or unjustified charge found in the document with exact dollar figures and dates in well-structured paragraphs.
+  "extracted_details": {
+    "patient_name": "Exact patient full name from document, or empty string if not visible",
+    "patient_address": "Exact patient street, city, state, zip from document, or empty string if not visible",
+    "patient_contact": "Exact patient phone/email from document, or empty string if not visible",
+    "recipient_name": "Exact Hospital / Payer / Collector name from document, or empty string if not visible",
+    "recipient_address": "Exact recipient mailing address from document, or empty string if not visible",
+    "account_number": "Exact Account, Invoice, or Claim number from document, or empty string if not visible",
+    "service_date": "Exact date(s) of service from document, or empty string if not visible"
+  },
+  "full_letter_content": "A comprehensive, formal, print-ready US dispute/appeal letter formatted cleanly in HTML using ONLY <p>, <br>, and <strong> tags (no markdown, no CSS styles, no outer html/body tags). CRITICAL RULE: Do NOT write bracketed placeholders like [Your Full Name] or [Your Address] anywhere in the letter. Instead, use these EXACT double-curly tokens so our app can populate them cleanly:
+  1. Sender Header Block: <p>{{SENDER_NAME}}<br>{{SENDER_ADDRESS}}<br>{{SENDER_CONTACT}}<br><br>{{CURRENT_DATE}}</p>
+  2. Recipient Block: <p><strong>Attn: Billing Dispute &amp; Patient Financial Services</strong><br>{{RECIPIENT_NAME}}<br>{{RECIPIENT_ADDRESS}}</p>
+  3. Subject Line: <p><strong>RE: Formal Billing Dispute &amp; Request for Account Review — Patient: {{SENDER_NAME}} | Account/Claim #: {{ACCOUNT_NUMBER}} | Date of Service: {{SERVICE_DATE}}</strong></p>
+  4. Salutation: <p>Dear Billing Department / Claims Review Officer,</p>
+  5. Body Paragraphs: Clearly state the formal dispute, detailing every specific overcharge, duplicate charge, math discrepancy, CPT code error, or denial issue found in the document with exact dollar figures and dates.
   6. Legal Basis & Formal Demands: ${legalGuidance}
-  7. Closing & Signature Block: Request written confirmation within 30 days, followed by <p>Sincerely,<br><br><br>___________________________<br><strong>[Your Printed Name]</strong><br>Enclosures: Copy of Statement / Supporting Documentation</p>"
+  7. Closing & Signature Block: Request written confirmation within 30 days, followed by <p>Sincerely,<br><br><br>___________________________<br><strong>{{SENDER_NAME}}</strong><br>Enclosures: Copy of Statement / Supporting Documentation</p>"
 }`;
 }
 
