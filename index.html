@@ -490,7 +490,7 @@
 
           <div class="mt-7 text-center">
             <button id="unlock-download-btn" class="cta-cursor w-full sm:w-auto inline-flex items-center justify-center gap-2 grad-btn text-white font-bold text-base px-8 py-4 rounded-2xl shadow-lift hover:brightness-110 active:scale-95 transition-all" data-testid="download-dispute-letter-button">
-              <i class="fa-solid fa-lock"></i> <span id="unlock-btn-label">Download Full Dispute Letter — $9.99</span>
+              <i class="fa-solid fa-lock" id="unlock-btn-icon"></i> <span id="unlock-btn-label">Download Full Dispute Letter — $9.99</span>
             </button>
             <p class="text-xs text-slate-400 mt-3" id="unlock-status-text">Secure checkout powered by Lemon Squeezy.</p>
 
@@ -528,10 +528,10 @@
     <div class="flex items-start justify-between gap-3 mb-4">
       <div>
         <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full mb-2">
-          <i class="fa-solid fa-circle-check"></i> Customize Letter
+          <i class="fa-solid fa-circle-check"></i> Payment Verified
         </span>
-        <h3 class="font-tight font-extrabold text-xl text-navy">Edit Name &amp; Address</h3>
-        <p class="text-xs text-slate-500 mt-1">Fill in or edit your details below to re-generate an updated PDF &amp; Word copy. Leave any field blank for a clean fill-in line.</p>
+        <h3 class="font-tight font-extrabold text-xl text-navy">Personalize &amp; Download PDF</h3>
+        <p class="text-xs text-slate-500 mt-1">Confirm or fill in your details below so your letter is 100% ready to send. Leave any field blank for a clean fill-in line.</p>
       </div>
       <button type="button" id="close-personalize-modal" class="text-slate-400 hover:text-navy p-1" aria-label="Close">
         <i class="fa-solid fa-xmark text-lg"></i>
@@ -579,7 +579,7 @@
 
       <div class="pt-3">
         <button type="submit" class="cta-cursor w-full grad-btn text-white font-bold text-sm py-3.5 rounded-xl shadow-glow hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2">
-          <i class="fa-solid fa-file-pdf"></i> Update &amp; Download PDF
+          <i class="fa-solid fa-file-pdf"></i> Download Ready-to-Send PDF
         </button>
         <p class="text-[11px] text-slate-400 text-center mt-2"><i class="fa-solid fa-shield-halved text-emerald-500 mr-1"></i>Processed locally in your browser — never stored on our servers.</p>
       </div>
@@ -809,6 +809,7 @@
   const resultActionPlan = document.getElementById('result-action-plan');
   const resetBtn = document.getElementById('reset-btn');
   const unlockBtn = document.getElementById('unlock-download-btn');
+  const unlockBtnIcon = document.getElementById('unlock-btn-icon');
   const unlockBtnLabel = document.getElementById('unlock-btn-label');
   const postPaymentActions = document.getElementById('post-payment-actions');
   const editDetailsBtn = document.getElementById('edit-letter-details-btn');
@@ -832,8 +833,9 @@
   let currentFullLetterHTML = '';
   let extractedDetails = {};
   let verifiedCustomerEmail = '';
+  let isOrderVerified = false;
   let lastFile = null;
-  let pdfGeneratedForCurrentAnalysis = false;
+  let isGeneratingPdf = false;
   let paymentSucceededInModal = false;
   let cachedPdfBlobUrl = null;
   let currentOrderToken = null;
@@ -855,7 +857,6 @@
     });
   }
 
-  // টোকেন রিপ্লেস করে সম্পূর্ণ রেডি-টু-সেন্ড HTML তৈরি করে (ফাঁকা থাকলে কলম দিয়ে লেখার লাইন দেয়)
   function compileLetterHTML(template, details){
     let html = (template || '').replace(/```html|```/gi, '').trim();
     const todayStr = getFormattedTodayUS();
@@ -913,12 +914,10 @@
 
     currentFullLetterHTML = compileLetterHTML(rawLetterTemplate, extractedDetails);
 
-    // পুরনো ক্যাশ মুছে নতুন তথ্য দিয়ে PDF তৈরি ও ডাউনলোড করা
     if(cachedPdfBlobUrl){
       URL.revokeObjectURL(cachedPdfBlobUrl);
       cachedPdfBlobUrl = null;
     }
-    pdfGeneratedForCurrentAnalysis = false;
     closePersonalizeModal();
     buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail);
   });
@@ -935,8 +934,9 @@
     currentFullLetterHTML = '';
     extractedDetails = {};
     verifiedCustomerEmail = '';
+    isOrderVerified = false;
     lastFile = null;
-    pdfGeneratedForCurrentAnalysis = false;
+    isGeneratingPdf = false;
     paymentSucceededInModal = false;
     if(cachedPdfBlobUrl){
       URL.revokeObjectURL(cachedPdfBlobUrl);
@@ -946,6 +946,7 @@
     stopPolling();
     closePersonalizeModal();
     if(postPaymentActions) postPaymentActions.classList.add('hidden');
+    if(unlockBtnIcon) unlockBtnIcon.className = 'fa-solid fa-lock';
     setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
     setUnlockStatus('Secure checkout powered by Lemon Squeezy.');
   }
@@ -1067,7 +1068,7 @@
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
-    setTimeout(() => link.remove(), 1000);
+    setTimeout(() => link.remove(), 1500);
   }
 
   function downloadLetterAsDocx(){
@@ -1080,11 +1081,11 @@
   }
   docxBtn.addEventListener('click', downloadLetterAsDocx);
 
-  // ---------- Build & Auto-Download PDF from Final Compiled HTML ----------
+  // ---------- Build & Download PDF from Final Compiled HTML ----------
   function buildAndDownloadPDFFromHTML(finalHTML, email){
     if(!finalHTML || !finalHTML.trim()) {
       alert("Error: পিডিএফ বানানোর জন্য কোনো টেক্সট পাওয়া যায়নি!");
-      setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
+      setUnlockBtnBusy(false, 'Download Ready-to-Send PDF');
       return;
     }
 
@@ -1093,11 +1094,11 @@
       return;
     }
 
-    if(pdfGeneratedForCurrentAnalysis) return;
+    if(isGeneratingPdf) return;
 
-    pdfGeneratedForCurrentAnalysis = true;
+    isGeneratingPdf = true;
     setUnlockBtnBusy(true, 'Generating your PDF…');
-    setUnlockStatus('Payment verified — building & downloading your PDF now…');
+    setUnlockStatus('Payment verified — generating your PDF now…');
 
     const overlay = document.createElement('div');
     Object.assign(overlay.style, {
@@ -1152,17 +1153,18 @@
         .then((pdfBlob) => {
           cachedPdfBlobUrl = URL.createObjectURL(pdfBlob);
           triggerBlobDownload(cachedPdfBlobUrl, 'MedFair-Dispute-Letter.pdf');
+          if(unlockBtnIcon) unlockBtnIcon.className = 'fa-solid fa-file-pdf';
           setUnlockBtnBusy(false, 'Download PDF Again');
-          setUnlockStatus(email ? `Payment verified! Your PDF has downloaded (receipt sent to ${email}).` : 'Payment verified! Your dispute letter PDF has downloaded.');
+          setUnlockStatus(email ? `Payment verified! Your PDF is ready (receipt sent to ${email}).` : 'Payment verified! Your dispute letter PDF is ready.');
           if(postPaymentActions) postPaymentActions.classList.remove('hidden');
         })
         .catch((err) => {
           console.error("PDF Error:", err);
-          pdfGeneratedForCurrentAnalysis = false;
-          setUnlockBtnBusy(false, 'Retry PDF Download');
-          setUnlockStatus('Could not generate the PDF. Click the button above to try again.');
+          setUnlockBtnBusy(false, 'Download Ready-to-Send PDF');
+          setUnlockStatus('Click the button above or in the popup to download your PDF.');
         })
         .finally(() => {
+          isGeneratingPdf = false;
           if (overlay.parentNode) {
             overlay.parentNode.removeChild(overlay);
           }
@@ -1170,8 +1172,9 @@
     }, 450);
   }
 
-  // পেমেন্ট ভেরিফাই হওয়ার সাথে সাথেই অটোমেটিক পিডিএফ তৈরি ও ডাউনলোড শুরু করবে
+  // পেমেন্ট ভেরিফাই হওয়ার সাথে সাথে অটো-ডাউনলোড ও পপআপ দুটোই ট্রিগার করবে
   function handlePaymentVerified(email, serverHTML){
+    isOrderVerified = true;
     verifiedCustomerEmail = email || '';
     if(serverHTML && !rawLetterTemplate){
       rawLetterTemplate = serverHTML;
@@ -1180,7 +1183,15 @@
       extractedDetails.patient_contact = verifiedCustomerEmail;
     }
     currentFullLetterHTML = compileLetterHTML(rawLetterTemplate, extractedDetails);
+
+    if(unlockBtnIcon) unlockBtnIcon.className = 'fa-solid fa-file-pdf';
+    setUnlockBtnBusy(false, 'Download Ready-to-Send PDF');
+    setUnlockStatus('Payment verified! Confirm your details or click Download in the popup.');
     if(postPaymentActions) postPaymentActions.classList.remove('hidden');
+
+    // ১. পপআপ খুলবে (যাতে ব্রাউজার অটো-ডাউনলোড ব্লক করলেও ইউজার ১ ক্লিকে নামাতে ও এডিট করতে পারেন)
+    openPersonalizeModal();
+    // ২. একই সাথে অটো-ডাউনলোডও শুরু করবে
     buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail);
   }
 
@@ -1190,7 +1201,7 @@
 
   function pollOrderStatus(token, attempt){
     attempt = attempt || 0;
-    if(pdfGeneratedForCurrentAnalysis) return;
+    if(isOrderVerified) return;
     fetch(`${ORDER_STATUS_ENDPOINT}?token=${encodeURIComponent(token)}`)
       .then((r)=> r.json())
       .then((data)=>{
@@ -1231,10 +1242,31 @@
           stopPolling();
           pollOrderStatus(currentOrderToken);
         } else if(event.event === 'Checkout.Closed'){
-          if(paymentSucceededInModal || pdfGeneratedForCurrentAnalysis) return;
-          stopPolling();
-          setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
-          setUnlockStatus('Checkout closed. Click below to try again.');
+          if(paymentSucceededInModal || isOrderVerified) return;
+          // পপআপ বন্ধ করলে একবার ব্যাকএন্ড চেক করে নেবে যদি পেমেন্ট হয়ে থাকে
+          if(currentOrderToken){
+            fetch(`${ORDER_STATUS_ENDPOINT}?token=${encodeURIComponent(currentOrderToken)}`)
+              .then((r)=> r.json())
+              .then((data)=>{
+                if(data.verified){
+                  stopPolling();
+                  handlePaymentVerified(data.email, data.letterHTML);
+                } else {
+                  stopPolling();
+                  setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
+                  setUnlockStatus('Checkout closed. Click below to try again.');
+                }
+              })
+              .catch(()=>{
+                stopPolling();
+                setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
+                setUnlockStatus('Checkout closed. Click below to try again.');
+              });
+          } else {
+            stopPolling();
+            setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
+            setUnlockStatus('Checkout closed. Click below to try again.');
+          }
         }
       }
     });
@@ -1244,14 +1276,18 @@
   unlockBtn.addEventListener('click', ()=>{
     if(!rawLetterTemplate || unlockBtn.disabled) return;
 
-    // ১. পিডিএফ ইতিমধ্যে তৈরি হয়ে থাকলে সরাসরি ডাউনলোড করবে
-    if(cachedPdfBlobUrl){
-      triggerBlobDownload(cachedPdfBlobUrl, 'MedFair-Dispute-Letter.pdf');
+    // ১. পেমেন্ট ইতিমধ্যে ভেরিফাই হয়ে থাকলে সরাসরি ডাউনলোড করবে (বা পপআপ খুলবে)
+    if(isOrderVerified){
+      if(cachedPdfBlobUrl){
+        triggerBlobDownload(cachedPdfBlobUrl, 'MedFair-Dispute-Letter.pdf');
+      } else {
+        buildAndDownloadPDFFromHTML(currentFullLetterHTML, verifiedCustomerEmail);
+      }
       return;
     }
 
     // ২. পেমেন্ট প্রসেসিং বা রিট্রাই অবস্থায় থাকলে পোলিং চালাবে
-    if(currentOrderToken && (paymentSucceededInModal || unlockBtnLabel.textContent === 'Check Payment Status' || unlockBtnLabel.textContent === 'Retry PDF Download')){
+    if(currentOrderToken && (paymentSucceededInModal || unlockBtnLabel.textContent === 'Check Payment Status')){
       setUnlockBtnBusy(true, 'Checking payment status…');
       pollOrderStatus(currentOrderToken);
       return;
@@ -1276,7 +1312,7 @@
       .then(({ checkoutUrl, orderToken })=>{
         currentOrderToken = orderToken;
         paymentSucceededInModal = false;
-        pdfGeneratedForCurrentAnalysis = false;
+        isOrderVerified = false;
         cachedPdfBlobUrl = null;
         setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
         setUnlockStatus('Opening secure checkout…');
