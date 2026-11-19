@@ -115,14 +115,14 @@
   }
   .grad-btn{ background: linear-gradient(100deg, var(--navy) 0%, var(--electric) 70%, var(--electric-2) 100%); }
 
-  /* Masked line reveal (pure CSS, runs automatically after preload) */
+  /* Masked line reveal */
   .line-mask{ overflow:hidden; display:block; }
   .line-inner{ display:block; transform:translateY(110%); animation: lineReveal .9s cubic-bezier(.16,1,.3,1) forwards; animation-delay:1.85s; }
   .line-mask:nth-of-type(2) .line-inner{ animation-delay:1.98s; }
   .line-mask:nth-of-type(3) .line-inner{ animation-delay:2.11s; }
   @keyframes lineReveal{ to{ transform:translateY(0%); } }
 
-  /* Reveal on scroll (IntersectionObserver toggles .is-visible) */
+  /* Reveal on scroll */
   .reveal{ opacity:0; transform:translateY(36px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
   .reveal.is-visible{ opacity:1; transform:translateY(0); }
 
@@ -176,7 +176,6 @@
   }
   @keyframes pulseDot{ 0%{ transform:scale(1); opacity:.6; } 100%{ transform:scale(2.6); opacity:0; } }
 
-  /* Custom cursor for large pointers only */
   @media (hover:hover) and (pointer:fine){
     .cta-cursor{ cursor: pointer; }
   }
@@ -185,14 +184,11 @@
   .result-enter{ animation: resultIn .6s cubic-bezier(.16,1,.3,1) forwards; }
   @keyframes resultIn{ from{ opacity:0; transform:translateY(18px) scale(.98); } to{ opacity:1; transform:translateY(0) scale(1); } }
 
-  /* focus ring accessibility */
   button:focus-visible, input:focus-visible, a:focus-visible{ outline:2px solid var(--electric); outline-offset:2px; }
 
-  /* Hide scrollbar for tab row on tiny screens */
   .no-scrollbar::-webkit-scrollbar{ display:none; }
   .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
 
-  /* Clean spacing inside generated PDF letter */
   #pdf-letter-body p { margin-bottom: 10pt; }
 </style>
 </head>
@@ -230,7 +226,6 @@
 
 <!-- ================= HERO ================= -->
 <section class="relative min-h-[100svh] flex items-center pt-28 pb-16 sm:pt-32 overflow-hidden bg-white">
-  <!-- ambient blobs -->
   <div class="absolute -top-32 -left-32 w-[420px] h-[420px] rounded-full bg-electric/10 blur-3xl blob" aria-hidden="true"></div>
   <div class="absolute top-1/3 -right-40 w-[480px] h-[480px] rounded-full bg-navy/10 blur-3xl blob" style="animation-delay:-4s" aria-hidden="true"></div>
 
@@ -500,7 +495,7 @@
                 <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5 shrink-0"></i>
                 <div class="text-xs text-amber-900 leading-relaxed">
                   <p class="font-bold text-sm text-amber-950 mb-1">Auto-Download Blocked by Chrome?</p>
-                  <p>Chrome often blocks automatic downloads after payment. Please <strong>turn off your browser's auto-download blocker</strong> (tap the blocked download icon in your address bar &rarr; <em>"Always allow"</em>) or tap the button below to save immediately:</p>
+                  <p>Mobile &amp; desktop Chrome often block automatic downloads after payment. Please <strong>turn off your browser's auto-download blocker</strong> (tap the blocked icon in your address bar &rarr; <em>"Always allow"</em>) or tap below to save immediately:</p>
                   <button type="button" id="manual-blocker-download-btn" class="mt-2.5 inline-flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition-colors">
                     <i class="fa-solid fa-download"></i> Download PDF Now
                   </button>
@@ -672,13 +667,13 @@
 
 <script>
 (function(){
-  // ---------- Preloader (pure CSS-driven, JS just removes it from the DOM flow) ----------
+  // ---------- Preloader ----------
   const preloader = document.getElementById('preloader');
   if(preloader){
     setTimeout(()=>{ preloader.style.display='none'; }, 2300);
   }
 
-  // ---------- Generic scroll reveal (IntersectionObserver, no rAF dependency) ----------
+  // ---------- Generic scroll reveal ----------
   if('IntersectionObserver' in window){
     const revealObserver = new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{
@@ -844,6 +839,7 @@
 
   const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'application/pdf'];
   const MAX_FILE_MB = 10;
+  const PENDING_STORAGE_KEY = 'medfair_pending_order_v1';
 
   let rawLetterTemplate = '';
   let currentFullLetterHTML = '';
@@ -856,6 +852,22 @@
   let readyPdfBlob = null;
   let currentOrderToken = null;
   let pollTimer = null;
+
+  function savePendingOrderState(){
+    try {
+      if(!currentOrderToken) return;
+      localStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify({
+        orderToken: currentOrderToken,
+        rawLetterTemplate,
+        extractedDetails,
+        ts: Date.now()
+      }));
+    } catch(e){}
+  }
+
+  function clearPendingOrderState(){
+    try { localStorage.removeItem(PENDING_STORAGE_KEY); } catch(e){}
+  }
 
   function escapeHTML(str){
     return String(str || '')
@@ -921,6 +933,7 @@
   closePersonalizeModalBtn.addEventListener('click', closePersonalizeModal);
   editDetailsBtn.addEventListener('click', openPersonalizeModal);
 
+  // মোবাইল ও পিসি উভয় ব্রাউজারেই নিরাপদে Blob ফাইল ডাউনলোড করার ফাংশন (৬০ সেকেন্ড পর্যন্ত লিংক সচল থাকে)
   function saveBlobDirectly(blob, filename){
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -932,8 +945,11 @@
     link.click();
     setTimeout(() => {
       link.remove();
+    }, 2000);
+    // ফোনের Download Manager-কে পর্যাপ্ত সময় দেওয়ার জন্য ৬০ সেকেন্ড পর URL মুক্ত করা হচ্ছে
+    setTimeout(() => {
       URL.revokeObjectURL(url);
-    }, 3000);
+    }, 60000);
   }
 
   if(manualBlockerDownloadBtn){
@@ -982,6 +998,7 @@
     paymentSucceededInModal = false;
     readyPdfBlob = null;
     currentOrderToken = null;
+    clearPendingOrderState();
     stopPolling();
     closePersonalizeModal();
     removeReadyPopup();
@@ -1110,7 +1127,7 @@
   }
   docxBtn.addEventListener('click', downloadLetterAsDocx);
 
-  // ---------- Instant Download Popup for Chrome (PC & Mobile) ----------
+  // ---------- Instant Download Popup for Mobile & Desktop Chrome ----------
   function showReadyDownloadPopup(email){
     removeReadyPopup();
 
@@ -1119,7 +1136,7 @@
     Object.assign(modal.style, {
       position: 'fixed',
       inset: '0',
-      backgroundColor: 'rgba(11, 27, 58, 0.80)',
+      backgroundColor: 'rgba(11, 27, 58, 0.82)',
       backdropFilter: 'blur(6px)',
       zIndex: '999995',
       display: 'flex',
@@ -1135,9 +1152,9 @@
         </div>
         <h3 style="font-family:'Inter Tight',sans-serif; font-weight:800; font-size:22px; color:#0B1B3A; margin:0 0 8px;">Your Dispute Letter is Ready!</h3>
         <p style="font-size:13px; color:#475569; line-height:1.5; margin:0 0 18px;">
-          Payment verified${email ? ` (${email})` : ''}. If Chrome blocked the automatic download, turn off your auto-download blocker or tap below to save immediately:
+          Payment verified${email ? ` (${email})` : ''}. Tap the button below to save your PDF immediately:
         </p>
-        <button id="popup-instant-pdf-btn" style="width:100%; background:linear-gradient(100deg,#0B1B3A 0%,#2F6BFF 70%,#00C2FF 100%); color:#ffffff; font-weight:700; font-size:15px; padding:14px 20px; border:none; border-radius:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <button id="popup-instant-pdf-btn" style="width:100%; background:linear-gradient(100deg,#0B1B3A 0%,#2F6BFF 70%,#00C2FF 100%); color:#ffffff; font-weight:700; font-size:15px; padding:15px 20px; border:none; border-radius:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
           <i class="fa-solid fa-download"></i> Download PDF Now
         </button>
         <div style="margin-top:14px; display:flex; justify-content:center; gap:14px; font-size:12px;">
@@ -1191,13 +1208,15 @@
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'flex-start',
-      overflowY: 'auto',
+      overflow: 'auto',
       padding: '20px'
     });
 
     const paperBox = document.createElement('div');
     Object.assign(paperBox.style, {
       width: '532pt',
+      minWidth: '532pt',
+      flexShrink: '0',
       minHeight: '700pt',
       backgroundColor: '#ffffff',
       color: '#000000',
@@ -1213,15 +1232,16 @@
     document.body.appendChild(overlay);
     window.scrollTo(0, 0);
 
-    // মোবাইল Chrome মেমোরি ক্র্যাশ এড়াতে ফোনে scale 1.5 এবং ডেস্কটপে 2
-    const captureScale = window.innerWidth < 768 ? 1.5 : 2;
+    // ফোনের মেমোরি ক্র্যাশ এড়াতে মোবাইলে 1.25 এবং ডেস্কটপে 2
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+    const captureScale = isMobile ? 1.25 : 2;
 
     setTimeout(() => {
       html2pdf()
         .set({
           filename: 'MedFair-Dispute-Letter.pdf',
           margin: [35, 35, 35, 35],
-          image: { type: 'jpeg', quality: 0.96 },
+          image: { type: 'jpeg', quality: 0.95 },
           jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' },
           html2canvas: {
             scale: captureScale,
@@ -1237,7 +1257,6 @@
         .output('blob')
         .then((pdfBlob) => {
           readyPdfBlob = pdfBlob;
-          // অটো-ডাউনলোডের চেষ্টা (Edge বা পারমিশন দেওয়া ব্রাউজারে সাথে সাথে ডাউনলোড হবে)
           saveBlobDirectly(pdfBlob, 'MedFair-Dispute-Letter.pdf');
 
           if(unlockBtnIcon) unlockBtnIcon.className = 'fa-solid fa-file-pdf';
@@ -1246,7 +1265,7 @@
           if(blockerWarningBox) blockerWarningBox.classList.remove('hidden');
           if(postPaymentActions) postPaymentActions.classList.remove('hidden');
 
-          // PC Chrome ও Phone Chrome-এ ইউজার যাতে ১ ট্যাপেই নামাতে পারেন সেজন্য পপআপ দেখানো
+          // ফোনের Chrome ও PC Chrome-এ যাতে ১ ট্যাপেই ডাউনলোড হয় সেজন্য তাৎক্ষণিক পপআপ দেখানো
           if(!isDirectUserClick){
             showReadyDownloadPopup(email);
           }
@@ -1255,7 +1274,7 @@
           console.error("PDF Error:", err);
           if(unlockBtnIcon) unlockBtnIcon.className = 'fa-solid fa-file-pdf';
           setUnlockBtnBusy(false, 'Download PDF Again');
-          setUnlockStatus('Auto-download was interrupted. Please turn off any auto-download blocker and click below.');
+          setUnlockStatus('Auto-download was interrupted. Tap the button above to download.');
           if(blockerWarningBox) blockerWarningBox.classList.remove('hidden');
           if(postPaymentActions) postPaymentActions.classList.remove('hidden');
           showReadyDownloadPopup(email);
@@ -1269,9 +1288,9 @@
     }, 350);
   }
 
-  // পেমেন্ট ভেরিফাই হওয়ার সাথে সাথেই PDF বিল্ড ও ডাউনলোড শুরু করবে
   function handlePaymentVerified(email, serverHTML){
     isOrderVerified = true;
+    clearPendingOrderState();
     verifiedCustomerEmail = email || '';
     if(serverHTML && !rawLetterTemplate){
       rawLetterTemplate = serverHTML;
@@ -1298,21 +1317,55 @@
           handlePaymentVerified(data.email, data.letterHTML);
           return;
         }
-        if(attempt >= 24){
+        // ফোনে পেমেন্ট/OTP দিতে সময় লাগতে পারে তাই ৬০ বার (১৫০ সেকেন্ড) পর্যন্ত চেক করবে
+        if(attempt >= 60){
           setUnlockBtnBusy(false, 'Check Payment Status');
-          setUnlockStatus("Still confirming with Lemon Squeezy — click the button above to check again.");
+          setUnlockStatus("Still confirming with Lemon Squeezy — tap the button above to check again.");
           return;
         }
         pollTimer = setTimeout(()=> pollOrderStatus(token, attempt + 1), 2500);
       })
       .catch(()=>{
-        if(attempt >= 24){
+        if(attempt >= 60){
           setUnlockBtnBusy(false, 'Check Payment Status');
-          setUnlockStatus('Could not confirm payment status. Click above to check again.');
+          setUnlockStatus('Could not confirm payment status. Tap above to check again.');
           return;
         }
         pollTimer = setTimeout(()=> pollOrderStatus(token, attempt + 1), 2500);
       });
+  }
+
+  // ফোনে পেমেন্ট/OTP অ্যাপ থেকে ব্রাউজারে ফিরে এলে সাথে সাথে পোলিং রিজিউম করবে
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.visibilityState === 'visible' && currentOrderToken && !isOrderVerified){
+      stopPolling();
+      pollOrderStatus(currentOrderToken, 0);
+    }
+  });
+
+  // পেজ যদি মোবাইল মেমোরি কারণে রিলোড হয়ে যায়, তবুও localStorage থেকে পেন্ডিং অর্ডার উদ্ধার করবে
+  function restorePendingOrderIfAny(){
+    try {
+      const savedRaw = localStorage.getItem(PENDING_STORAGE_KEY);
+      if(!savedRaw) return;
+      const saved = JSON.parse(savedRaw);
+      // ৩০ মিনিটের পুরনো হলে বাদ দেবে
+      if(!saved.orderToken || (Date.now() - saved.ts) > 30 * 60 * 1000){
+        clearPendingOrderState();
+        return;
+      }
+      currentOrderToken = saved.orderToken;
+      rawLetterTemplate = saved.rawLetterTemplate || '';
+      extractedDetails = saved.extractedDetails || {};
+      currentFullLetterHTML = compileLetterHTML(rawLetterTemplate, extractedDetails);
+
+      // রেজাল্ট সেকশন দৃশ্যমান করে পোলিং চালু করা
+      idleEl.classList.add('hidden');
+      resultEl.classList.remove('hidden');
+      setUnlockBtnBusy(true, 'Checking payment status…');
+      setUnlockStatus('Resuming payment verification…');
+      pollOrderStatus(currentOrderToken, 0);
+    } catch(e){}
   }
 
   function initLemonSqueezy(){
@@ -1328,7 +1381,7 @@
           setUnlockBtnBusy(true, 'Confirming payment…');
           setUnlockStatus('Confirming your payment with our server — do not close this page.');
           stopPolling();
-          pollOrderStatus(currentOrderToken);
+          pollOrderStatus(currentOrderToken, 0);
         } else if(event.event === 'Checkout.Closed'){
           if(paymentSucceededInModal || isOrderVerified) return;
           if(currentOrderToken){
@@ -1341,29 +1394,33 @@
                 } else {
                   stopPolling();
                   setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
-                  setUnlockStatus('Checkout closed. Click below to try again.');
+                  setUnlockStatus('Checkout closed. Tap below to try again.');
                 }
               })
               .catch(()=>{
                 stopPolling();
                 setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
-                setUnlockStatus('Checkout closed. Click below to try again.');
+                setUnlockStatus('Checkout closed. Tap below to try again.');
               });
           } else {
             stopPolling();
             setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
-            setUnlockStatus('Checkout closed. Click below to try again.');
+            setUnlockStatus('Checkout closed. Tap below to try again.');
           }
         }
       }
     });
   }
-  window.addEventListener('load', initLemonSqueezy);
+
+  window.addEventListener('load', ()=>{
+    initLemonSqueezy();
+    restorePendingOrderIfAny();
+  });
 
   unlockBtn.addEventListener('click', ()=>{
     if(!rawLetterTemplate || unlockBtn.disabled) return;
 
-    // ১. পেমেন্ট ভেরিফাই হয়ে থাকলে কোনো অপেক্ষা ছাড়াই সরাসরি PDF ডাউনলোড করবে
+    // ১. পেমেন্ট ভেরিফাই হয়ে থাকলে সরাসরি PDF ডাউনলোড করবে
     if(isOrderVerified){
       if(readyPdfBlob){
         saveBlobDirectly(readyPdfBlob, 'MedFair-Dispute-Letter.pdf');
@@ -1376,7 +1433,7 @@
     // ২. পেমেন্ট প্রসেসিং বা রিট্রাই অবস্থায় থাকলে পোলিং চালাবে
     if(currentOrderToken && (paymentSucceededInModal || unlockBtnLabel.textContent === 'Check Payment Status')){
       setUnlockBtnBusy(true, 'Checking payment status…');
-      pollOrderStatus(currentOrderToken);
+      pollOrderStatus(currentOrderToken, 0);
       return;
     }
 
@@ -1401,6 +1458,7 @@
         paymentSucceededInModal = false;
         isOrderVerified = false;
         readyPdfBlob = null;
+        savePendingOrderState();
         setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
         setUnlockStatus('Opening secure checkout…');
         window.LemonSqueezy.Url.Open(checkoutUrl);
