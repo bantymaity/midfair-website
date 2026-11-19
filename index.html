@@ -896,11 +896,14 @@
   }
   docxBtn.addEventListener('click', downloadLetterAsDocx);
 
-  // ---------- Updated PDF Generation Function ----------
+  // ---------- Updated PDF Generation Function (100% Visible Capture Fix) ----------
   function generateAndDownloadLetterPDF(email, serverHTML){
-    const finalHTML = serverHTML || currentFullLetterHTML;
+    let finalHTML = serverHTML || currentFullLetterHTML || '';
 
-    if(!finalHTML || finalHTML.trim() === '') {
+    // AI রেসপন্সে ভুল করে ```html বা ``` থাকলে তা পরিষ্কার করা
+    finalHTML = finalHTML.replace(/```html|```/gi, '').trim();
+
+    if(!finalHTML) {
       alert("Error: পিডিএফ বানানোর জন্য কোনো টেক্সট পাওয়া যায়নি!");
       setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
       return;
@@ -912,32 +915,48 @@
     setUnlockBtnBusy(true, 'Generating your PDF…');
     setUnlockStatus('Payment verified by our server — building your PDF now.');
 
-    // ১. কন্টেইনার তৈরি করে অবশ্যই document.body-তে যুক্ত করতে হবে (স্ক্রিনের বাইরে রেখে)
-    const tempContainer = document.createElement('div');
-    tempContainer.innerHTML = finalHTML;
-
-    Object.assign(tempContainer.style, {
+    // ১. স্ক্রিনের ওপর একটি দৃশ্যমান ওভারলে তৈরি করা (যাতে html2canvas সঠিকভাবে ক্যাপচার করতে পারে)
+    const overlay = document.createElement('div');
+    Object.assign(overlay.style, {
       position: 'fixed',
-      left: '-9999px',
-      top: '0',
+      inset: '0',
+      backgroundColor: 'rgba(11, 27, 58, 0.85)',
+      zIndex: '99999',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      overflowY: 'auto',
+      padding: '20px'
+    });
+
+    // ২. ভেতরে সাদা কাগজের মতো চিঠির কন্টেইনার তৈরি করা
+    const paperBox = document.createElement('div');
+    Object.assign(paperBox.style, {
       width: '532pt',
+      minHeight: '700pt',
       backgroundColor: '#ffffff',
       color: '#000000',
+      padding: '20px',
       fontFamily: '"Times New Roman", Times, serif',
       fontSize: '12pt',
       lineHeight: '1.6',
-      zIndex: '-1'
+      boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
     });
+    paperBox.innerHTML = `<div style="color:#000000 !important; background:#ffffff !important;">${finalHTML}</div>`;
 
-    document.body.appendChild(tempContainer);
+    overlay.appendChild(paperBox);
+    document.body.appendChild(overlay);
 
-    // ২. ব্রাউজারকে কন্টেন্ট রেন্ডার করার জন্য সামান্য সময় দিয়ে PDF জেনারেট করা
+    // পেজ একদম ওপরে স্ক্রল করে নেওয়া যাতে ক্যাপচার না কাটে
+    window.scrollTo(0, 0);
+
+    // ৩. রেন্ডার হওয়ার সামান্য সময় দিয়ে PDF জেনারেট করা
     setTimeout(() => {
       html2pdf()
-        .from(tempContainer)
+        .from(paperBox)
         .set({
           filename: 'MedFair-Dispute-Letter.pdf',
-          margin: [40, 40, 40, 40],
+          margin: [35, 35, 35, 35],
           image: { type: 'jpeg', quality: 0.98 },
           jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' },
           html2canvas: {
@@ -964,12 +983,12 @@
           setUnlockStatus('Could not generate the PDF. Please try again.');
         })
         .finally(() => {
-          // ৩. কাজ শেষে অস্থায়ী কন্টেইনারটি DOM থেকে পরিষ্কার করে ফেলা
-          if (tempContainer.parentNode) {
-            tempContainer.parentNode.removeChild(tempContainer);
+          // ৪. ডাউনলোড শুরু হওয়ামাত্রই ওভারলেটি স্ক্রিন থেকে সরিয়ে ফেলা
+          if (overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
           }
         });
-    }, 250);
+    }, 400);
   }
 
   function stopPolling(){
