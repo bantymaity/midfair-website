@@ -741,6 +741,11 @@
   const MAX_FILE_MB = 10;
   let currentFullLetterHTML = '';
   let lastFile = null;
+  let pdfGeneratedForCurrentAnalysis = false;
+  let paymentSucceededInModal = false;
+  let cachedPdfBlobUrl = null;
+  let currentOrderToken = null;
+  let pollTimer = null;
 
   function resetUpload(){
     idleEl.classList.remove('hidden');
@@ -753,6 +758,11 @@
     currentFullLetterHTML = '';
     lastFile = null;
     pdfGeneratedForCurrentAnalysis = false;
+    paymentSucceededInModal = false;
+    if(cachedPdfBlobUrl){
+      URL.revokeObjectURL(cachedPdfBlobUrl);
+      cachedPdfBlobUrl = null;
+    }
     currentOrderToken = null;
     stopPolling();
     if(docxBtn) docxBtn.classList.add('hidden');
@@ -858,9 +868,6 @@
   const ORDER_STATUS_ENDPOINT = '/api/order-status';
   const unlockStatusText = document.getElementById('unlock-status-text');
   const docxBtn = document.getElementById('download-docx-btn');
-  let pdfGeneratedForCurrentAnalysis = false;
-  let currentOrderToken = null;
-  let pollTimer = null;
 
   function setUnlockStatus(message){
     if(unlockStatusText) unlockStatusText.textContent = message;
@@ -872,35 +879,31 @@
     if(label) unlockBtnLabel.textContent = label;
   }
 
-  function triggerDataUriDownload(dataUri, filename){
+  // Blob URL দিয়ে ডাউনলোড করলে Chrome/Edge কখনোই বড় PDF ব্লক করে না
+  function triggerBlobDownload(blobUrl, filename){
     const link = document.createElement('a');
-    link.href = dataUri;
+    link.href = blobUrl;
     link.download = filename;
+    link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
-    link.remove();
+    setTimeout(() => link.remove(), 1000);
   }
 
   function downloadLetterAsDocx(){
     if(!currentFullLetterHTML || !window.htmlDocx) return;
-    const htmlString = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="font-family:'Times New Roman',serif; font-size:12pt;">${currentFullLetterHTML}</body></html>`;
+    const cleanHTML = currentFullLetterHTML.replace(/```html|```/gi, '').trim();
+    const htmlString = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="font-family:'Times New Roman',serif; font-size:12pt;">${cleanHTML}</body></html>`;
     const blob = htmlDocx.asBlob(htmlString);
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'MedFair-Dispute-Letter.docx';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
+    triggerBlobDownload(url, 'MedFair-Dispute-Letter.docx');
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
   }
   docxBtn.addEventListener('click', downloadLetterAsDocx);
 
-  // ---------- Updated PDF Generation Function (100% Visible Capture Fix) ----------
+  // ---------- Updated PDF Generation Function (Blob + Manual Retry Safe) ----------
   function generateAndDownloadLetterPDF(email, serverHTML){
     let finalHTML = serverHTML || currentFullLetterHTML || '';
-
-    // AI রেসপন্সে ভুল করে ```html বা ``` থাকলে তা পরিষ্কার করা
     finalHTML = finalHTML.replace(/```html|```/gi, '').trim();
 
     if(!finalHTML) {
@@ -909,13 +912,18 @@
       return;
     }
 
+    // যদি ইতিমধ্যে PDF তৈরি হয়ে থাকে, তবে সরাসরি ক্যাশ করা ফাইলটি ডাউনলোড করবে
+    if(cachedPdfBlobUrl){
+      triggerBlobDownload(cachedPdfBlobUrl, 'MedFair-Dispute-Letter.pdf');
+      return;
+    }
+
     if(pdfGeneratedForCurrentAnalysis) return;
 
     pdfGeneratedForCurrentAnalysis = true;
     setUnlockBtnBusy(true, 'Generating your PDF…');
-    setUnlockStatus('Payment verified by our server — building your PDF now.');
+    setUnlockStatus('Payment verified — building your PDF now…');
 
-    // ১. স্ক্রিনের ওপর একটি দৃশ্যমান ওভারলে তৈরি করা (যাতে html2canvas সঠিকভাবে ক্যাপচার করতে পারে)
     const overlay = document.createElement('div');
     Object.assign(overlay.style, {
       position: 'fixed',
@@ -929,7 +937,6 @@
       padding: '20px'
     });
 
-    // ২. ভেতরে সাদা কাগজের মতো চিঠির কন্টেইনার তৈরি করা
     const paperBox = document.createElement('div');
     Object.assign(paperBox.style, {
       width: '532pt',
@@ -946,11 +953,8 @@
 
     overlay.appendChild(paperBox);
     document.body.appendChild(overlay);
-
-    // পেজ একদম ওপরে স্ক্রল করে নেওয়া যাতে ক্যাপচার না কাটে
     window.scrollTo(0, 0);
 
-    // ৩. রেন্ডার হওয়ার সামান্য সময় দিয়ে PDF জেনারেট করা
     setTimeout(() => {
       html2pdf()
         .from(paperBox)
@@ -969,33 +973,32 @@
           pagebreak: { mode: ['css', 'legacy'] },
         })
         .toPdf()
-        .output('datauristring')
-        .then((dataUri) => {
-          triggerDataUriDownload(dataUri, 'MedFair-Dispute-Letter.pdf');
-          setUnlockBtnBusy(false, 'Downloaded — Get Another Copy');
-          setUnlockStatus(email ? `Downloaded — a receipt with a backup link is on its way to ${email}.` : 'Your dispute letter has been downloaded.');
+        .output('blob')
+        .then((pdfBlob) => {
+          cachedPdfBlobUrl = URL.createObjectURL(pdfBlob);
+          triggerBlobDownload(cachedPdfBlobUrl, 'MedFair-Dispute-Letter.pdf');
+          setUnlockBtnBusy(false, 'Download PDF Again');
+          setUnlockStatus(email ? `Payment verified! Your PDF has downloaded (also sent to ${email}).` : 'Payment verified! Your dispute letter PDF has downloaded.');
           if(docxBtn) docxBtn.classList.remove('hidden');
         })
         .catch((err) => {
           console.error("PDF Error:", err);
           pdfGeneratedForCurrentAnalysis = false;
-          setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
-          setUnlockStatus('Could not generate the PDF. Please try again.');
+          setUnlockBtnBusy(false, 'Retry PDF Download');
+          setUnlockStatus('Could not generate the PDF. Click the button above to try again.');
         })
         .finally(() => {
-          // ৪. ডাউনলোড শুরু হওয়ামাত্রই ওভারলেটি স্ক্রিন থেকে সরিয়ে ফেলা
           if (overlay.parentNode) {
             overlay.parentNode.removeChild(overlay);
           }
         });
-    }, 400);
+    }, 450);
   }
 
   function stopPolling(){
     if(pollTimer){ clearTimeout(pollTimer); pollTimer = null; }
   }
 
-  // ---------- Updated Polling Function ----------
   function pollOrderStatus(token, attempt){
     attempt = attempt || 0;
     if(pdfGeneratedForCurrentAnalysis) return;
@@ -1003,13 +1006,15 @@
       .then((r)=> r.json())
       .then((data)=>{
         if(data.verified){
+          stopPolling();
+          if(data.letterHTML) currentFullLetterHTML = data.letterHTML;
           setUnlockStatus('Payment verified by our server.');
           generateAndDownloadLetterPDF(data.email, data.letterHTML);
           return;
         }
         if(attempt >= 24){ // ~60s of polling at 2.5s intervals
           setUnlockBtnBusy(false, 'Check Payment Status');
-          setUnlockStatus("Still confirming with Lemon Squeezy — this can take a minute. You'll get an email as soon as it's verified.");
+          setUnlockStatus("Still confirming with Lemon Squeezy — click the button above to check again.");
           return;
         }
         pollTimer = setTimeout(()=> pollOrderStatus(token, attempt + 1), 2500);
@@ -1017,7 +1022,7 @@
       .catch(()=>{
         if(attempt >= 24){
           setUnlockBtnBusy(false, 'Check Payment Status');
-          setUnlockStatus('Could not confirm payment status. Click to check again.');
+          setUnlockStatus('Could not confirm payment status. Click above to check again.');
           return;
         }
         pollTimer = setTimeout(()=> pollOrderStatus(token, attempt + 1), 2500);
@@ -1032,16 +1037,18 @@
     window.LemonSqueezy.Setup({
       eventHandler: (event)=>{
         if(event.event === 'Checkout.Success'){
+          paymentSucceededInModal = true;
           if(!currentOrderToken) return;
           setUnlockBtnBusy(true, 'Confirming payment…');
           setUnlockStatus('Confirming your payment with our server — do not close this page.');
+          stopPolling();
           pollOrderStatus(currentOrderToken);
         } else if(event.event === 'Checkout.Closed'){
+          // পেমেন্ট সফল হয়ে থাকলে পপআপ বন্ধ করলেও পোলিং বন্ধ হবে না!
+          if(paymentSucceededInModal || pdfGeneratedForCurrentAnalysis) return;
           stopPolling();
-          if(!pdfGeneratedForCurrentAnalysis){
-            setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
-            setUnlockStatus('Checkout closed. Click below to try again.');
-          }
+          setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
+          setUnlockStatus('Checkout closed. Click below to try again.');
         }
       }
     });
@@ -1051,9 +1058,15 @@
   unlockBtn.addEventListener('click', ()=>{
     if(!currentFullLetterHTML || unlockBtn.disabled) return;
 
-    // "Check Payment Status" retry path — we already have a token from a prior attempt.
-    if(currentOrderToken && !pdfGeneratedForCurrentAnalysis && unlockBtnLabel.textContent === 'Check Payment Status'){
-      setUnlockBtnBusy(true, 'Confirming payment…');
+    // ১. পিডিএফ ইতিমধ্যে তৈরি হয়ে থাকলে সরাসরি ডাউনলোড করবে (পুনরায় চেকআউট খুলবে না)
+    if(cachedPdfBlobUrl){
+      triggerBlobDownload(cachedPdfBlobUrl, 'MedFair-Dispute-Letter.pdf');
+      return;
+    }
+
+    // ২. পেমেন্ট হয়ে থাকলে বা স্ট্যাটাস চেক করার অবস্থায় থাকলে পোলিং/জেনারেশন চালাবে
+    if(currentOrderToken && (paymentSucceededInModal || unlockBtnLabel.textContent === 'Check Payment Status' || unlockBtnLabel.textContent === 'Retry PDF Download')){
+      setUnlockBtnBusy(true, 'Checking & building PDF…');
       pollOrderStatus(currentOrderToken);
       return;
     }
@@ -1074,7 +1087,9 @@
       .then((r)=>{ if(!r.ok) throw new Error('checkout-prep-failed'); return r.json(); })
       .then(({ checkoutUrl, orderToken })=>{
         currentOrderToken = orderToken;
+        paymentSucceededInModal = false;
         pdfGeneratedForCurrentAnalysis = false;
+        cachedPdfBlobUrl = null;
         setUnlockBtnBusy(false, 'Download Full Dispute Letter — $9.99');
         setUnlockStatus('Opening secure checkout…');
         window.LemonSqueezy.Url.Open(checkoutUrl);
