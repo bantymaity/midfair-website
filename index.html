@@ -933,7 +933,6 @@
   closePersonalizeModalBtn.addEventListener('click', closePersonalizeModal);
   editDetailsBtn.addEventListener('click', openPersonalizeModal);
 
-  // মোবাইল ও পিসি উভয় ব্রাউজারেই নিরাপদে Blob ফাইল ডাউনলোড করার ফাংশন (৬০ সেকেন্ড পর্যন্ত লিংক সচল থাকে)
   function saveBlobDirectly(blob, filename){
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -946,7 +945,6 @@
     setTimeout(() => {
       link.remove();
     }, 2000);
-    // ফোনের Download Manager-কে পর্যাপ্ত সময় দেওয়ার জন্য ৬০ সেকেন্ড পর URL মুক্ত করা হচ্ছে
     setTimeout(() => {
       URL.revokeObjectURL(url);
     }, 60000);
@@ -1188,7 +1186,7 @@
   // ---------- Mobile & Chrome Safe PDF Builder ----------
   function buildAndDownloadPDFFromHTML(finalHTML, email, isDirectUserClick = false){
     if(!finalHTML || !finalHTML.trim()) {
-      alert("Error: পিডিএফ বানানোর জন্য কোনো টেক্সট পাওয়া যায়নি!");
+      alert("Error: No letter text found to generate PDF!");
       setUnlockBtnBusy(false, 'Download PDF Again');
       return;
     }
@@ -1232,7 +1230,6 @@
     document.body.appendChild(overlay);
     window.scrollTo(0, 0);
 
-    // ফোনের মেমোরি ক্র্যাশ এড়াতে মোবাইলে 1.25 এবং ডেস্কটপে 2
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
     const captureScale = isMobile ? 1.25 : 2;
 
@@ -1265,7 +1262,6 @@
           if(blockerWarningBox) blockerWarningBox.classList.remove('hidden');
           if(postPaymentActions) postPaymentActions.classList.remove('hidden');
 
-          // ফোনের Chrome ও PC Chrome-এ যাতে ১ ট্যাপেই ডাউনলোড হয় সেজন্য তাৎক্ষণিক পপআপ দেখানো
           if(!isDirectUserClick){
             showReadyDownloadPopup(email);
           }
@@ -1317,7 +1313,6 @@
           handlePaymentVerified(data.email, data.letterHTML);
           return;
         }
-        // ফোনে পেমেন্ট/OTP দিতে সময় লাগতে পারে তাই ৬০ বার (১৫০ সেকেন্ড) পর্যন্ত চেক করবে
         if(attempt >= 60){
           setUnlockBtnBusy(false, 'Check Payment Status');
           setUnlockStatus("Still confirming with Lemon Squeezy — tap the button above to check again.");
@@ -1335,7 +1330,6 @@
       });
   }
 
-  // ফোনে পেমেন্ট/OTP অ্যাপ থেকে ব্রাউজারে ফিরে এলে সাথে সাথে পোলিং রিজিউম করবে
   document.addEventListener('visibilitychange', ()=>{
     if(document.visibilityState === 'visible' && currentOrderToken && !isOrderVerified){
       stopPolling();
@@ -1343,27 +1337,38 @@
     }
   });
 
-  // পেজ যদি মোবাইল মেমোরি কারণে রিলোড হয়ে যায়, তবুও localStorage থেকে পেন্ডিং অর্ডার উদ্ধার করবে
+  // Restore order from URL (?order_token=...) after mobile redirect or from localStorage
   function restorePendingOrderIfAny(){
     try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlToken = urlParams.get('order_token');
+
       const savedRaw = localStorage.getItem(PENDING_STORAGE_KEY);
-      if(!savedRaw) return;
-      const saved = JSON.parse(savedRaw);
-      // ৩০ মিনিটের পুরনো হলে বাদ দেবে
-      if(!saved.orderToken || (Date.now() - saved.ts) > 30 * 60 * 1000){
+      const saved = savedRaw ? JSON.parse(savedRaw) : null;
+
+      const tokenToCheck = urlToken || (saved && saved.orderToken);
+      if(!tokenToCheck) return;
+
+      if(!urlToken && saved && (Date.now() - saved.ts) > 30 * 60 * 1000){
         clearPendingOrderState();
         return;
       }
-      currentOrderToken = saved.orderToken;
-      rawLetterTemplate = saved.rawLetterTemplate || '';
-      extractedDetails = saved.extractedDetails || {};
-      currentFullLetterHTML = compileLetterHTML(rawLetterTemplate, extractedDetails);
 
-      // রেজাল্ট সেকশন দৃশ্যমান করে পোলিং চালু করা
+      currentOrderToken = tokenToCheck;
+      if(saved && saved.orderToken === tokenToCheck){
+        rawLetterTemplate = saved.rawLetterTemplate || '';
+        extractedDetails = saved.extractedDetails || {};
+        currentFullLetterHTML = compileLetterHTML(rawLetterTemplate, extractedDetails);
+      }
+
+      if(urlToken && window.history && window.history.replaceState){
+        window.history.replaceState({}, document.title, window.location.pathname + '#tool');
+      }
+
       idleEl.classList.add('hidden');
       resultEl.classList.remove('hidden');
-      setUnlockBtnBusy(true, 'Checking payment status…');
-      setUnlockStatus('Resuming payment verification…');
+      setUnlockBtnBusy(true, 'Confirming payment…');
+      setUnlockStatus('Verifying your payment with our server…');
       pollOrderStatus(currentOrderToken, 0);
     } catch(e){}
   }
@@ -1420,7 +1425,6 @@
   unlockBtn.addEventListener('click', ()=>{
     if(!rawLetterTemplate || unlockBtn.disabled) return;
 
-    // ১. পেমেন্ট ভেরিফাই হয়ে থাকলে সরাসরি PDF ডাউনলোড করবে
     if(isOrderVerified){
       if(readyPdfBlob){
         saveBlobDirectly(readyPdfBlob, 'MedFair-Dispute-Letter.pdf');
@@ -1430,7 +1434,6 @@
       return;
     }
 
-    // ২. পেমেন্ট প্রসেসিং বা রিট্রাই অবস্থায় থাকলে পোলিং চালাবে
     if(currentOrderToken && (paymentSucceededInModal || unlockBtnLabel.textContent === 'Check Payment Status')){
       setUnlockBtnBusy(true, 'Checking payment status…');
       pollOrderStatus(currentOrderToken, 0);
