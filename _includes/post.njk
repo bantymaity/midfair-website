@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>{{ title }} — MedFair Insights</title>
+<meta name="description" content="{{ description }}" />
+<link rel="canonical" href="https://medfair.us{{ page.url }}" />
+<meta name="robots" content="index, follow" />
+
+<!-- Open Graph SEO -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="{{ title }}" />
+<meta property="og:description" content="{{ description }}" />
+<meta property="og:url" content="https://medfair.us{{ page.url }}" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ title | replace('"', '\\"') }}",
+  "description": "{{ description | replace('"', '\\"') }}",
+  "datePublished": "{{ date | isoDate }}",
+  "author": { "@type": "Organization", "name": "MedFair" },
+  "publisher": { "@type": "Organization", "name": "MedFair", "url": "https://medfair.us" }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Inter+Tight:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: { navy:{DEFAULT:'#0B1B3A',2:'#0F2A5C',3:'#132F66'}, electric:{DEFAULT:'#2F6BFF',2:'#00C2FF'} },
+      fontFamily: { sans:['Inter','ui-sans-serif','system-ui'], tight:['Inter Tight','Inter','ui-sans-serif'] },
+      boxShadow: { soft:'0 2px 8px -2px rgba(11,27,58,0.08), 0 8px 24px -8px rgba(11,27,58,0.10)', lift:'0 12px 40px -12px rgba(11,27,58,0.25), 0 4px 12px -4px rgba(47,107,255,0.15)', glow:'0 0 0 1px rgba(47,107,255,0.15), 0 8px 30px -6px rgba(47,107,255,0.35)' }
+    } }
+  }
+</script>
+<style>
+  :root{ --navy:#0B1B3A; --navy-2:#0F2A5C; --electric:#2F6BFF; --electric-2:#00C2FF; }
+  html{scroll-behavior:smooth;}
+  body{ font-family:'Inter',ui-sans-serif,system-ui,sans-serif; background:#fff; }
+  h1,h2,h3,.font-display{ font-family:'Inter Tight','Inter',ui-sans-serif,sans-serif; }
+  ::selection{ background:var(--electric); color:#fff; }
+  .glass-navbar{ background:rgba(255,255,255,0.72); backdrop-filter:blur(16px) saturate(180%); -webkit-backdrop-filter:blur(16px) saturate(180%); }
+  .glass{ background:rgba(255,255,255,0.6); backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%); border:1px solid rgba(255,255,255,0.5); }
+  .grad-trust{ background:linear-gradient(120deg,var(--navy) 0%,var(--navy-2) 35%,var(--electric) 78%,var(--electric-2) 100%); }
+  .grad-text{ background:linear-gradient(100deg,var(--navy) 10%,var(--electric) 55%,var(--electric-2) 90%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .grad-btn{ background:linear-gradient(100deg,var(--navy) 0%,var(--electric) 70%,var(--electric-2) 100%); }
+  .badge-insurance{ background:rgba(47,107,255,0.1); color:var(--electric); }
+  .badge-debt{ background:rgba(11,27,58,0.08); color:var(--navy); }
+  .badge-bills{ background:rgba(0,194,255,0.12); color:#0891b2; }
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:#F8FAFC; }
+  ::-webkit-scrollbar-thumb{ background:linear-gradient(var(--navy),var(--electric)); border-radius:10px; }
+
+  /* Markdown Post Formatting */
+  .post-body h2 {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 800;
+    font-size: 1.65rem;
+    line-height: 1.25;
+    color: #0B1B3A;
+    margin-top: 2.25rem;
+    margin-bottom: 0.85rem;
+    letter-spacing: -0.02em;
+  }
+  .post-body h3 {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #0F2A5C;
+    margin-top: 1.75rem;
+    margin-bottom: 0.65rem;
+  }
+  .post-body p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #334155;
+    margin-bottom: 1.25rem;
+  }
+  .post-body strong {
+    color: #0B1B3A;
+    font-weight: 700;
+  }
+  .post-body ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 1.5rem;
+  }
+  .post-body ul li {
+    position: relative;
+    padding-left: 1.65rem;
+    margin-bottom: 0.65rem;
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: #334155;
+  }
+  .post-body ul li::before {
+    content: "\f058";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+    color: #2F6BFF;
+    font-size: 0.95rem;
+  }
+  .post-body ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #334155;
+  }
+  .post-body ol li {
+    margin-bottom: 0.65rem;
+    font-size: 1.02rem;
+    line-height: 1.7;
+    padding-left: 0.35rem;
+  }
+  .post-body blockquote {
+    border-left: 4px solid #2F6BFF;
+    background: #F8FAFC;
+    padding: 1rem 1.25rem;
+    border-radius: 0 1rem 1rem 0;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #0B1B3A;
+  }
+  .post-body a {
+    color: #2F6BFF;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body class="bg-white text-slate-900 antialiased overflow-x-hidden selection:bg-electric selection:text-white">
+
+{% set catLower = (category or 'Medical Bills') | lower %}
+{% set badgeClass = 'badge-bills' %}
+{% set autoImage = image %}
+
+{% if 'insurance' in catLower or 'denial' in catLower %}
+  {% set badgeClass = 'badge-insurance' %}
+  {% if not autoImage %}{% set autoImage = 'https://images.unsplash.com/photo-1603796846097-bee99e4a601f?q=85&w=1200&auto=format&fit=crop' %}{% endif %}
+{% elif 'debt' in catLower or 'collection' in catLower %}
+  {% set badgeClass = 'badge-debt' %}
+  {% if not autoImage %}{% set autoImage = 'https://images.unsplash.com/photo-1611187401217-0fee54edf7ce?q=85&w=1200&auto=format&fit=crop' %}{% endif %}
+{% else %}
+  {% set badgeClass = 'badge-bills' %}
+  {% if not autoImage %}{% set autoImage = 'https://images.unsplash.com/photo-1615770922480-0b9ae80afeba?q=85&w=1200&auto=format&fit=crop' %}{% endif %}
+{% endif %}
+
+<header class="fixed top-0 inset-x-0 z-50">
+  <nav class="glass-navbar mx-auto mt-2 sm:mt-3 max-w-6xl rounded-2xl sm:rounded-full flex items-center justify-between px-4 sm:px-6 py-3 shadow-soft border border-white/60">
+    <a href="/index.html" class="flex items-center gap-2 font-tight font-extrabold text-navy text-lg tracking-tight">
+      <span class="w-8 h-8 rounded-xl grad-trust flex items-center justify-center text-white text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+      MedFair
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+      <a href="/index.html#how-it-works" class="hover:text-navy transition-colors">How it works</a>
+      <a href="/index.html#tool" class="hover:text-navy transition-colors">Analyze a Document</a>
+      <a href="/blog.html" class="text-navy font-semibold">Blog</a>
+      <a href="/about.html" class="hover:text-navy transition-colors">About</a>
+    </div>
+    <a href="/index.html#tool" class="grad-btn text-white text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full shadow-glow hover:brightness-110 active:scale-95 transition-all">Analyze Free</a>
+  </nav>
+</header>
+
+<main class="pt-32 sm:pt-36 pb-20">
+  <article class="max-w-3xl mx-auto px-5 sm:px-6">
+    <div class="mb-6">
+      <a href="/blog.html" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-electric hover:underline">
+        <i class="fa-solid fa-arrow-left"></i> Back to MedFair Insights
+      </a>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3 mb-4">
+      <span class="{{ badgeClass }} text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">{{ category or 'Medical Bills' }}</span>
+      <span class="text-xs text-slate-400">{{ date | readableDate }}</span>
+      <span class="text-xs text-slate-300">&bull;</span>
+      <span class="text-xs text-slate-400">{{ content | readingTime }}</span>
+    </div>
+
+    <h1 class="font-tight font-extrabold tracking-tight text-3xl sm:text-4xl lg:text-5xl leading-[1.1] text-navy mb-5">
+      {{ title }}
+    </h1>
+
+    {% if description %}
+    <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-8 border-l-4 border-electric/40 pl-4">
+      {{ description }}
+    </p>
+    {% endif %}
+
+    <div class="rounded-[1.75rem] overflow-hidden shadow-lift border border-slate-100 mb-10 h-60 sm:h-96">
+      <img src="{{ autoImage }}" alt="{{ title }}" class="w-full h-full object-cover" loading="eager" />
+    </div>
+
+    <div class="post-body">
+      {{ content | safe }}
+    </div>
+  </article>
+
+  <!-- Final CTA -->
+  <section class="relative py-16 sm:py-20 grad-trust overflow-hidden mt-16 max-w-5xl mx-auto sm:rounded-[2rem] shadow-lift">
+    <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(circle at 20% 20%, white 0, transparent 40%), radial-gradient(circle at 80% 80%, white 0, transparent 35%);"></div>
+    <div class="relative max-w-2xl mx-auto px-5 sm:px-6 text-center">
+      <h2 class="font-tight font-extrabold text-2xl sm:text-4xl text-white leading-tight">Stop reading about it. See what's in your bill.</h2>
+      <a href="/index.html#tool" class="inline-flex items-center gap-2 bg-white text-navy font-bold text-base px-8 py-4 rounded-2xl shadow-lift mt-7 hover:scale-105 active:scale-95 transition-transform">
+        <i class="fa-solid fa-bolt"></i> Analyze My Document Free
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="bg-navy text-white/60 py-14">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pb-8 border-b border-white/10">
+      <a href="/index.html" class="flex items-center gap-2 font-tight font-extrabold text-white text-lg">
+        <span class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-electric-2 text-sm"><i class="fa-solid fa-shield-heart"></i></span>
+        MedFair
+      </a>
+      <div class="flex flex-wrap gap-6 text-sm">
+        <a href="/blog.html" class="hover:text-white transition-colors">Blog</a>
+        <a href="/about.html" class="hover:text-white transition-colors">About</a>
+        <a href="/contact.html" class="hover:text-white transition-colors">Contact</a>
+        <a href="/privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="/terms.html" class="hover:text-white transition-colors">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <p class="text-xs text-white/40 mt-8 max-w-2xl leading-relaxed">MedFair provides informational, AI-generated summaries only and does not constitute legal, medical, or financial advice. Always consult a licensed professional regarding your specific situation. &copy; 2026 MedFair. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
