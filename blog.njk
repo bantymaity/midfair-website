@@ -1,3 +1,6 @@
+---
+permalink: /blog.html
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,58 +103,42 @@
   </div>
 </section>
 
-<!-- Blog Grid -->
+<!-- Blog Grid (Automatically populated from posts/*.md) -->
 <section class="pb-20 sm:pb-28">
   <div class="max-w-6xl mx-auto px-5 sm:px-6">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" data-testid="blog-grid">
 
-      <!-- Post 1 -->
-      <a href="#" class="post-card reveal group bg-white rounded-[1.75rem] border border-slate-100 shadow-soft overflow-hidden flex flex-col" data-testid="blog-card-facility-fee">
-        <div class="post-thumb h-48 sm:h-52">
-          <img src="https://images.unsplash.com/photo-1615770922480-0b9ae80afeba?q=85&w=800&auto=format&fit=crop" alt="Modern hospital facility exterior" class="w-full h-full object-cover" loading="lazy" />
-        </div>
-        <div class="p-6 flex flex-col flex-1">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="badge-bills text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">Medical Bills</span>
-            <span class="text-xs text-slate-400">Jun 18, 2026</span>
-          </div>
-          <h2 class="font-tight font-bold text-lg text-navy leading-snug mb-2 group-hover:text-electric transition-colors">How to Fight a Surprise Hospital Facility Fee</h2>
-          <p class="text-sm text-slate-600 leading-relaxed line-clamp-2 mb-5">Facility fees can add hundreds of dollars to a routine visit with almost no warning. Here's exactly what they are, when they're legal, and the three-step script to get them reduced or removed.</p>
-          <span class="read-link mt-auto inline-flex items-center gap-2 text-sm font-bold text-navy">Read Article <i class="fa-solid fa-arrow-right text-electric text-xs"></i></span>
-        </div>
-      </a>
+      {% for post in collections.posts %}
+        {% set catLower = (post.data.category or 'Medical Bills') | lower %}
+        {% set badgeClass = 'badge-bills' %}
+        {% set autoImage = post.data.image %}
 
-      <!-- Post 2 -->
-      <a href="#" class="post-card reveal group bg-white rounded-[1.75rem] border border-slate-100 shadow-soft overflow-hidden flex flex-col" data-testid="blog-card-eob-guide">
-        <div class="post-thumb h-48 sm:h-52">
-          <img src="https://images.unsplash.com/photo-1603796846097-bee99e4a601f?q=85&w=800&auto=format&fit=crop" alt="Reviewing insurance paperwork at a desk" class="w-full h-full object-cover" loading="lazy" />
-        </div>
-        <div class="p-6 flex flex-col flex-1">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="badge-insurance text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">Insurance</span>
-            <span class="text-xs text-slate-400">Jun 11, 2026</span>
-          </div>
-          <h2 class="font-tight font-bold text-lg text-navy leading-snug mb-2 group-hover:text-electric transition-colors">Understanding Your EOB: A Step-by-Step Guide</h2>
-          <p class="text-sm text-slate-600 leading-relaxed line-clamp-2 mb-5">Your Explanation of Benefits is not a bill — but it holds the key to every dispute you'll ever file. We break down every line, code, and column so nothing catches you off guard.</p>
-          <span class="read-link mt-auto inline-flex items-center gap-2 text-sm font-bold text-navy">Read Article <i class="fa-solid fa-arrow-right text-electric text-xs"></i></span>
-        </div>
-      </a>
+        {% if 'insurance' in catLower or 'denial' in catLower %}
+          {% set badgeClass = 'badge-insurance' %}
+          {% if not autoImage %}{% set autoImage = 'https://images.unsplash.com/photo-1603796846097-bee99e4a601f?q=85&w=800&auto=format&fit=crop' %}{% endif %}
+        {% elif 'debt' in catLower or 'collection' in catLower %}
+          {% set badgeClass = 'badge-debt' %}
+          {% if not autoImage %}{% set autoImage = 'https://images.unsplash.com/photo-1611187401217-0fee54edf7ce?q=85&w=800&auto=format&fit=crop' %}{% endif %}
+        {% else %}
+          {% set badgeClass = 'badge-bills' %}
+          {% if not autoImage %}{% set autoImage = 'https://images.unsplash.com/photo-1615770922480-0b9ae80afeba?q=85&w=800&auto=format&fit=crop' %}{% endif %}
+        {% endif %}
 
-      <!-- Post 3 -->
-      <a href="#" class="post-card reveal group bg-white rounded-[1.75rem] border border-slate-100 shadow-soft overflow-hidden flex flex-col" data-testid="blog-card-fdcpa-rights">
-        <div class="post-thumb h-48 sm:h-52">
-          <img src="https://images.unsplash.com/photo-1611187401217-0fee54edf7ce?q=85&w=800&auto=format&fit=crop" alt="Gavel representing consumer debt law" class="w-full h-full object-cover" loading="lazy" />
-        </div>
-        <div class="p-6 flex flex-col flex-1">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="badge-debt text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">Medical Debt</span>
-            <span class="text-xs text-slate-400">Jun 4, 2026</span>
+        <a href="{{ post.url }}" class="post-card reveal group bg-white rounded-[1.75rem] border border-slate-100 shadow-soft overflow-hidden flex flex-col">
+          <div class="post-thumb h-48 sm:h-52">
+            <img src="{{ autoImage }}" alt="{{ post.data.title }}" class="w-full h-full object-cover" loading="lazy" />
           </div>
-          <h2 class="font-tight font-bold text-lg text-navy leading-snug mb-2 group-hover:text-electric transition-colors">The FDCPA and Your Medical Debt Rights</h2>
-          <p class="text-sm text-slate-600 leading-relaxed line-clamp-2 mb-5">Debt collectors have far fewer rights than they want you to believe. Learn exactly what the Fair Debt Collection Practices Act protects you from — and how to send a validation request that works.</p>
-          <span class="read-link mt-auto inline-flex items-center gap-2 text-sm font-bold text-navy">Read Article <i class="fa-solid fa-arrow-right text-electric text-xs"></i></span>
-        </div>
-      </a>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="{{ badgeClass }} text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">{{ post.data.category or 'Medical Bills' }}</span>
+              <span class="text-xs text-slate-400">{{ post.date | readableDate }}</span>
+            </div>
+            <h2 class="font-tight font-bold text-lg text-navy leading-snug mb-2 group-hover:text-electric transition-colors">{{ post.data.title }}</h2>
+            <p class="text-sm text-slate-600 leading-relaxed line-clamp-2 mb-5">{{ post.data.description }}</p>
+            <span class="read-link mt-auto inline-flex items-center gap-2 text-sm font-bold text-navy">Read Article <i class="fa-solid fa-arrow-right text-electric text-xs"></i></span>
+          </div>
+        </a>
+      {% endfor %}
 
     </div>
   </div>
